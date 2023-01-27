@@ -1,0 +1,346 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="TinyXml">
+      <UniqueIdentifier>{1390beb6-0bc7-45c9-b9d9-a05802553e2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Config">
+      <UniqueIdentifier>{4520de9d-9848-45eb-b0b6-cf3a37686791}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{4009536b-789b-4f6e-b74b-62934a8e39e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Logger">
+      <UniqueIdentifier>{55e8898c-8bcf-465d-bc94-e4c68413fece}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{2be25f65-9ccf-4fae-a2dd-63c45c0092e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DebugEngine">
+      <UniqueIdentifier>{587a83bf-f3bb-4f8c-8117-c3e1f7a49edc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PhysicEngine">
+      <UniqueIdentifier>{6c09dfe5-7fd7-4e2a-b27f-5fc35fd44399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ParticleEngine">
+      <UniqueIdentifier>{c1b73567-d51b-4fe1-8ec2-149fb0be24fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SoundEngine">
+      <UniqueIdentifier>{f5a1f896-3d64-41d8-adb3-a41dfc35d0f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NetworkEngine">
+      <UniqueIdentifier>{d81d66c0-2096-4e05-a3ca-8e6a172ef7ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FSM">
+      <UniqueIdentifier>{6c2090c4-7e63-4607-81fd-4e24886e508e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ScreenManager">
+      <UniqueIdentifier>{9c00a741-0a43-4441-b6a5-ba5dc2e919be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\json">
+      <UniqueIdentifier>{007f9cf8-4cea-407d-953c-580d90dcd60e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Utilities\Maths.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\StringUtilities.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger\Logger.cpp">
+      <Filter>Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger\LoggerDebug.cpp">
+      <Filter>Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger\LoggerFile.cpp">
+      <Filter>Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger\LoggerMsgbox.cpp">
+      <Filter>Logger</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Frustum.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCore.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="MediaPathManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshHierarchy.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshX.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshXAnimated.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Object3D.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Pad.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldPosition.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugEngine\Exception.cpp">
+      <Filter>DebugEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugEngine\MemoryManager.cpp">
+      <Filter>DebugEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicEngine\PhysicEngine.cpp">
+      <Filter>PhysicEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicEngine\PhysicSpaceWarp.cpp">
+      <Filter>PhysicEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEngine\ParticleBehaviour.cpp">
+      <Filter>ParticleEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEngine\ParticleObject.cpp">
+      <Filter>ParticleEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleEngine\ParticleSystem.cpp">
+      <Filter>ParticleEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenManager\ScreenManager.cpp">
+      <Filter>ScreenManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Serializable.cpp" />
+    <ClCompile Include="../../External/tinyxml/tinyxml.cpp" />
+    <ClCompile Include="../../External/tinyxml/tinyxmlerror.cpp" />
+    <ClCompile Include="../../External/tinyxml/tinyxmlparser.cpp" />
+    <ClCompile Include="../../External/tinyxml/tinystr.cpp" />
+    <ClCompile Include="../../External/json11/json11.cpp" />
+    <ClCompile Include="Plugin.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Config\Export.h">
+      <Filter>Config</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Macros.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Maths.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Serializable.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Singleton.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\SmartPtr.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\SmartPtrPolicies.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\StringUtilities.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger\Logger.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger\LoggerDebug.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger\LoggerFile.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger\LoggerMsgBox.h">
+      <Filter>Logger</Filter>
+    </ClInclude>
+    <ClInclude Include="Buffer.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Frustum.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCore.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphic.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Keys.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="MediaPathManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshHierarchy.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshX.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshXAnimated.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Object3D.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Pad.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBox.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldPosition.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugEngine\DebugNew.h">
+      <Filter>DebugEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugEngine\DebugNewOff.h">
+      <Filter>DebugEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugEngine\Exception.h">
+      <Filter>DebugEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugEngine\MemoryManager.h">
+      <Filter>DebugEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicEngine\PhysicEngine.h">
+      <Filter>PhysicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicEngine\PhysicSpaceWarp.h">
+      <Filter>PhysicEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEngine\ParticleBehaviour.h">
+      <Filter>ParticleEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEngine\ParticleObject.h">
+      <Filter>ParticleEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEngine\ParticleSystem.h">
+      <Filter>ParticleEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleEngine\ParticleType.h">
+      <Filter>ParticleEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="FSM\FSM.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="FSM\FSM_State.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="FSM\FSM_Transition.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="FSM\FSM_Types.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenManager\ScreenManager.h">
+      <Filter>ScreenManager</Filter>
+    </ClInclude>
+    <ClInclude Include="CoordinateSpace.h" />
+    <ClInclude Include="Utilities\BinarySerialization.h" />
+    <ClInclude Include="../../External/tinyxml/tinyxml.h" />
+    <ClInclude Include="../../External/tinyxml/tinystr.h" />
+    <ClInclude Include="../../External/json11/json11.hpp" />
+    <ClInclude Include="Plugin.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Utilities\Maths.inl">
+      <Filter>Utilities</Filter>
+    </None>
+    <None Include="Utilities\SmartPtr.inl">
+      <Filter>Utilities</Filter>
+    </None>
+    <None Include="Buffer.inl">
+      <Filter>Core</Filter>
+    </None>
+    <None Include="ResourceManager.inl">
+      <Filter>Core</Filter>
+    </None>
+    <None Include="FSM\FSM.inl">
+      <Filter>FSM</Filter>
+    </None>
+    <None Include="FSM\FSM_State.inl">
+      <Filter>FSM</Filter>
+    </None>
+    <None Include="FSM\FSM_Transition.inl">
+      <Filter>FSM</Filter>
+    </None>
+    <None Include="Utilities\BinarySerialization.inl" />
+  </ItemGroup>
+</Project>

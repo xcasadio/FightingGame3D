@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Character name="nom_du_personnage">
+  <Status for="10" def="11" vit="13.3">
+  </Status>
+  <PositionDef>
+    <Head x="20" y="34"  z="0"/>
+    <Heap x="20" y="34"  z="0"/>
+    <Feet x="20" y="34"  z="0"/>
+    <Body xmin="20" ymin="34" zmin="45" xmax="65" ymax="34" zmax="45"/>
+  </PositionDef>
+  <MeshDef fileName="" />
+  <AnimationDef>
+    <Animation type="0" name="idle" id="0" speed="0.1"/>
+  </AnimationDef>
+</Character>

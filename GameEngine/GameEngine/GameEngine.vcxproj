@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug Editor|Win32">
+      <Configuration>Debug Editor</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release Opti|Win32">
+      <Configuration>Release Opti</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D0137F2E-56AD-4DCB-A5CF-B0EE7E421A08}</ProjectGuid>
+    <RootNamespace>Moteurdejeu</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectName>GameEngine</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Opti|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Editor|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release Opti|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug Editor|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.29911.84</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Editor|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Opti|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>GAME_ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(SolutionDir)External;$(ProjectDir);D:\DirectX SDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dinput8.lib;dxguid.lib;dxerr.lib;dsound.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <Version>0.1</Version>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>D:\DirectX SDK\Lib\x86</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Editor|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>GAME_ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(SolutionDir)External;$(ProjectDir);D:\DirectX SDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dinput8.lib;dxguid.lib;dxerr.lib;dsound.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <Version>0.1</Version>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>D:\DirectX SDK\Lib\x86</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <PreprocessorDefinitions>GAME_ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(SolutionDir)External;$(ProjectDir);D:\DirectX SDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dinput8.lib;dxguid.lib;dxerr.lib;dsound.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <Version>0.1</Version>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>D:\DirectX SDK\Lib\x86</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Opti|Win32'">
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <PreprocessorDefinitions>GAME_ENGINE_EXPORTS;_SECURE_SCL=0;_HAS_ITERATOR_DEBUGGING=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(SolutionDir)External;$(ProjectDir);D:\DirectX SDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;dinput8.lib;dxguid.lib;dxerr.lib;dsound.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <Version>0.1</Version>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalLibraryDirectories>D:\DirectX SDK\Lib\x86</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="DebugEngine\Exception.cpp" />
+    <ClCompile Include="DebugEngine\MemoryManager.cpp" />
+    <ClCompile Include="Font.cpp" />
+    <ClCompile Include="Frustum.cpp" />
+    <ClCompile Include="GameCore.cpp" />
+    <ClCompile Include="GameStateManager.cpp" />
+    <ClCompile Include="Graphic.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Logger\Logger.cpp" />
+    <ClCompile Include="Logger\LoggerDebug.cpp" />
+    <ClCompile Include="Logger\LoggerFile.cpp" />
+    <ClCompile Include="Logger\LoggerMsgbox.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MediaPathManager.cpp" />
+    <ClCompile Include="MeshHierarchy.cpp" />
+    <ClCompile Include="MeshX.cpp" />
+    <ClCompile Include="MeshXAnimated.cpp" />
+    <ClCompile Include="Object3D.cpp" />
+    <ClCompile Include="Pad.cpp" />
+    <ClCompile Include="ParticleEngine\ParticleBehaviour.cpp" />
+    <ClCompile Include="ParticleEngine\ParticleObject.cpp" />
+    <ClCompile Include="ParticleEngine\ParticleSystem.cpp" />
+    <ClCompile Include="PhysicEngine\PhysicEngine.cpp" />
+    <ClCompile Include="PhysicEngine\PhysicSpaceWarp.cpp" />
+    <ClCompile Include="Plugin.cpp" />
+    <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="ScreenManager\ScreenManager.cpp" />
+    <ClCompile Include="SkyBox.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Utilities\Maths.cpp" />
+    <ClCompile Include="Utilities\Serializable.cpp" />
+    <ClCompile Include="Utilities\StringUtilities.cpp" />
+    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="WorldPosition.cpp" />
+    <ClCompile Include="../../External/tinyxml/tinyxml.cpp" />
+    <ClCompile Include="../../External/tinyxml/tinyxmlerror.cpp" />
+    <ClCompile Include="../../External/tinyxml/tinyxmlparser.cpp" />
+    <ClCompile Include="../../External/tinyxml/tinystr.cpp" />
+    <ClCompile Include="../../External/json11/json11.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Buffer.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="Config\Export.h" />
+    <ClInclude Include="CoordinateSpace.h" />
+    <ClInclude Include="DebugEngine\DebugNew.h" />
+    <ClInclude Include="DebugEngine\DebugNewOff.h" />
+    <ClInclude Include="DebugEngine\Exception.h" />
+    <ClInclude Include="DebugEngine\MemoryManager.h" />
+    <ClInclude Include="Font.h" />
+    <ClInclude Include="Frustum.h" />
+    <ClInclude Include="FSM\FSM.h" />
+    <ClInclude Include="FSM\FSM_State.h" />
+    <ClInclude Include="FSM\FSM_Transition.h" />
+    <ClInclude Include="FSM\FSM_Types.h" />
+    <ClInclude Include="GameCore.h" />
+    <ClInclude Include="GameStateManager.h" />
+    <ClInclude Include="Graphic.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Keys.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="Logger\Logger.h" />
+    <ClInclude Include="Logger\LoggerDebug.h" />
+    <ClInclude Include="Logger\LoggerFile.h" />
+    <ClInclude Include="Logger\LoggerMsgBox.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="MediaPathManager.h" />
+    <ClInclude Include="MeshHierarchy.h" />
+    <ClInclude Include="MeshX.h" />
+    <ClInclude Include="MeshXAnimated.h" />
+    <ClInclude Include="Object3D.h" />
+    <ClInclude Include="Pad.h" />
+    <ClInclude Include="ParticleEngine\ParticleBehaviour.h" />
+    <ClInclude Include="ParticleEngine\ParticleObject.h" />
+    <ClInclude Include="ParticleEngine\ParticleSystem.h" />
+    <ClInclude Include="ParticleEngine\ParticleType.h" />
+    <ClInclude Include="PhysicEngine\PhysicEngine.h" />
+    <ClInclude Include="PhysicEngine\PhysicSpaceWarp.h" />
+    <ClInclude Include="Plugin.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="ScreenManager\ScreenManager.h" />
+    <ClInclude Include="SkyBox.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="Utilities\BinarySerialization.h" />
+    <ClInclude Include="Utilities\Macros.h" />
+    <ClInclude Include="Utilities\Maths.h" />
+    <ClInclude Include="Utilities\Serializable.h" />
+    <ClInclude Include="Utilities\Singleton.h" />
+    <ClInclude Include="Utilities\SmartPtr.h" />
+    <ClInclude Include="Utilities\SmartPtrPolicies.h" />
+    <ClInclude Include="Utilities\StringUtilities.h" />
+    <ClInclude Include="Window.h" />
+    <ClInclude Include="WorldPosition.h" />
+    <ClInclude Include="../../External/tinyxml/tinyxml.h" />
+    <ClInclude Include="../../External/tinyxml/tinystr.h" />
+    <ClInclude Include="../../External/json11/json11.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Buffer.inl" />
+    <None Include="FSM\FSM.inl" />
+    <None Include="FSM\FSM_State.inl" />
+    <None Include="FSM\FSM_Transition.inl" />
+    <None Include="ResourceManager.inl" />
+    <None Include="Utilities\BinarySerialization.inl" />
+    <None Include="Utilities\Maths.inl" />
+    <None Include="Utilities\SmartPtr.inl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

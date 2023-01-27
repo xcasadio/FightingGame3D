@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<PadConfig>
+  <Button Id="0" Input="1" KeyId="17" KeyType="0" JoystickNum="0"/>
+  <Button Id="1" Input="1" KeyId="32" KeyType="0" />
+  <Button Id="2" Input="1" KeyId="31" KeyType="0" />
+  <Button Id="3" Input="1" KeyId="30" KeyType="0" />
+  <Button Id="4" Input="1" KeyId="28" KeyType="0" />
+  <Button Id="5" Input="1" KeyId="1" KeyType="0" />
+  <Button Id="6" Input="1" KeyId="25" KeyType="0" />
+  <Button Id="7" Input="1" KeyId="38" KeyType="0" />
+  <Button Id="8" Input="1" KeyId="24" KeyType="0" />
+  <Button Id="9" Input="1" KeyId="23" KeyType="0" />
+  <Button Id="10" Input="1" KeyId="22" KeyType="0" />
+  <Button Id="11" Input="1" KeyId="21" KeyType="0" />
+</PadConfig>

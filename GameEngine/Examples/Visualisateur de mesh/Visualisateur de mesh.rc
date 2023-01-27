@@ -1,0 +1,123 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Français (France) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
+#ifdef _WIN32
+LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MAINDIALOG DIALOGEX 0, 0, 449, 354
+STYLE DS_ABSALIGN | DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | DS_CENTER | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "Visualisateur"
+MENU IDR_MENU1
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_PREVIEW,"Static",SS_BLACKFRAME | SS_NOTIFY,7,7,340,340
+    COMBOBOX        IDC_COMBODISPLAYMODE,352,18,90,54,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CTEXT           "Mode d'affichage",IDC_TEXT1,352,7,90,10
+    CONTROL         "Affichage textures",IDC_CHECKDISPLAYTEXTURE,"Button",BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,352,42,90,13
+    CONTROL         "Affichage en blanc",IDC_CHECKWHITEMATERIAL,"Button",BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,352,58,90,15
+    CONTROL         "Afficher le bounding box",IDC_CHECKDISPLAYBOUNDINGBOX,
+                    "Button",BS_AUTOCHECKBOX | BS_LEFT | BS_MULTILINE | WS_TABSTOP,352,88,90,14
+    CONTROL         "Afficher le bouding sphere",IDC_CHECKDISPLAYBOUNDINGSPHERE,
+                    "Button",BS_AUTOCHECKBOX | BS_LEFT | BS_MULTILINE | WS_TABSTOP,352,106,90,19
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_MAINDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 442
+        VERTGUIDE, 352
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 347
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU1 MENU 
+BEGIN
+    POPUP "Fichier"
+    BEGIN
+        MENUITEM "Ouvrir",                      ID_FICHIER_OUVRIR
+        MENUITEM SEPARATOR
+        MENUITEM "Fermer",                      ID_FICHIER_FERMER
+    END
+END
+
+#endif    // Français (France) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,11 @@
+{
+  "name": "Fighting Game",
+  "gamedll": "FightingGame3D.dll",
+  "window": {
+    "title": "Fighting Game",
+    "depth": 32,
+    "width": 1024,
+    "height": 768,
+    "windowed": "true"
+  }
+}

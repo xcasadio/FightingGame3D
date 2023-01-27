@@ -1,0 +1,218 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Français (France) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_FRA)
+#ifdef _WIN32
+LANGUAGE LANG_FRENCH, SUBLANG_FRENCH
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MAINDIALOG DIALOGEX 0, 0, 525, 343
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "Particle editor"
+MENU IDR_MENU1
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_PREVIEW,"Static",SS_BLACKFRAME,193,7,325,329
+    LTEXT           "Life (ms)",IDC_STATIC_LIFE,7,7,86,11,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_LIFE,93,7,30,13,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "Continuous",IDC_CHECK_CONTINOUS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,25,86,10
+    LTEXT           "Emission per sec",IDC_STATIC_LIFE2,7,41,86,11,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_EMISSION,93,41,30,13,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Max particles",IDC_STATIC_LIFE3,7,60,86,11,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_PARTICLE_MAX,93,60,30,13,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Life (ms)",IDC_STATIC_LIFE4,7,86,29,11,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_LIFE_MIN,63,86,43,13,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Min",IDC_STATIC_LIFE5,43,86,20,11,SS_CENTERIMAGE
+    LTEXT           "Max",IDC_STATIC_LIFE6,117,86,20,11,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_LIFE_MAX,142,86,43,13,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Speed",IDC_STATIC_LIFE7,7,107,20,11,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_SPEED_MIN,63,107,43,13,ES_AUTOHSCROLL
+    LTEXT           "Min",IDC_STATIC_LIFE8,43,107,20,11,SS_CENTERIMAGE
+    LTEXT           "Max",IDC_STATIC_LIFE9,117,107,20,11,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_SPEED_MAX,142,107,43,13,ES_AUTOHSCROLL
+    LTEXT           "Size",IDC_STATIC_LIFE10,7,129,20,11,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_SIZE_MIN,63,129,43,13,ES_AUTOHSCROLL
+    LTEXT           "Min",IDC_STATIC_LIFE11,43,129,20,11,SS_CENTERIMAGE
+    LTEXT           "Max",IDC_STATIC_LIFE12,117,129,20,11,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_SIZE_MAX,142,129,43,13,ES_AUTOHSCROLL
+    CONTROL         "",IDC_COLOR_START,"Static",SS_BLACKRECT,63,149,30,15
+    CONTROL         "",IDC_COLOR_END,"Static",SS_BLACKRECT,153,149,32,15
+    LTEXT           "Spread (degree)",IDC_STATIC_LIFE15,7,171,86,11,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_SPREAD_X,113,171,43,13,ES_AUTOHSCROLL
+    LTEXT           "x",IDC_STATIC_LIFE16,93,171,20,11,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_SPREAD_Y,113,187,43,13,ES_AUTOHSCROLL
+    LTEXT           "y",IDC_STATIC_LIFE17,93,187,20,11,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_SPREAD_Z,113,203,43,13,ES_AUTOHSCROLL
+    LTEXT           "z",IDC_STATIC_LIFE18,93,203,20,11,SS_CENTERIMAGE
+    PUSHBUTTON      "Particle",IDC_BUTTON_SET_PARTICLE,7,230,55,18
+    PUSHBUTTON      "Update",IDC_BUTTON_UPDATE,134,318,51,18
+    PUSHBUTTON      "Color start",IDC_BUTTON_COLOR_START,7,149,45,15
+    PUSHBUTTON      "Color end",IDC_BUTTON_COLOR_END,100,149,45,15
+    PUSHBUTTON      "Start",IDC_BUTTON_START,7,318,56,18
+END
+
+IDD_DIALOG_PARTICLE DIALOGEX 0, 0, 205, 124
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Particle editor"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Fichier",IDC_BUTTON_FILE,7,7,42,16
+    COMBOBOX        IDC_COMBO_SRC_BLEND,69,32,129,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO_DEST_BLEND,70,54,128,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Source",IDC_STATIC,7,32,26,13,SS_CENTERIMAGE
+    LTEXT           "Destination",IDC_STATIC,7,56,44,13,SS_CENTERIMAGE
+    CONTROL         "zWrite",IDC_CHECK_ZWRITE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,77,53,13
+    CONTROL         "lighting",IDC_CHECK_LIGHTING,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,96,77,51,13
+    EDITTEXT        IDC_EDIT_PARTICLE_FILE_NAME,57,7,141,15,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "OK",IDC_BUTTON_SET_PARTICLE_OK,147,99,51,18
+END
+
+IDD_DIALOG_COLOR DIALOGEX 0, 0, 180, 76
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_ACCEPTFILES
+CAPTION "Color"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,69,54,50,15
+    PUSHBUTTON      "Annuler",IDCANCEL,123,54,50,15
+    CTEXT           "Alpha",IDC_STATIC,75,7,38,14,SS_CENTERIMAGE
+    PUSHBUTTON      "Color",IDC_BUTTON_COLOR,7,7,50,14
+    EDITTEXT        IDC_EDIT_ALPHA,125,7,48,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "emissive color",IDC_BUTTON_EMISSIVE_COLOR,7,31,57,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_MAINDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 518
+        VERTGUIDE, 63
+        VERTGUIDE, 93
+        VERTGUIDE, 185
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 336
+        HORZGUIDE, 105
+        HORZGUIDE, 149
+        HORZGUIDE, 164
+    END
+
+    IDD_DIALOG_PARTICLE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 198
+        VERTGUIDE, 96
+        VERTGUIDE, 198
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 117
+        HORZGUIDE, 22
+        HORZGUIDE, 32
+        HORZGUIDE, 44
+        HORZGUIDE, 77
+    END
+
+    IDD_DIALOG_COLOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 173
+        VERTGUIDE, 64
+        VERTGUIDE, 75
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 69
+        HORZGUIDE, 21
+        HORZGUIDE, 32
+        HORZGUIDE, 45
+        HORZGUIDE, 54
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU1 MENU 
+BEGIN
+    POPUP "Fichier"
+    BEGIN
+        MENUITEM "Charger",                     ID_FICHIER_CHARGER
+        MENUITEM "Sauvegarder",                 ID_FICHIER_SAUVEGARDER
+    END
+    POPUP "Option"
+    BEGIN
+        MENUITEM "Couleur fond d'ecran",        ID_OPTION_COULEURFOND
+        MENUITEM "grille",                      ID_OPTION_GRILLE
+    END
+END
+
+#endif    // Français (France) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

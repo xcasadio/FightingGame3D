@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ParticleDef name="particle">
+  <Emission number="100" max="500" continuous="1" life="5.3" />
+  <Particle file="df.png" alpha="1" srcBend="1" destBend="1" zWrite="1" lighting="1"/>
+  
+  <Life min="1" max="5.3" />
+  <Speed min="1" max="5.3" />
+  <Size min="1" max="5.3" />
+  <Life continuous="1" life="5.3" />
+  <Color start="5554" end="54654" />
+  <Spread x="2" y="1.0" z="354" />
+</ParticleDef>

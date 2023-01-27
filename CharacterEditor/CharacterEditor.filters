@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Fichiers sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Fichiers de ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Ref Fighting Game 3D">
+      <UniqueIdentifier>{e1e16933-6811-4110-8c18-0259c7dd149b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ref Fighting Game 3D\Tinyml">
+      <UniqueIdentifier>{b6250703-e140-48d9-baa1-cf979ab97237}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Editor.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Fighting Game\Character.cpp">
+      <Filter>Ref Fighting Game 3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Fighting Game\CharacterCollision.cpp">
+      <Filter>Ref Fighting Game 3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Fighting Game\CharacterLocal.cpp">
+      <Filter>Ref Fighting Game 3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Fighting Game\Command.cpp">
+      <Filter>Ref Fighting Game 3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Fighting Game\StateDef.cpp">
+      <Filter>Ref Fighting Game 3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Fighting Game\tinyxml\tinystr.cpp">
+      <Filter>Ref Fighting Game 3D\Tinyml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Fighting Game\tinyxml\tinyxml.cpp">
+      <Filter>Ref Fighting Game 3D\Tinyml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Fighting Game\tinyxml\tinyxmlerror.cpp">
+      <Filter>Ref Fighting Game 3D\Tinyml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Fighting Game\tinyxml\tinyxmlparser.cpp">
+      <Filter>Ref Fighting Game 3D\Tinyml</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Editor.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Types.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Fighting Game\Character.h">
+      <Filter>Ref Fighting Game 3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Fighting Game\CharacterCollision.h">
+      <Filter>Ref Fighting Game 3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Fighting Game\CharacterLocal.h">
+      <Filter>Ref Fighting Game 3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Fighting Game\Command.h">
+      <Filter>Ref Fighting Game 3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Fighting Game\StateDef.h">
+      <Filter>Ref Fighting Game 3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Fighting Game\stateDefTypes.h">
+      <Filter>Ref Fighting Game 3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Fighting Game\tinyxml\tinystr.h">
+      <Filter>Ref Fighting Game 3D\Tinyml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Fighting Game\tinyxml\tinyxml.h">
+      <Filter>Ref Fighting Game 3D\Tinyml</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Editeur Personnage.rc">
+      <Filter>Fichiers de ressources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
