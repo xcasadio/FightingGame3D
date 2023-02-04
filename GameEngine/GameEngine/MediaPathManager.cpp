@@ -12,42 +12,42 @@ namespace GameEngine
 {
 	SINGLETON_IMPL(MediaPathManager)
 
-	/**
-	 *
-	 */
-	 void MediaPathManager::AddPath( const char *fileName_ )
+		/**
+		 *
+		 */
+		void MediaPathManager::AddPath(const char* fileName_)
 	{
 		std::string str = fileName_;
-		if ( *str.rbegin() != '/' && *str.rbegin() != '\\' )
+		if (*str.rbegin() != '/' && *str.rbegin() != '\\')
 		{
-			str.append( "/" );
+			str.append("/");
 		}
-		
-		m_Paths.insert( str );
+
+		m_Paths.insert(str);
 	}
 
 	/**
 	 *
 	 */
-	std::string MediaPathManager::FindMedia( const char *fileName_ )
+	std::string MediaPathManager::FindMedia(const char* fileName_)
 	{
 		std::string str;
 		std::fstream file;
 		std::set<std::string>::iterator it;
 
-		for ( it = m_Paths.begin(); it != m_Paths.end(); it++ )
+		for (it = m_Paths.begin(); it != m_Paths.end(); ++it)
 		{
-			str.append( *it );
-			str.append( fileName_ );
-			
-			file.open( str.c_str() );
+			str.append(*it);
+			str.append(fileName_);
 
-			if ( file.is_open() )
+			file.open(str.c_str());
+
+			if (file.is_open())
 			{
 				file.close();
 				return str;
 			}
-			
+
 			str.clear();
 		}
 

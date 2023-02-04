@@ -8,7 +8,7 @@
 
 #include "DebugEngine/DebugNew.h"
 
-DWORD ButtonCombination::id( COMMAND_ID_FIRST_CUSTOM_COMMAND );
+DWORD ButtonCombination::id(COMMAND_ID_FIRST_CUSTOM_COMMAND);
 
 //std::map< std::string, long > IALogicExpressionValue::m_MapKeyWord;
 
@@ -18,7 +18,7 @@ DWORD ButtonCombination::id( COMMAND_ID_FIRST_CUSTOM_COMMAND );
 
 //=====================================================================================
 //=====================================================================================
-/** 
+/**
  *
  */
 Command::~Command()
@@ -29,25 +29,24 @@ Command::~Command()
  * @is flux d'entrée
  * @return le nombre d'octet lu
  */
-int Command::Read( std::istream &is_ )
+int Command::Read(std::istream& is_)
 {
 	int octetRead = is_.tellg();
 
 	size_t t = 0;
-	ButtonCombination *pButtonCombination = NULL;
 
-	is_.read( (char *) &t, sizeof(t) );
+	is_.read((char*)&t, sizeof(t));
 
 	m_Commands.clear();
 
-	for ( size_t i = 0; i < t; i++  )
+	for (size_t i = 0; i < t; i++)
 	{
-		pButtonCombination = new ButtonCombination;
-		pButtonCombination->Read( is_ );
-		m_Commands.push_back( *pButtonCombination );
+		ButtonCombination* pButtonCombination = new ButtonCombination;
+		pButtonCombination->Read(is_);
+		m_Commands.push_back(*pButtonCombination);
 
 		delete pButtonCombination;
-		pButtonCombination = NULL;
+		pButtonCombination = nullptr;
 	}
 
 	return octetRead;
@@ -57,39 +56,35 @@ int Command::Read( std::istream &is_ )
  * @os flux de sortie
  * @return le meme flux modifié
  */
-std::ostream &Command::operator >> ( std::ostream &os_ )
+std::ostream& Command::operator >> (std::ostream& os_)
 {
-	std::vector<ButtonCombination>::iterator it;
-
 	size_t t = m_Commands.size();
-	os_.write( (char *) &t, sizeof(size_t) );
+	os_.write((char*)&t, sizeof(size_t));
 
-	for ( it = m_Commands.begin(); it != m_Commands.end(); it++ )
+	for (std::vector<ButtonCombination>::iterator it = m_Commands.begin(); it != m_Commands.end(); ++it)
 	{
 		*it >> os_;
 	}
-	
+
 	return os_;
 }
 
 /**
  *
  */
-void Command::Add(ButtonCombination &combination_)
+void Command::Add(ButtonCombination& combination_)
 {
 	m_Commands.push_back(combination_);
 }
 
-/** 
+/**
  *
  */
-bool Command::CommandActivated( std::string &str_ )
+bool Command::CommandActivated(std::string& str_)
 {
-	std::vector<ButtonCombination>::iterator it;
-
-	for ( it = m_Commands.begin(); it != m_Commands.end(); it++)
+	for (std::vector<ButtonCombination>::iterator it = m_Commands.begin(); it != m_Commands.end(); ++it)
 	{
-		if ( str_.compare( it->GetName() ) == 0 )
+		if (str_.compare(it->GetName()) == 0)
 		{
 			return it->GetActivated();
 		}
@@ -103,11 +98,9 @@ bool Command::CommandActivated( std::string &str_ )
  */
 void Command::InactiveCombination()
 {
-	std::vector<ButtonCombination>::iterator it;
-
-	for ( it = m_Commands.begin(); it != m_Commands.end(); it++ )
+	for (std::vector<ButtonCombination>::iterator it = m_Commands.begin(); it != m_Commands.end(); ++it)
 	{
-		it->SetActivated( false );
+		it->SetActivated(false);
 	}
 }
 
@@ -116,8 +109,8 @@ void Command::InactiveCombination()
  *
 cButtonCombination &cCommand::GetIdByName(std::string &str_)
 {
-	
-	
+
+
 	//Erreur
 	char buf[256];
 	sprintf_s(buf, 256, "cCommand::GetIdByName() : La commande %s n'existe pas", str_.c_str());
@@ -139,12 +132,12 @@ long cCommand::GetActivatedCommand()
  *
  */
 #ifdef EDITOR
-std::vector<ButtonCombination> *Command::GetCommands()
+std::vector<ButtonCombination>* Command::GetCommands()
 {
 	return &m_Commands;
 }
 #elif SHOW_DEBUG
-std::vector<ButtonCombination> *Command::GetCommands()
+std::vector<ButtonCombination>* Command::GetCommands()
 {
 	return &m_Commands;
 }
@@ -157,7 +150,7 @@ std::vector<ButtonCombination> *Command::GetCommands()
  */
 CommandPlayer::~CommandPlayer()
 {
-	
+
 }
 
 /**
@@ -224,7 +217,7 @@ cCommandPlayer::cCommandPlayer()
 /**
  *
  */
-void CommandPlayer::CheckCommand( char posInScreen_, BufferButton &buffer_ )
+void CommandPlayer::CheckCommand(char posInScreen_, BufferButton& buffer_)
 {
 	std::vector<ButtonCombination>::iterator it;
 	size_t size = 0;
@@ -235,7 +228,7 @@ void CommandPlayer::CheckCommand( char posInScreen_, BufferButton &buffer_ )
 
 	//check Activated Command
 
-	buffer_.CheckCommand( m_Commands );
+	buffer_.CheckCommand(m_Commands);
 
 	/*
 	for ( it = m_Commands.begin(); it != m_Commands.end(); it++ )
@@ -252,7 +245,7 @@ void CommandPlayer::CheckCommand( char posInScreen_, BufferButton &buffer_ )
 /**
  * Verifie les boutons de deplacement car ce sont des cas speciaux.
  */
-eCommandId CommandPlayer::CheckDisplacement( char posInScreen_, BufferButton &buffer_ )
+eCommandId CommandPlayer::CheckDisplacement(char posInScreen_, BufferButton& buffer_)
 {
 	eCommandId displacement = COMMAND_ID_NONE;
 
@@ -260,11 +253,11 @@ eCommandId CommandPlayer::CheckDisplacement( char posInScreen_, BufferButton &bu
 	DWORD time = GetTickCount();
 
 	//lire le buffer a la position
-	if ( buffer_.Read( 0, bufferButton) )
+	if (buffer_.Read(0, bufferButton))
 	{
 		/*
 		if ( posInScreen_ == CHARAC_RIGHT )
-		{					
+		{
 			if ( (bufferButton.buttonPressed & ( MASK_RIGHT | MASK_LEFT ) ) != ( MASK_RIGHT | MASK_LEFT ) )
 			{
 				if ( (bufferButton.buttonPressed & MASK_RIGHT) == MASK_RIGHT )
@@ -285,38 +278,38 @@ eCommandId CommandPlayer::CheckDisplacement( char posInScreen_, BufferButton &bu
 
 		time -= bufferButton.time;
 
-		if ( posInScreen_ == CHARAC_RIGHT )
+		if (posInScreen_ == CHARAC_RIGHT)
 		{
-			if ( (bufferButton.buttonHeld & ( MASK_RIGHT | MASK_LEFT ) ) != ( MASK_RIGHT | MASK_LEFT ) )
+			if ((bufferButton.buttonHeld & (MASK_RIGHT | MASK_LEFT)) != (MASK_RIGHT | MASK_LEFT))
 			{
-				if ( (bufferButton.buttonHeld & MASK_RIGHT) == MASK_RIGHT )
+				if ((bufferButton.buttonHeld & MASK_RIGHT) == MASK_RIGHT)
 				{
 					displacement = COMMAND_ID_WALK_BACKWARD;
 				}
-				else if ( (bufferButton.buttonHeld & MASK_LEFT) == MASK_LEFT )
+				else if ((bufferButton.buttonHeld & MASK_LEFT) == MASK_LEFT)
 				{
 					displacement = COMMAND_ID_WALK_FORWARD;
 				}
-			}			
+			}
 		}
-		else if ( (bufferButton.buttonHeld & ( MASK_RIGHT | MASK_LEFT ) ) != ( MASK_RIGHT | MASK_LEFT ) )
+		else if ((bufferButton.buttonHeld & (MASK_RIGHT | MASK_LEFT)) != (MASK_RIGHT | MASK_LEFT))
 		{
-			if ( (bufferButton.buttonHeld & MASK_RIGHT) == MASK_RIGHT )
+			if ((bufferButton.buttonHeld & MASK_RIGHT) == MASK_RIGHT)
 			{
 				displacement = COMMAND_ID_WALK_FORWARD;
 			}
-			else if ( (bufferButton.buttonHeld & MASK_LEFT) == MASK_LEFT )
+			else if ((bufferButton.buttonHeld & MASK_LEFT) == MASK_LEFT)
 			{
 				displacement = COMMAND_ID_WALK_BACKWARD;
 			}
 		}
 
-		if ( (bufferButton.buttonHeld & MASK_UP) == MASK_UP &&
-			 (bufferButton.buttonReleased & MASK_UP) != MASK_UP )			 
+		if ((bufferButton.buttonHeld & MASK_UP) == MASK_UP &&
+			(bufferButton.buttonReleased & MASK_UP) != MASK_UP)
 		{
-			if ( (bufferButton.buttonHeld & MASK_RIGHT) == MASK_RIGHT  )
+			if ((bufferButton.buttonHeld & MASK_RIGHT) == MASK_RIGHT)
 			{
-				if ( posInScreen_ == CHARAC_RIGHT )
+				if (posInScreen_ == CHARAC_RIGHT)
 				{
 					displacement = COMMAND_ID_JUMP_BACKWARD;
 				}
@@ -325,9 +318,9 @@ eCommandId CommandPlayer::CheckDisplacement( char posInScreen_, BufferButton &bu
 					displacement = COMMAND_ID_JUMP_FORWARD;
 				}
 			}
-			else if ( (bufferButton.buttonHeld & MASK_LEFT) == MASK_LEFT )
+			else if ((bufferButton.buttonHeld & MASK_LEFT) == MASK_LEFT)
 			{
-				if ( posInScreen_ == CHARAC_RIGHT )
+				if (posInScreen_ == CHARAC_RIGHT)
 				{
 					displacement = COMMAND_ID_JUMP_FORWARD;
 				}
@@ -341,9 +334,9 @@ eCommandId CommandPlayer::CheckDisplacement( char posInScreen_, BufferButton &bu
 				displacement = COMMAND_ID_JUMP;
 			}
 		}
-		
-		if ( (bufferButton.buttonHeld & MASK_DOWN) == MASK_DOWN &&
-			(bufferButton.buttonReleased & MASK_DOWN) != MASK_DOWN )
+
+		if ((bufferButton.buttonHeld & MASK_DOWN) == MASK_DOWN &&
+			(bufferButton.buttonReleased & MASK_DOWN) != MASK_DOWN)
 		{
 			displacement = COMMAND_ID_CROUCH;
 		}
@@ -362,8 +355,8 @@ eCommandId CommandPlayer::CheckDisplacement( char posInScreen_, BufferButton &bu
  */
 IALogicExpressionValue::~IALogicExpressionValue()
 {
-	m_pCharac = NULL;
-	m_pOpponent = NULL;
+	m_pCharac = nullptr;
+	m_pOpponent = nullptr;
 }
 
 /**
@@ -371,8 +364,8 @@ IALogicExpressionValue::~IALogicExpressionValue()
  */
 IALogicExpressionValue::IALogicExpressionValue()
 {
-	m_pOpponent = NULL;
-	m_pCharac = NULL;
+	m_pOpponent = nullptr;
+	m_pCharac = nullptr;
 }
 
 /**
@@ -386,26 +379,26 @@ IALogicExpressionValue::IALogicExpressionValue( const IALogicExpressionValue *v_
 /**
  *
  */
-IALogicExpressionValue::IALogicExpressionValue( const IALogicExpressionValue &v_ )
+IALogicExpressionValue::IALogicExpressionValue(const IALogicExpressionValue& v_)
 {
-	Copy( v_ );
+	Copy(v_);
 }
 
 /**
  *
  */
-IALogicExpressionValue &IALogicExpressionValue::operator = ( const IALogicExpressionValue &v_ )
+IALogicExpressionValue& IALogicExpressionValue::operator = (const IALogicExpressionValue& v_)
 {
-	Copy( v_ );
+	Copy(v_);
 	return *this;
 }
 
 /**
  *
  */
-bool IALogicExpressionValue::operator == ( const IALogicExpressionValue &v_ )
+bool IALogicExpressionValue::operator == (const IALogicExpressionValue& v_)
 {
-	return ( GetLogicValue() == ( const_cast<IALogicExpressionValue &> (v_) ).GetLogicValue() );
+	return (GetLogicValue() == (const_cast<IALogicExpressionValue&> (v_)).GetLogicValue());
 	/*
 	std::map< std::string, long >::iterator itL = m_MapKeyWord.find(m_KeyWordName);
 	std::map< std::string, long >::iterator itR = m_MapKeyWord.find(v_.m_KeyWordName);
@@ -422,28 +415,28 @@ bool IALogicExpressionValue::operator == ( const IALogicExpressionValue &v_ )
 /**
  *
  */
-bool IALogicExpressionValue::operator < ( const IALogicExpressionValue &v_ )
+bool IALogicExpressionValue::operator < (const IALogicExpressionValue& v_)
 {
-	return ( GetLogicValue() < ( const_cast<IALogicExpressionValue &> (v_) ).GetLogicValue() );
-/*
-	std::map< std::string, long >::iterator itL = m_MapKeyWord.find(m_KeyWordName);
-	std::map< std::string, long >::iterator itR = m_MapKeyWord.find(v_.m_KeyWordName);
+	return (GetLogicValue() < (const_cast<IALogicExpressionValue&> (v_)).GetLogicValue());
+	/*
+		std::map< std::string, long >::iterator itL = m_MapKeyWord.find(m_KeyWordName);
+		std::map< std::string, long >::iterator itR = m_MapKeyWord.find(v_.m_KeyWordName);
 
-	if ( itL == m_MapKeyWord.end() || itR == m_MapKeyWord.end() )
-	{
-		return false;
-	}
+		if ( itL == m_MapKeyWord.end() || itR == m_MapKeyWord.end() )
+		{
+			return false;
+		}
 
-	return m_pCharac->GetParameterValue( itL->second, m_pOpponent ) < v_.m_pCharac->GetParameterValue( itR->second, m_pOpponent );
-*/
+		return m_pCharac->GetParameterValue( itL->second, m_pOpponent ) < v_.m_pCharac->GetParameterValue( itR->second, m_pOpponent );
+	*/
 }
 
 /**
  *
  */
-bool IALogicExpressionValue::operator && ( const IALogicExpressionValue &v_ )
+bool IALogicExpressionValue::operator && (const IALogicExpressionValue& v_)
 {
-	return ( GetLogicValue() && ( const_cast<IALogicExpressionValue &> (v_) ).GetLogicValue() );
+	return (GetLogicValue() && (const_cast<IALogicExpressionValue&> (v_)).GetLogicValue());
 
 	/*
 	std::map< std::string, long >::iterator itL = m_MapKeyWord.find(m_KeyWordName);
@@ -461,9 +454,9 @@ bool IALogicExpressionValue::operator && ( const IALogicExpressionValue &v_ )
 /**
  *
  */
-bool IALogicExpressionValue::operator || ( const IALogicExpressionValue &v_ )
+bool IALogicExpressionValue::operator || (const IALogicExpressionValue& v_)
 {
-	return ( GetLogicValue() || ( const_cast<IALogicExpressionValue &> (v_) ).GetLogicValue() );
+	return (GetLogicValue() || (const_cast<IALogicExpressionValue&> (v_)).GetLogicValue());
 	/*
 	std::map< std::string, long >::iterator itL = m_MapKeyWord.find(m_KeyWordName);
 	std::map< std::string, long >::iterator itR = m_MapKeyWord.find(v_.m_KeyWordName);
@@ -482,33 +475,33 @@ bool IALogicExpressionValue::operator || ( const IALogicExpressionValue &v_ )
  */
 float IALogicExpressionValue::GetLogicValue()
 {
-	switch ( m_Val.type )
+	switch (m_Val.type)
 	{
 	case IA_LOGIC_EXPRESSION_VALUE_KEYWORD:
+	{
+		/*
+		std::map< std::string, long >::iterator it;
+
+		it = m_MapKeyWord.find( m_Val.keyWordId );
+
+
+		if ( it != m_MapKeyWord.end() )
+		{*/
+		return m_pCharac->GetParameterValue( /*it->second*/ m_Val.keyWordId, m_pOpponent);
+		/*}
+		else
 		{
-			/*
-			std::map< std::string, long >::iterator it;
-
-			it = m_MapKeyWord.find( m_Val.keyWordId );
-			
-
-			if ( it != m_MapKeyWord.end() )
-			{*/
-			return m_pCharac->GetParameterValue( /*it->second*/ m_Val.keyWordId, m_pOpponent );
-			/*}
-			else
-			{
-				assert( false );
-			}*/
-		}
-		break;
+			assert( false );
+		}*/
+	}
+	break;
 
 	case IA_LOGIC_EXPRESSION_VALUE_REAL:
 		return m_Val.real;
 		break;
 	}
 
-	assert( false );
+	assert(false);
 
 	return 0.0f;
 }
@@ -516,7 +509,7 @@ float IALogicExpressionValue::GetLogicValue()
 /**
  *
  */
-void IALogicExpressionValue::SetValue( sIALogicExpressionValue &val_ )
+void IALogicExpressionValue::SetValue(sIALogicExpressionValue& val_)
 {
 	m_Val = val_;
 }
@@ -532,9 +525,9 @@ bool IALogicExpressionValue::ToBool()
 /**
  *
  */
-void IALogicExpressionValue::Copy( const IALogicExpressionValue &v_ )
+void IALogicExpressionValue::Copy(const IALogicExpressionValue& v_)
 {
-	if ( this != &v_ )
+	if (this != &v_)
 	{
 		m_Val = v_.m_Val;
 		//m_KeyWordName = v_.m_KeyWordName;
@@ -562,7 +555,7 @@ std::string IALogicExpressionValue::GetKeyWordName() const
 /**
  *
  */
-void IALogicExpressionValue::SetCharacterLocal( CharacterLocal *pCharac_ )
+void IALogicExpressionValue::SetCharacterLocal(CharacterLocal* pCharac_)
 {
 	m_pCharac = pCharac_;
 }
@@ -570,7 +563,7 @@ void IALogicExpressionValue::SetCharacterLocal( CharacterLocal *pCharac_ )
 /**
  *
  */
-CharacterLocal *IALogicExpressionValue::GetCharacterLocal()
+CharacterLocal* IALogicExpressionValue::GetCharacterLocal()
 {
 	return m_pCharac;
 }
@@ -578,7 +571,7 @@ CharacterLocal *IALogicExpressionValue::GetCharacterLocal()
 /**
  *
  */
-void IALogicExpressionValue::SetCharacterLocalOpponent( CharacterLocal *pCharac_ )
+void IALogicExpressionValue::SetCharacterLocalOpponent(CharacterLocal* pCharac_)
 {
 	m_pOpponent = pCharac_;
 }
@@ -586,11 +579,11 @@ void IALogicExpressionValue::SetCharacterLocalOpponent( CharacterLocal *pCharac_
 /**
  *
  */
-CharacterLocal *IALogicExpressionValue::GetCharacterLocalOpponent()
+CharacterLocal* IALogicExpressionValue::GetCharacterLocalOpponent()
 {
 	return m_pOpponent;
 }
-	
+
 //=====================================================================================
 //=====================================================================================
 /**
@@ -598,8 +591,8 @@ CharacterLocal *IALogicExpressionValue::GetCharacterLocalOpponent()
  */
 CommandIA::CommandIA()
 {
-	m_pCharac = NULL;
-	m_pOpponent = NULL;
+	m_pCharac = nullptr;
+	m_pOpponent = nullptr;
 	m_CurrentDisplacement = COMMAND_ID_NONE;
 }
 
@@ -608,13 +601,13 @@ CommandIA::CommandIA()
  */
 CommandIA::~CommandIA()
 {
-	
+
 }
 
 /**
  *
  */
-void CommandIA::CheckCommand( char posInScreen_, BufferButton &buffer_ )
+void CommandIA::CheckCommand(char posInScreen_, BufferButton& buffer_)
 {
 	//std::vector<cButtonCombination>::iterator it;
 	//size_t size = 0;
@@ -623,16 +616,14 @@ void CommandIA::CheckCommand( char posInScreen_, BufferButton &buffer_ )
 
 	//IA : 
 	/*
-		Ici on va choisir la command "éxecuté"		
+		Ici on va choisir la command "éxecuté"
 	*/
 
 	InactiveCombination();
 
-	//std::vector< FSM_State<IALogicExpressionValue, long> > states = m_FSM.Process();
-	std::set<long> states; 
-	states = m_FSM.Process();
+	std::set<long> states = m_FSM.Process();
 
-	if ( states.size() > 0 )
+	if (states.size() > 0)
 	{
 		//changement de state
 		/*for ( size_t i = 0; i < states.size(); i++ )
@@ -642,27 +633,27 @@ void CommandIA::CheckCommand( char posInScreen_, BufferButton &buffer_ )
 
 		long stateId = *states.begin();
 
-		m_FSM.SetCurrentStateId( stateId );
+		m_FSM.SetCurrentStateId(stateId);
 
 		m_CurrentDisplacement = COMMAND_ID_NONE;
 
-		switch ( stateId )
+		switch (stateId)
 		{
 		case STATE_DEF_WALK_FORWARD:
 			m_CurrentDisplacement = COMMAND_ID_WALK_FORWARD;
 			break;
 
 		default:
-			if ( m_pCharac->m_CurrentStateDefId != stateId )
+			if (m_pCharac->m_CurrentStateDefId != stateId)
 			{
-				m_pCharac->ChangeState( stateId );
+				m_pCharac->ChangeState(stateId);
 			}
 		}
 	}
 }
 
 /**
- * 
+ *
  */
 eCommandId CommandIA::GetDisplacement() const
 {
@@ -672,7 +663,7 @@ eCommandId CommandIA::GetDisplacement() const
 /**
  *
  */
-void CommandIA::SetCharacter( CharacterLocal *pCharac_, CharacterLocal *pOpponent_ )
+void CommandIA::SetCharacter(CharacterLocal* pCharac_, CharacterLocal* pOpponent_)
 {
 	m_pCharac = pCharac_;
 	m_pOpponent = pOpponent_;
@@ -685,92 +676,86 @@ void CommandIA::SetCharacter( CharacterLocal *pCharac_, CharacterLocal *pOpponen
  */
 void CommandIA::InitFSM()
 {
-	FSM_State<IALogicExpressionValue, long> *pState = NULL;
-	FSM_Transition<IALogicExpressionValue, long> *pTransition = NULL;
-
-	LogicExpression<IALogicExpressionValue> *pLogicExpr = NULL;
-	LogicExpressionBrick<IALogicExpressionValue> *pLogicExprBrick = NULL, *pLogicExprBrickRight = NULL, *pLogicExprBrickLeft = NULL;
-	LogicValue<IALogicExpressionValue> *pLogicValue = NULL;
-	IALogicExpressionValue *pLogicExprVal = NULL;
 	IALogicExpressionValue::sIALogicExpressionValue IAVal;
 
-	long stateObject;
-
 	//le state IMMOBILE
-	pState = new FSM_State<IALogicExpressionValue, long>( &m_FSM );
-	stateObject = STATE_DEF_IDLE;
-	pState->SetStateObject( stateObject );
-	pState->SetId( STATE_DEF_IDLE );
+	FSM_State<IALogicExpressionValue, long>* pState = new FSM_State<IALogicExpressionValue, long>(&m_FSM);
+	long stateObject = STATE_DEF_IDLE;
+	pState->SetStateObject(stateObject);
+	pState->SetId(STATE_DEF_IDLE);
 
 	//la transition
-	pTransition = new FSM_Transition<IALogicExpressionValue, long>( &m_FSM, pState );
-	pTransition->SetTargetedStateId( STATE_DEF_WALK_FORWARD );
+	FSM_Transition<IALogicExpressionValue, long>* pTransition = new FSM_Transition<
+		IALogicExpressionValue, long>(&m_FSM, pState);
+	pTransition->SetTargetedStateId(STATE_DEF_WALK_FORWARD);
 
 	//la condition de la transition
-	pLogicExpr = new LogicExpression<IALogicExpressionValue>;
-	pLogicExprBrick = new LogicExpressionBrick<IALogicExpressionValue>;
-	pLogicExprBrickLeft = new LogicExpressionBrick<IALogicExpressionValue>;
-	pLogicExprBrickRight = new LogicExpressionBrick<IALogicExpressionValue>;
-	pLogicExprVal = new IALogicExpressionValue;
-	pLogicValue = new LogicValue<IALogicExpressionValue>;
+	LogicExpression<IALogicExpressionValue>* pLogicExpr = new LogicExpression<IALogicExpressionValue>;
+	LogicExpressionBrick<IALogicExpressionValue>* pLogicExprBrick = new LogicExpressionBrick<IALogicExpressionValue>;
+	LogicExpressionBrick<IALogicExpressionValue>* pLogicExprBrickLeft = new LogicExpressionBrick<
+		IALogicExpressionValue>;
+	LogicExpressionBrick<IALogicExpressionValue>* pLogicExprBrickRight = new LogicExpressionBrick<
+		IALogicExpressionValue>;
+	IALogicExpressionValue* pLogicExprVal = new IALogicExpressionValue;
+	LogicValue<IALogicExpressionValue>* pLogicValue = new LogicValue<IALogicExpressionValue>;
 	IAVal.type = IALogicExpressionValue::IA_LOGIC_EXPRESSION_VALUE_KEYWORD;
 	IAVal.keyWordId = IA_KEY_WORD_DIST_BETWEEN_PLAYER;
 
 	//la valeur
-	pLogicExprVal->SetCharacterLocal( m_pCharac );
-	pLogicExprVal->SetCharacterLocalOpponent( m_pOpponent );
-	pLogicExprVal->SetValue( IAVal );
+	pLogicExprVal->SetCharacterLocal(m_pCharac);
+	pLogicExprVal->SetCharacterLocalOpponent(m_pOpponent);
+	pLogicExprVal->SetValue(IAVal);
 
-	pLogicValue->SetValue( pLogicExprVal );
-	pLogicExprBrickLeft->SetVal( pLogicValue );
-	pLogicExprBrick->SetLeft( pLogicExprBrickLeft ); // "p2dist ...
+	pLogicValue->SetValue(pLogicExprVal);
+	pLogicExprBrickLeft->SetVal(pLogicValue);
+	pLogicExprBrick->SetLeft(pLogicExprBrickLeft); // "p2dist ...
 
 	pLogicValue = new LogicValue<IALogicExpressionValue>;
-	pLogicValue->SetValue( LOGIC_OPERATOR_SUP_EQUAL );
-	pLogicExprBrick->SetVal( pLogicValue ); // "p2dist >= ...
+	pLogicValue->SetValue(LOGIC_OPERATOR_SUP_EQUAL);
+	pLogicExprBrick->SetVal(pLogicValue); // "p2dist >= ...
 
 	pLogicExprVal = new IALogicExpressionValue;
-	pLogicExprVal->SetCharacterLocal( m_pCharac );
-	pLogicExprVal->SetCharacterLocalOpponent( m_pOpponent );
+	pLogicExprVal->SetCharacterLocal(m_pCharac);
+	pLogicExprVal->SetCharacterLocalOpponent(m_pOpponent);
 	IAVal.type = IALogicExpressionValue::IA_LOGIC_EXPRESSION_VALUE_REAL;
 	IAVal.real = 10.0f;
 
-	pLogicExprVal->SetValue( IAVal );
+	pLogicExprVal->SetValue(IAVal);
 	pLogicValue = new LogicValue<IALogicExpressionValue>;
-	pLogicValue->SetValue( pLogicExprVal );
-	pLogicExprBrickRight->SetVal( pLogicValue );
-	pLogicExprBrick->SetRight( pLogicExprBrickRight ); // "p2dist >= 10.0"	
+	pLogicValue->SetValue(pLogicExprVal);
+	pLogicExprBrickRight->SetVal(pLogicValue);
+	pLogicExprBrick->SetRight(pLogicExprBrickRight); // "p2dist >= 10.0"	
 
-	pLogicExpr->SetRoot(  pLogicExprBrick );
+	pLogicExpr->SetRoot(pLogicExprBrick);
 
 	//========================
-	pTransition->SetLogicExpression( pLogicExpr );
+	pTransition->SetLogicExpression(pLogicExpr);
 
 	//on ajoute la transition
-	pState->AddTransition( *pTransition );
+	pState->AddTransition(*pTransition);
 
 	delete pTransition;
-	pTransition = NULL;
+	pTransition = nullptr;
 
 	//========================
 	//on ajoute le state
-	m_FSM.GetStates().push_back( *pState );
+	m_FSM.GetStates().push_back(*pState);
 
 	delete pState;
-	pState = NULL;
-	
+	pState = nullptr;
+
 	/////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////
 
 	//le state AVANCER
-	pState = new FSM_State<IALogicExpressionValue, long>( &m_FSM );
+	pState = new FSM_State<IALogicExpressionValue, long>(&m_FSM);
 	stateObject = STATE_DEF_WALK_FORWARD;
-	pState->SetStateObject( stateObject );
-	pState->SetId( STATE_DEF_WALK_FORWARD );
+	pState->SetStateObject(stateObject);
+	pState->SetId(STATE_DEF_WALK_FORWARD);
 
 	//1ere transition
-	pTransition = new FSM_Transition<IALogicExpressionValue, long>( &m_FSM, pState );
-	pTransition->SetTargetedStateId( STATE_DEF_IDLE );
+	pTransition = new FSM_Transition<IALogicExpressionValue, long>(&m_FSM, pState);
+	pTransition->SetTargetedStateId(STATE_DEF_IDLE);
 
 	//la condition de la transition
 	pLogicExpr = new LogicExpression<IALogicExpressionValue>;
@@ -783,55 +768,55 @@ void CommandIA::InitFSM()
 	IAVal.keyWordId = IA_KEY_WORD_DIST_BETWEEN_PLAYER;
 
 	//la valeur
-	pLogicExprVal->SetCharacterLocal( m_pCharac );
-	pLogicExprVal->SetCharacterLocalOpponent( m_pOpponent );
-	pLogicExprVal->SetValue( IAVal );
+	pLogicExprVal->SetCharacterLocal(m_pCharac);
+	pLogicExprVal->SetCharacterLocalOpponent(m_pOpponent);
+	pLogicExprVal->SetValue(IAVal);
 
-	pLogicValue->SetValue( pLogicExprVal );
-	pLogicExprBrickLeft->SetVal( pLogicValue );
-	pLogicExprBrick->SetLeft( pLogicExprBrickLeft ); // "p2dist ...
+	pLogicValue->SetValue(pLogicExprVal);
+	pLogicExprBrickLeft->SetVal(pLogicValue);
+	pLogicExprBrick->SetLeft(pLogicExprBrickLeft); // "p2dist ...
 
 	pLogicValue = new LogicValue<IALogicExpressionValue>;
-	pLogicValue->SetValue( LOGIC_OPERATOR_INF_EQUAL );
-	pLogicExprBrick->SetVal( pLogicValue ); // "p2dist <= ...
+	pLogicValue->SetValue(LOGIC_OPERATOR_INF_EQUAL);
+	pLogicExprBrick->SetVal(pLogicValue); // "p2dist <= ...
 
 	pLogicExprVal = new IALogicExpressionValue;
-	pLogicExprVal->SetCharacterLocal( m_pCharac );
-	pLogicExprVal->SetCharacterLocalOpponent( m_pOpponent );
+	pLogicExprVal->SetCharacterLocal(m_pCharac);
+	pLogicExprVal->SetCharacterLocalOpponent(m_pOpponent);
 	IAVal.type = IALogicExpressionValue::IA_LOGIC_EXPRESSION_VALUE_REAL;
 	IAVal.real = 6.0f;
 
-	pLogicExprVal->SetValue( IAVal );
+	pLogicExprVal->SetValue(IAVal);
 	pLogicValue = new LogicValue<IALogicExpressionValue>;
-	pLogicValue->SetValue( pLogicExprVal );
-	pLogicExprBrickRight->SetVal( pLogicValue );
-	pLogicExprBrick->SetRight( pLogicExprBrickRight ); // "p2dist <= 6.0"	
+	pLogicValue->SetValue(pLogicExprVal);
+	pLogicExprBrickRight->SetVal(pLogicValue);
+	pLogicExprBrick->SetRight(pLogicExprBrickRight); // "p2dist <= 6.0"	
 
-	pLogicExpr->SetRoot(  pLogicExprBrick );
+	pLogicExpr->SetRoot(pLogicExprBrick);
 
 	//===========================
-	pTransition->SetLogicExpression( pLogicExpr );
+	pTransition->SetLogicExpression(pLogicExpr);
 
 	//on ajoute la transition
-	pState->AddTransition( *pTransition );
+	pState->AddTransition(*pTransition);
 
 	//===========================
 	//on ajoute le state
-	m_FSM.GetStates().push_back( *pState );
+	m_FSM.GetStates().push_back(*pState);
 
 	delete pState;
-	pState = NULL;
-	
+	pState = nullptr;
+
 	/////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////	
-	
-	m_FSM.SetCurrentStateId( STATE_DEF_IDLE );
+
+	m_FSM.SetCurrentStateId(STATE_DEF_IDLE);
 }
 
 //=====================================================================================
 //=====================================================================================
 /**
- * 
+ *
  */
 ButtonCombination::ButtonCombination()
 {
@@ -839,9 +824,9 @@ ButtonCombination::ButtonCombination()
 }
 
 /**
- * 
+ *
  */
-ButtonCombination::ButtonCombination(const ButtonCombination &combi_)
+ButtonCombination::ButtonCombination(const ButtonCombination& combi_)
 {
 	InitParameters();
 
@@ -858,9 +843,9 @@ void ButtonCombination::InitParameters()
 }
 
 /**
- * 
+ *
  */
-ButtonCombination &ButtonCombination::operator=(const ButtonCombination &combi_)
+ButtonCombination& ButtonCombination::operator=(const ButtonCombination& combi_)
 {
 	Copy(combi_);
 	return *this;
@@ -870,22 +855,22 @@ ButtonCombination &ButtonCombination::operator=(const ButtonCombination &combi_)
  * @is flux d'entrée
  * @return le nombre d'octet lu
  */
-int ButtonCombination::Read( std::istream &is_ )
+int ButtonCombination::Read(std::istream& is_)
 {
 	int octetRead = is_.tellg();
 	size_t t = 0;
 	sCombination combination;
 
-	is_.read( (char *) &m_TimeMax, sizeof(m_TimeMax) );
-	is_.read( (char *) &m_szName, sizeof(m_szName) );
-	is_.read( (char *) &m_bIsSubCombination, sizeof(m_bIsSubCombination) );
+	is_.read((char*)&m_TimeMax, sizeof(m_TimeMax));
+	is_.read((char*)&m_szName, sizeof(m_szName));
+	is_.read((char*)&m_bIsSubCombination, sizeof(m_bIsSubCombination));
 
-	is_.read( (char *) &t, sizeof(t) );
-	
-	for ( size_t i = 0; i < t; i++ )
+	is_.read((char*)&t, sizeof(t));
+
+	for (size_t i = 0; i < t; i++)
 	{
-		is_.read( (char *) &combination, sizeof(sCombination) );
-		m_Combinations.push_back( combination );
+		is_.read((char*)&combination, sizeof(sCombination));
+		m_Combinations.push_back(combination);
 	}
 
 	return octetRead;
@@ -895,30 +880,28 @@ int ButtonCombination::Read( std::istream &is_ )
  * @os flux de sortie
  * @return le meme flux modifié
  */
-std::ostream &ButtonCombination::operator >> ( std::ostream &os_ )
+std::ostream& ButtonCombination::operator >> (std::ostream& os_)
 {
-	std::vector<sCombination>::iterator it;
-
-	os_.write( (char *) &m_TimeMax, sizeof(m_TimeMax) );
-	os_.write( (char *) &m_szName, sizeof(m_szName) );
-	os_.write( (char *) &m_bIsSubCombination, sizeof(m_bIsSubCombination) );
+	os_.write((char*)&m_TimeMax, sizeof(m_TimeMax));
+	os_.write((char*)&m_szName, sizeof(m_szName));
+	os_.write((char*)&m_bIsSubCombination, sizeof(m_bIsSubCombination));
 
 	size_t t = m_Combinations.size();
 
-	os_.write( (char *) &t, sizeof(t) );
-	
-	for ( it = m_Combinations.begin(); it != m_Combinations.end(); it++ )
+	os_.write((char*)&t, sizeof(t));
+
+	for (std::vector<sCombination>::iterator it = m_Combinations.begin(); it != m_Combinations.end(); ++it)
 	{
-		os_.write( (char *) &(*it), sizeof(sCombination) );
+		os_.write((char*)&(*it), sizeof(sCombination));
 	}
-	
+
 	return os_;
 }
 
 /**
  *
  */
-void ButtonCombination::Add( sCombination &combination_)
+void ButtonCombination::Add(sCombination& combination_)
 {
 	m_Combinations.push_back(combination_);
 }
@@ -926,7 +909,7 @@ void ButtonCombination::Add( sCombination &combination_)
 /**
  *
  */
-void ButtonCombination::SetTimeMax( long time_)
+void ButtonCombination::SetTimeMax(long time_)
 {
 	m_TimeMax = time_;
 }
@@ -950,7 +933,7 @@ DWORD ButtonCombination::GetId() const
 /**
  *
  */
-const char *ButtonCombination::GetName() const
+const char* ButtonCombination::GetName() const
 {
 	return m_szName;
 }
@@ -958,7 +941,7 @@ const char *ButtonCombination::GetName() const
 /**
  *
  */
-void ButtonCombination::SetName(const char *name_)
+void ButtonCombination::SetName(const char* name_)
 {
 	strcpy_s(m_szName, sizeof(m_szName), name_);
 }
@@ -974,7 +957,7 @@ size_t cButtonCombination::GetCombinationSize() const
 /**
  *
  */
-const std::vector<ButtonCombination::sCombination> &ButtonCombination::GetCombinations() const
+const std::vector<ButtonCombination::sCombination>& ButtonCombination::GetCombinations() const
 {
 	return  m_Combinations;
 }
@@ -982,7 +965,7 @@ const std::vector<ButtonCombination::sCombination> &ButtonCombination::GetCombin
 /**
  *
  */
-void ButtonCombination::SetActivated( bool v_ )
+void ButtonCombination::SetActivated(bool v_)
 {
 	m_bActivated = v_;
 }
@@ -998,7 +981,7 @@ bool ButtonCombination::GetActivated() const
 /**
  *
  */
-void ButtonCombination::SetSubCombination( bool val_ ) 
+void ButtonCombination::SetSubCombination(bool val_)
 {
 	m_bIsSubCombination = val_;
 }
@@ -1017,7 +1000,7 @@ bool ButtonCombination::IsSubCombination() const
 bool cButtonCombination::CheckCombination( char posInScreen_, cBufferButton &buffer_ )
 {
 	cBufferButton::sBufferButton bufferButton;
-	
+
 	DWORD time = GetTickCount();
 	DWORD i = 0, j = 0;
 	unsigned int button;
@@ -1042,7 +1025,7 @@ bool cButtonCombination::CheckCombination( char posInScreen_, cBufferButton &buf
 			button = bufferButton.buttonPressed;
 
 			if ( posInScreen_ == CHARAC_RIGHT )
-			{					
+			{
 				if ( ( bufferButton.buttonPressed & ( MASK_RIGHT | MASK_LEFT ) ) != ( MASK_RIGHT | MASK_LEFT ) )
 				{
 					if ( ( bufferButton.buttonPressed & MASK_RIGHT) == MASK_RIGHT )
@@ -1084,7 +1067,7 @@ bool cButtonCombination::CheckCombination( char posInScreen_, cBufferButton &buf
 			button = bufferButton.buttonReleased;
 
 			if ( posInScreen_ == CHARAC_RIGHT )
-			{					
+			{
 				if ( ( bufferButton.buttonReleased & ( MASK_RIGHT | MASK_LEFT ) ) != ( MASK_RIGHT | MASK_LEFT ) )
 				{
 					if ( ( bufferButton.buttonReleased & MASK_RIGHT) == MASK_RIGHT )
@@ -1109,7 +1092,7 @@ bool cButtonCombination::CheckCombination( char posInScreen_, cBufferButton &buf
 		if ( button != m_Combinations.at(i).button )
 		{
 			break;
-		}			
+		}
 
 		i++;
 
@@ -1124,9 +1107,9 @@ bool cButtonCombination::CheckCombination( char posInScreen_, cBufferButton &buf
 	return false;
 }
 */
-void ButtonCombination::Copy(const ButtonCombination &combi_)
+void ButtonCombination::Copy(const ButtonCombination& combi_)
 {
-	if ( this != &combi_)
+	if (this != &combi_)
 	{
 		m_Combinations = combi_.m_Combinations;
 		strcpy_s(m_szName, sizeof(m_szName) - sizeof(char), combi_.m_szName);
@@ -1141,7 +1124,7 @@ void ButtonCombination::Copy(const ButtonCombination &combi_)
 /**
  *
  */
-std::vector<ButtonCombination::sCombination> *ButtonCombination::GetCombination()
+std::vector<ButtonCombination::sCombination>* ButtonCombination::GetCombination()
 {
 	return &m_Combinations;
 }
@@ -1162,7 +1145,7 @@ cBufferButton::cBufferButton()
 /**
  *
  */
-void BufferButton::Update(Pad *pad_)
+void BufferButton::Update(Pad* pad_)
 {
 	sBufferButton button;
 
@@ -1171,19 +1154,19 @@ void BufferButton::Update(Pad *pad_)
 	button.buttonPressed = pad_->GetButtonPressedValue();
 	button.buttonHeld = pad_->GetButtonHeldValue();
 	button.buttonReleased = pad_->GetButtonReleasedValue();
-	
-	if ( button.buttonPressed == 0 && 
+
+	if (button.buttonPressed == 0 &&
 		button.buttonHeld == 0 &&
-		button.buttonReleased == 0 )
+		button.buttonReleased == 0)
 	{
 		return;
 	}
 
-	if ( m_Buffer.size() > 0 )
+	if (m_Buffer.size() > 0)
 	{
-		if ( button.buttonPressed == m_Buffer.front().buttonPressed && 
+		if (button.buttonPressed == m_Buffer.front().buttonPressed &&
 			button.buttonHeld == m_Buffer.front().buttonHeld &&
-			button.buttonReleased == m_Buffer.front().buttonReleased )
+			button.buttonReleased == m_Buffer.front().buttonReleased)
 		{
 			return;
 		}
@@ -1197,7 +1180,7 @@ void BufferButton::Update(Pad *pad_)
 /**
  *
  */
-std::deque<BufferButton::sBufferButton> &BufferButton::GetBuffer()
+std::deque<BufferButton::sBufferButton>& BufferButton::GetBuffer()
 {
 	return m_Buffer;
 }
@@ -1210,10 +1193,10 @@ void BufferButton::Clean()
 	int i = 0;
 	DWORD time_ = GetTickCount();
 
-	while ( m_Buffer.size() )
+	while (m_Buffer.size())
 	{
-		if ( time_ - m_Buffer.back().time > BUTTON_TIME_MAX_BEFORE_ERASE )
-		{			
+		if (time_ - m_Buffer.back().time > BUTTON_TIME_MAX_BEFORE_ERASE)
+		{
 			m_Buffer.pop_back();
 		}
 		else
@@ -1226,9 +1209,9 @@ void BufferButton::Clean()
 /**
  * Lit le buffer a la position pos_
  */
-bool BufferButton::Read(unsigned int pos_, BufferButton::sBufferButton &button_)
+bool BufferButton::Read(unsigned int pos_, BufferButton::sBufferButton& button_)
 {
-	if ( pos_ >= m_Buffer.size() )
+	if (pos_ >= m_Buffer.size())
 	{
 		return false;
 	}
@@ -1240,7 +1223,7 @@ bool BufferButton::Read(unsigned int pos_, BufferButton::sBufferButton &button_)
 	DWORD time = m_Buffer.at(pos_).time;
 
 	//verif held
-	while ( i < m_Buffer.size() )
+	while (i < m_Buffer.size())
 	{
 		/*
 		if ( time - m_Buffer.at(i).time >= BUFFER_BUTTON_PRESSED_TIME_INTERVAL_MAX )
@@ -1248,8 +1231,8 @@ bool BufferButton::Read(unsigned int pos_, BufferButton::sBufferButton &button_)
 			break;
 		}
 		*/
-		
-		button_.buttonHeld |= (m_Buffer.at(i).buttonHeld & (!buttonReleased) );
+
+		button_.buttonHeld |= (m_Buffer.at(i).buttonHeld & (!buttonReleased));
 		buttonReleased |= m_Buffer.at(i).buttonReleased;
 
 		i++;
@@ -1263,14 +1246,14 @@ bool BufferButton::Read(unsigned int pos_, BufferButton::sBufferButton &button_)
 	*/
 	i = pos_ + 1;
 	buttonReleased = 0;
-	while ( i < m_Buffer.size() )
+	while (i < m_Buffer.size())
 	{
-		if ( time - m_Buffer.at(i).time >= BUFFER_BUTTON_PRESSED_TIME_INTERVAL_MAX )
+		if (time - m_Buffer.at(i).time >= BUFFER_BUTTON_PRESSED_TIME_INTERVAL_MAX)
 		{
 			break;
 		}
 
-		button_.buttonPressed |= (m_Buffer.at(i).buttonPressed  & (!buttonReleased) );
+		button_.buttonPressed |= (m_Buffer.at(i).buttonPressed & (!buttonReleased));
 		buttonReleased |= m_Buffer.at(i).buttonReleased;
 
 		i++;
@@ -1279,61 +1262,58 @@ bool BufferButton::Read(unsigned int pos_, BufferButton::sBufferButton &button_)
 	return true;
 }
 
-/** 
+/**
  *
  */
-void BufferButton::CheckCommand( std::vector<ButtonCombination> &commands_ )
+void BufferButton::CheckCommand(std::vector<ButtonCombination>& commands_)
 {
-	std::vector<ButtonCombination>::iterator itCommand;
-	std::vector<ButtonCombination::sCombination>::const_reverse_iterator itCombi;
-	size_t i, lastButtonChecked = 0;
 	unsigned int button;
 	DWORD time = GetTickCount();
 	bool bNextCommand = false;
 
-	for ( itCommand = commands_.begin(); itCommand != commands_.end(); itCommand++ )
+	for (std::vector<ButtonCombination>::iterator itCommand = commands_.begin(); itCommand != commands_.end(); ++itCommand)
 	{
 		//impossible que la commande soit effectuée
-		if ( itCommand->GetCombinations().size() > m_Buffer.size() ) 
+		if (itCommand->GetCombinations().size() > m_Buffer.size())
 		{
 			continue;
 		}
-		
-		lastButtonChecked = 0;
 
-		for ( itCombi = itCommand->GetCombinations().rbegin(); itCombi < itCommand->GetCombinations().rend(); itCombi++ )
+		size_t lastButtonChecked = 0;
+
+		for (std::vector<ButtonCombination::sCombination>::const_reverse_iterator itCombi = itCommand->GetCombinations().rbegin(); itCombi < itCommand->GetCombinations().rend(); ++itCombi)
 		{
-			for ( i = lastButtonChecked; i < m_Buffer.size(); i++ )
+			for (size_t i = lastButtonChecked; i < m_Buffer.size(); i++)
 			{
-				switch ( itCombi->type )
+				switch (itCombi->type)
 				{
 				case ButtonCombination::BUTTON_PRESSED:
-					button = ReadPressed( i, time, itCommand->GetTimeMax() );
+					button = ReadPressed(i, time, itCommand->GetTimeMax());
 					break;
 
 				case ButtonCombination::BUTTON_HELD:
-					button = ReadHeld( i, time, itCommand->GetTimeMax() );
+					button = ReadHeld(i, time, itCommand->GetTimeMax());
 					break;
 
 				case ButtonCombination::BUTTON_RELEASED:
-					button = ReadReleased( i, time, itCommand->GetTimeMax() );
+					button = ReadReleased(i, time, itCommand->GetTimeMax());
 					break;
 				}//fin switch
 
-				if ( button > 0 )
+				if (button > 0)
 				{
 					lastButtonChecked = i + 1;
-					
-					if ( button != itCombi->button )
+
+					if (button != itCombi->button)
 					{
 						bNextCommand = true;
 						break;
 					}
-					else if ( itCombi == itCommand->GetCombinations().rend() - 1 )
+					else if (itCombi == itCommand->GetCombinations().rend() - 1)
 					{
-						itCommand->SetActivated( true );
-						
-						if ( itCommand->IsSubCombination() == false )
+						itCommand->SetActivated(true);
+
+						if (itCommand->IsSubCombination() == false)
 						{
 							m_Buffer.clear();
 							return;
@@ -1352,7 +1332,7 @@ void BufferButton::CheckCommand( std::vector<ButtonCombination> &commands_ )
 
 			}//fin for itBuffer
 
-			if ( bNextCommand )
+			if (bNextCommand)
 			{
 				bNextCommand = false;
 				break;
@@ -1365,21 +1345,21 @@ void BufferButton::CheckCommand( std::vector<ButtonCombination> &commands_ )
 /**
  * Lit le buffer a la position pos_
  */
-unsigned int BufferButton::ReadPressed( unsigned int &pos_, DWORD currentTime_, DWORD timeCommand_ )
+unsigned int BufferButton::ReadPressed(unsigned int& pos_, DWORD currentTime_, DWORD timeCommand_)
 {
 	unsigned int buttonReleased = 0;
 
-	while( pos_ < m_Buffer.size() )
+	while (pos_ < m_Buffer.size())
 	{
-		if ( currentTime_ - m_Buffer.at(pos_).time > timeCommand_ )
+		if (currentTime_ - m_Buffer.at(pos_).time > timeCommand_)
 		{
 			return 0;
 		}
 
-		if ( m_Buffer.at(pos_).buttonPressed != 0 )
+		if (m_Buffer.at(pos_).buttonPressed != 0)
 		{
 			//le bouton a déjà été relaché
-			if ( ( m_Buffer.at(pos_).buttonPressed & buttonReleased ) == m_Buffer.at(pos_).buttonPressed && pos_ == 0 )
+			if ((m_Buffer.at(pos_).buttonPressed & buttonReleased) == m_Buffer.at(pos_).buttonPressed && pos_ == 0)
 			{
 				return 0;
 			}
@@ -1394,7 +1374,7 @@ unsigned int BufferButton::ReadPressed( unsigned int &pos_, DWORD currentTime_, 
 		}
 
 		pos_++;
-	}	
+	}
 
 	return 0;
 }
@@ -1402,29 +1382,28 @@ unsigned int BufferButton::ReadPressed( unsigned int &pos_, DWORD currentTime_, 
 /**
  * Lit le buffer a la position pos_
  */
-unsigned int BufferButton::ReadHeld( unsigned int &pos_, DWORD currentTime_, DWORD timeCommand_ )
+unsigned int BufferButton::ReadHeld(unsigned int& pos_, DWORD currentTime_, DWORD timeCommand_)
 {
 	unsigned int buttonReleased = 0;
-	unsigned int i = 0;
-	
-	for ( i = 0; i <= pos_; i++ )
+
+	for (unsigned int i = 0; i <= pos_; i++)
 	{
 		buttonReleased |= m_Buffer.at(i).buttonReleased;
 	}
 
-	while( pos_ < m_Buffer.size() )
+	while (pos_ < m_Buffer.size())
 	{
-		if ( currentTime_ - m_Buffer.at(pos_).time > timeCommand_ )
+		if (currentTime_ - m_Buffer.at(pos_).time > timeCommand_)
 		{
 			return 0;
 		}
 
 		buttonReleased |= m_Buffer.at(pos_).buttonReleased;
 
-		if ( m_Buffer.at(pos_).buttonHeld != 0 )
+		if (m_Buffer.at(pos_).buttonHeld != 0)
 		{
 			//le bouton a déjà été relaché
-			if ( ( m_Buffer.at(pos_).buttonHeld & buttonReleased ) == m_Buffer.at(pos_).buttonHeld )
+			if ((m_Buffer.at(pos_).buttonHeld & buttonReleased) == m_Buffer.at(pos_).buttonHeld)
 			{
 				return 0;
 			}
@@ -1435,11 +1414,11 @@ unsigned int BufferButton::ReadHeld( unsigned int &pos_, DWORD currentTime_, DWO
 		}
 		//else // on enregistre les boutons relaché
 		//{
-			
+
 		//}
 
 		pos_++;
-	}	
+	}
 
 	return 0;
 }
@@ -1447,21 +1426,21 @@ unsigned int BufferButton::ReadHeld( unsigned int &pos_, DWORD currentTime_, DWO
 /**
  * Lit le buffer a la position pos_
  */
-unsigned int BufferButton::ReadReleased( unsigned int &pos_, DWORD currentTime_, DWORD timeCommand_ )
+unsigned int BufferButton::ReadReleased(unsigned int& pos_, DWORD currentTime_, DWORD timeCommand_)
 {
 	unsigned int buttonReleased = 0;
 
-	while( pos_ < m_Buffer.size() )
+	while (pos_ < m_Buffer.size())
 	{
-		if ( currentTime_ - m_Buffer.at(pos_).time > timeCommand_ )
+		if (currentTime_ - m_Buffer.at(pos_).time > timeCommand_)
 		{
 			return 0;
 		}
 
-		if ( m_Buffer.at(pos_).buttonHeld != 0 )
+		if (m_Buffer.at(pos_).buttonHeld != 0)
 		{
 			//le bouton a déjà été relaché
-			if ( ( m_Buffer.at(pos_).buttonReleased & buttonReleased ) == m_Buffer.at(pos_).buttonReleased )
+			if ((m_Buffer.at(pos_).buttonReleased & buttonReleased) == m_Buffer.at(pos_).buttonReleased)
 			{
 				return 0;
 			}
@@ -1476,7 +1455,7 @@ unsigned int BufferButton::ReadReleased( unsigned int &pos_, DWORD currentTime_,
 		}
 
 		pos_++;
-	}	
+	}
 
 	return 0;
 }

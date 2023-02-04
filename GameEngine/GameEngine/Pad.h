@@ -122,8 +122,8 @@ namespace GameEngine
 		 */
 		 //bool Init(HWND hWnd, HINSTANCE hInst, bool windowed);
 
-		
-		void Load(sPad *pConfig);
+		bool Pad::Load(const char* fileName_);
+		void Load(sPad* pConfig);
 
 		/**
 		 * mise a jour du pad

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Resource.h"
-#include "Config/Export.h"
+#include "FG_Export.h"
 
 #include "DebugEngine/DebugNew.h"
 
@@ -12,7 +12,7 @@ using namespace GameEngine;
 #define GLOBAL_VAR_STAGE_CHOOSEN "stagechoosen"
 #define GLOBAL_VAR_PLAY_MODE "playmode"
 
-class GAME_ENGINE_EXPORT GlobalVariable :
+class FIGHTING_GAME_EXPORT GlobalVariable :
 	public IResource
 {
 public:

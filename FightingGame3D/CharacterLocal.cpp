@@ -20,7 +20,7 @@
 
 #include "DebugEngine/DebugNew.h"
 
-const D3DXVECTOR3 CharacterLocal::m_vGravity = D3DXVECTOR3( 0.0f, -130.0f, 0.0f );
+const D3DXVECTOR3 CharacterLocal::m_vGravity = D3DXVECTOR3(0.0f, -130.0f, 0.0f);
 
 //#include "DebugEngine/DebugNew.h"
 
@@ -41,10 +41,10 @@ eCharacterControllerType cCharacterLocalController::GetType()
 /**
  *
  */
-CharacterLocal::CharacterLocal( World *pStage_ ) : Character( pStage_ )
+CharacterLocal::CharacterLocal(World* pStage_) : Character(pStage_)
 {
-	m_pCommand = NULL;
-	m_pStateDefGhost = NULL;
+	m_pCommand = nullptr;
+	m_pStateDefGhost = nullptr;
 
 	m_Life = 1000;
 	m_Power = 0;
@@ -54,8 +54,8 @@ CharacterLocal::CharacterLocal( World *pStage_ ) : Character( pStage_ )
 	m_bCommandActivated = false;
 	m_bEndAnimationReach = false;
 
-	m_vJumpVelocity = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
-	m_vVelocity = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+	m_vJumpVelocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_vVelocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 }
 
 /**
@@ -71,13 +71,13 @@ CharacterLocal::~CharacterLocal()
  */
 void CharacterLocal::Free()
 {
-	if ( m_pCommand )
+	if (m_pCommand)
 	{
 		delete m_pCommand;
-		m_pCommand = NULL;
+		m_pCommand = nullptr;
 	}
 
-	m_pStateDefGhost = NULL;
+	m_pStateDefGhost = nullptr;
 
 	m_MapStateDef.clear();
 
@@ -87,29 +87,27 @@ void CharacterLocal::Free()
 /**
  *
  */
-bool CharacterLocal::LoadSpecial( TiXmlElement *pElementRoot )
+bool CharacterLocal::LoadSpecial(TiXmlElement* pElementRoot)
 {
-	TiXmlElement *pElement = NULL;
-
 	//On charge les States -------------------------------------------------
-	pElement = pElementRoot->FirstChildElement("FileDef");
+	TiXmlElement* pElement = pElementRoot->FirstChildElement("FileDef");
 
 	if (!pElement)
 		return false;
 
-	const char *fileName = pElement->Attribute("fileName");
+	const char* fileName = pElement->Attribute("fileName");
 
-	if ( fileName == NULL)
+	if (fileName == nullptr)
 	{
-		Window::Error( false, "cCharacter::Load() : attribut fileName : %s", fileName);
+		Window::Error(false, "cCharacter::Load() : attribut fileName : %s", fileName);
 		return false;
 	}
 
-	std::string str = MediaPathManager::Instance().FindMedia( fileName );
+	std::string str = MediaPathManager::Instance().FindMedia(fileName);
 
-	if ( LoadSerialized( str.c_str() ) == false )
+	if (LoadSerialized(str.c_str()) == false)
 	{
-		Window::Error( false, "cCharacter::Load() : erreur Read()" );
+		Window::Error(false, "cCharacter::Load() : erreur Read()");
 		return false;
 	}
 
@@ -123,77 +121,76 @@ bool CharacterLocal::LoadSpecial( TiXmlElement *pElementRoot )
 /**
  *
  */
-int CharacterLocal::Read( std::istream &is_ )
+int CharacterLocal::Read(std::istream& is_)
 {
 	int octetRead = is_.tellg();
 
-	char *pBuf = NULL;
+	char* pBuf = nullptr;
 	size_t t = 0;
 	long k = 0;
-	StateDef *pStateDef = NULL;
 	D3DXVECTOR3 vec;
 
-	is_.read( (char *) &t, sizeof(size_t) );
-	if ( t > 0 )
+	is_.read((char*)&t, sizeof(size_t));
+	if (t > 0)
 	{
 		pBuf = new char[t];
-		is_.read( (char *) pBuf, t * sizeof(char) );
+		is_.read((char*)pBuf, t * sizeof(char));
 
-		m_Name.append( pBuf );
+		m_Name.append(pBuf);
 		delete[] pBuf;
-		pBuf = NULL;
+		pBuf = nullptr;
 	}
 
-	is_.read( (char *) &t, sizeof(size_t) );
-	if ( t > 0 )
+	is_.read((char*)&t, sizeof(size_t));
+	if (t > 0)
 	{
 		pBuf = new char[t];
-		is_.read( (char *) pBuf, t * sizeof(char) );
+		is_.read((char*)pBuf, t * sizeof(char));
 
 #ifdef EDITOR
 		m_MeshFileName.clear();
-		m_MeshFileName.append( pBuf );
+		m_MeshFileName.append(pBuf);
 
-		if ( m_meshX.Load( pBuf ) == false )
+		if (m_meshX.Load(pBuf) == false)
 		{
 			delete[] pBuf;
-			pBuf = NULL;
+			pBuf = nullptr;
 			//exception
 			return -1;
 		}
 #endif
 		delete[] pBuf;
-		pBuf = NULL;
+		pBuf = nullptr;
 	}
 
-	is_.read( (char *) &m_vMeshDir, sizeof(D3DXVECTOR3) );
+	is_.read((char*)&m_vMeshDir, sizeof(D3DXVECTOR3));
 
-	is_.read( (char *) &vec, sizeof(D3DXVECTOR3) );
-	m_CharacterBox.SetMin( vec );
-	is_.read( (char *) &vec, sizeof(D3DXVECTOR3) );
-	m_CharacterBox.SetMax( vec );
+	is_.read((char*)&vec, sizeof(D3DXVECTOR3));
+	m_CharacterBox.SetMin(vec);
+	is_.read((char*)&vec, sizeof(D3DXVECTOR3));
+	m_CharacterBox.SetMax(vec);
 
-	if ( m_pCommand == NULL )
+	if (m_pCommand == nullptr)
 	{
 		//TODO : exception
 	}
 
-	m_pCommand->Read( is_ );
+	m_pCommand->Read(is_);
 
 	m_MapStateDef.clear();
 
-	is_.read( (char *) &t, sizeof(size_t) );
-	for( size_t i = 0; i < t; i++ )
+	is_.read((char*)&t, sizeof(size_t));
+	for (size_t i = 0; i < t; i++)
 	{
-		is_.read( (char *) &k, sizeof(k) );
-		pStateDef = new StateDef;
-		pStateDef->Read( is_ );
+		is_.read((char*)&k, sizeof(k));
+		StateDef* pStateDef = new StateDef;
+		pStateDef->Read(is_);
 		m_MapStateDef[k] = *pStateDef;
 		delete pStateDef;
-		pStateDef = NULL;
+		pStateDef = nullptr;
 	}
-	
-	octetRead = (int) is_.tellg() - octetRead;
+
+	octetRead = (int)is_.tellg() - octetRead;
 
 	return octetRead;
 }
@@ -201,52 +198,50 @@ int CharacterLocal::Read( std::istream &is_ )
 /**
  *
  */
-std::ostream &CharacterLocal::operator >> ( std::ostream &os_ )
+std::ostream& CharacterLocal::operator >> (std::ostream& os_)
 {
-	CommandPlayer *pCommandPlayer = NULL;
+	CommandPlayer* pCommandPlayer = nullptr;
 
-	if ( m_pCommand == NULL )
+	if (m_pCommand == nullptr)
 	{
 		//exception
 	}
-	else if ( ( pCommandPlayer = dynamic_cast<CommandPlayer *> (m_pCommand) ) == NULL )
+	else if ((pCommandPlayer = dynamic_cast<CommandPlayer*> (m_pCommand)) == nullptr)
 	{
 		//exception
 	}
 
 	size_t t = m_Name.size();
-	os_.write( (char *) &t, sizeof(size_t) );
-	if ( t > 0 )
+	os_.write((char*)&t, sizeof(size_t));
+	if (t > 0)
 	{
-		os_.write( (char *) m_Name.c_str(), t * sizeof(char) );
+		os_.write((char*)m_Name.c_str(), t * sizeof(char));
 	}
-	
+
 #ifdef EDITOR
-	std::string str = cStringUtilities::GetFileName( m_MeshFileName );
+	std::string str = cStringUtilities::GetFileName(m_MeshFileName);
 	t = str.size() + 1;
-	os_.write( (char *) &t, sizeof(size_t) );
-	if ( t - 1 > 0 )
+	os_.write((char*)&t, sizeof(size_t));
+	if (t - 1 > 0)
 	{
-		os_.write( (char *) str.c_str(), (t - 1) * sizeof(char) );
+		os_.write((char*)str.c_str(), (t - 1) * sizeof(char));
 		t = '\0';
-		os_.write( (char *) &t, sizeof(char) );
+		os_.write((char*)&t, sizeof(char));
 	}
 #endif
 
-	os_.write( (char *) &m_vMeshDir, sizeof(D3DXVECTOR3) );
-	os_.write( (char *) &m_CharacterBox.GetMin(), sizeof(D3DXVECTOR3) );
-	os_.write( (char *) &m_CharacterBox.GetMax(), sizeof(D3DXVECTOR3) );
+	os_.write((char*)&m_vMeshDir, sizeof(D3DXVECTOR3));
+	os_.write((char*)&m_CharacterBox.GetMin(), sizeof(D3DXVECTOR3));
+	os_.write((char*)&m_CharacterBox.GetMax(), sizeof(D3DXVECTOR3));
 
 	*pCommandPlayer >> os_;
 
-	std::map< long, StateDef >::iterator it;
-
 	t = m_MapStateDef.size();
-	os_.write( (char *) &t, sizeof(size_t) );
+	os_.write((char*)&t, sizeof(size_t));
 
-	for ( it = m_MapStateDef.begin(); it != m_MapStateDef.end(); it++ )
+	for (std::map<long, StateDef>::iterator it = m_MapStateDef.begin(); it != m_MapStateDef.end(); ++it)
 	{
-		os_.write( (char *) &it->first, sizeof(it->first) );
+		os_.write((char*)&it->first, sizeof(it->first));
 		it->second >> os_;
 	}
 
@@ -256,30 +251,30 @@ std::ostream &CharacterLocal::operator >> ( std::ostream &os_ )
 /**
  *
  */
-void CharacterLocal::Update( const float time_, Character *pCharac_)
+void CharacterLocal::Update(const float time_, Character* pCharac_)
 {
 	//construire le matrix world
 	D3DXMATRIX matRot;
 
 	//orientation selon la direction
-	cMaths::MatrixRotationFrom2Vectors( &matRot, &m_vMeshDir, &m_vDir );
+	cMaths::MatrixRotationFrom2Vectors(&matRot, &m_vMeshDir, &m_vDir);
 
-	D3DXMatrixTranslation( &m_matWorld, GetPosition().x, GetPosition().y, GetPosition().z );
+	D3DXMatrixTranslation(&m_matWorld, GetPosition().x, GetPosition().y, GetPosition().z);
 
-	D3DXMatrixMultiply( &m_matWorld, &matRot, &m_matWorld );
+	D3DXMatrixMultiply(&m_matWorld, &matRot, &m_matWorld);
 
-	if ( m_PauseTime <= 0 )
+	if (m_PauseTime <= 0)
 	{
 		//si fin de l'animation
-		if ( m_meshX.Update( time_, &m_matWorld ) )
+		if (m_meshX.Update(time_, &m_matWorld))
 		{
 			m_bEndAnimationReach = true;
 		}
 	}
 	else
 	{
-		m_meshX.Update( 0.0f, &m_matWorld);
-		m_PauseTime -= (int) (time_ * 1000.0f);
+		m_meshX.Update(0.0f, &m_matWorld);
+		m_PauseTime -= (int)(time_ * 1000.0f);
 	}
 
 	m_bCommandActivated = false;
@@ -287,23 +282,23 @@ void CharacterLocal::Update( const float time_, Character *pCharac_)
 	//les deplacements standard
 	CheckStandardDisplacement();
 
-	m_pCommand->CheckCommand( m_PosInScreen, m_BufferButton );
+	m_pCommand->CheckCommand(m_PosInScreen, m_BufferButton);
 
 	//Verification standard ( saut, touché etc.. )
-	CheckUsualParameters( time_ );
+	CheckUsualParameters(time_);
 
-	CheckState( *m_pStateDefGhost );
-	CheckState( m_CurrentStateDef );
+	CheckState(*m_pStateDefGhost);
+	CheckState(m_CurrentStateDef);
 
 	m_bIsHit = false;
 	m_bHit = false;
 
 	//collision
-	if ( pCharac_ != NULL )
+	if (pCharac_ != nullptr)
 	{
-		CheckCollision( dynamic_cast<CharacterLocal *>(pCharac_) );
+		CheckCollision(dynamic_cast<CharacterLocal*>(pCharac_));
 	}
-	
+
 	m_bCollAttActivated = false;
 }
 
@@ -317,22 +312,22 @@ void CharacterLocal::StateNext()
 	//TODO - verif ancienne state avec courante 
 
 	//pas de changement pour les state commun
-	if ( m_CurrentStateDefId == STATE_DEF_IDLE ||
-		 m_CurrentStateDefId == STATE_DEF_WALK_BACKWARD ||
-		 m_CurrentStateDefId == STATE_DEF_WALK_FORWARD ||
-		 m_CurrentStateDefId == STATE_DEF_CROUCH ||
-		 m_CurrentStateDefId == STATE_DEF_AIR_IDLE ||
-		 m_CurrentStateDefId == STATE_DEF_AIR_FORWARD ||
-		 m_CurrentStateDefId == STATE_DEF_AIR_BACKWARD )
+	if (m_CurrentStateDefId == STATE_DEF_IDLE ||
+		m_CurrentStateDefId == STATE_DEF_WALK_BACKWARD ||
+		m_CurrentStateDefId == STATE_DEF_WALK_FORWARD ||
+		m_CurrentStateDefId == STATE_DEF_CROUCH ||
+		m_CurrentStateDefId == STATE_DEF_AIR_IDLE ||
+		m_CurrentStateDefId == STATE_DEF_AIR_FORWARD ||
+		m_CurrentStateDefId == STATE_DEF_AIR_BACKWARD)
 	{
 		return;
 	}
 
-	std::map<long, StateDef>::iterator it = m_MapStateDef.find(m_CurrentStateDefId);
+	auto it = m_MapStateDef.find(m_CurrentStateDefId);
 
-	if ( it == m_MapStateDef.end() )
+	if (it == m_MapStateDef.end())
 	{
-		Window::Error( false, "cCharacterLocal::StateNext() : le stateDef[%d] n'est pas defini", m_CurrentStateDef);
+		Window::Error(false, "cCharacterLocal::StateNext() : le stateDef[%d] n'est pas defini", m_CurrentStateDef);
 		return;
 	}
 
@@ -363,161 +358,159 @@ void CharacterLocal::StateNext()
 /**
  *
  */
-float CharacterLocal::GetParameterValue( std::string &str_)
+float CharacterLocal::GetParameterValue(std::string& str_)
 {
-	std::map<long, StateDef>::iterator it = m_MapStateDef.find(m_CurrentStateDefId);
+	auto it = m_MapStateDef.find(m_CurrentStateDefId);
 
-	if ( it == m_MapStateDef.end() )
+	if (it == m_MapStateDef.end())
 	{
-		Window::Error( false, "cCharacterLocal::GetParameterValue() : Le statedef %d n'existe pas", m_CurrentStateDef);
+		Window::Error(false, "cCharacterLocal::GetParameterValue() : Le statedef %d n'existe pas", m_CurrentStateDef);
 	}
 
-	if ( str_.size() == 0)
+	if (str_.size() == 0)
 	{
-		Window::Error( false, "cCharacterLocal::GetParameterValue() : taille string str == 0");
+		Window::Error(false, "cCharacterLocal::GetParameterValue() : taille string str == 0");
 		return 0.0f;
 	}
 
-	std::string subStr;
-
 	//le cas pour les commandes
-	if ( str_.at(0) == TRIGGER_KEY_WORD_COMMAND_NAME )
+	if (str_.at(0) == TRIGGER_KEY_WORD_COMMAND_NAME)
 	{
 		//le joueur doit avoir le controle
-		if ( it->second.GetPlayerCtrl() )
+		if (it->second.GetPlayerCtrl())
 		{
-			subStr = str_.substr(1, str_.size() - 2 );
-			return (float) m_pCommand->CommandActivated( subStr ); //m_pCommand->GetIdByName(subStr);
+			std::string subStr = str_.substr(1, str_.size() - 2);
+			return (float)m_pCommand->CommandActivated(subStr); //m_pCommand->GetIdByName(subStr);
 		}
 		else
 		{
 			return -9.0f; // TODO : fixer une valeur abitraire
 		}
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_CTRL) == 0)
+	else if (str_.compare(TRIGGER_KEY_WORD_CTRL) == 0)
 	{
 		return it->second.GetPlayerCtrl() ? 1.0f : 0.0f;
 	}
 	else if (str_.compare(TRIGGER_KEY_WORD_COMMAND) == 0)
 	{
-		return (float) true;//m_pCommand->GetActivatedCommand();
+		return (float)true;//m_pCommand->GetActivatedCommand();
 	}
 	/*
 		TODO : lors de la creation du fichier
 		remplacer les valeurs 'caracteres' (exemple S)
 		par directement sa valeur
 	*/
-	else if ( str_.compare(TRIGGER_KEY_WORD_A) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_A) == 0)
 	{
-		return (float) STATE_TYPE_AIR;
+		return (float)STATE_TYPE_AIR;
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_S) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_S) == 0)
 	{
-		return (float) STATE_TYPE_STAND;
+		return (float)STATE_TYPE_STAND;
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_C) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_C) == 0)
 	{
-		return (float) STATE_TYPE_CROUCH;
+		return (float)STATE_TYPE_CROUCH;
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_STATE_TYPE) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_STATE_TYPE) == 0)
 	{
-		return (float) it->second.GetStateType();
+		return (float)it->second.GetStateType();
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_STATE_NO) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_STATE_NO) == 0)
 	{
-		return (float) m_CurrentStateDefId;
+		return (float)m_CurrentStateDefId;
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_IS_HIT) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_IS_HIT) == 0)
 	{
-		return (float) m_bIsHit;
+		return (float)m_bIsHit;
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_HIT) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_HIT) == 0)
 	{
-		return (float) m_bHit;
+		return (float)m_bHit;
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_ANIMID) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_ANIMID) == 0)
 	{
-		return (float) m_CurrentStateDef.GetAnimId();
+		return (float)m_CurrentStateDef.GetAnimId();
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_ANIM_TIME) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_ANIM_TIME) == 0)
 	{
-		return (float) m_meshX.GetCurrentAnimationTime();
+		return (float)m_meshX.GetCurrentAnimationTime();
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_POS_X) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_POS_X) == 0)
 	{
 		return GetPosition().x;
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_POS_Y) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_POS_Y) == 0)
 	{
 		return GetPosition().y;
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_POS_Z) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_POS_Z) == 0)
 	{
 		return GetPosition().z;
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_END_ANIM_REACH) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_END_ANIM_REACH) == 0)
 	{
 		return m_bEndAnimationReach;
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_VEL_X) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_VEL_X) == 0)
 	{
 		return m_vVelocity.x;
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_VEL_Y) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_VEL_Y) == 0)
 	{
 		return m_vVelocity.y;
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_VEL_Z) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_VEL_Z) == 0)
 	{
 		return m_vVelocity.z;
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_JUMP_VEL_X) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_JUMP_VEL_X) == 0)
 	{
 		return m_vJumpVelocity.x;
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_JUMP_VEL_Y) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_JUMP_VEL_Y) == 0)
 	{
 		return m_vJumpVelocity.y;
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_JUMP_VEL_Z) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_JUMP_VEL_Z) == 0)
 	{
 		return m_vJumpVelocity.z;
 	}
 
 	//Erreur
-	Window::Error( false, "cCharacterLocal::GetParameterValue() : Le mot clé %s non defini", str_.c_str());
-	
+	Window::Error(false, "cCharacterLocal::GetParameterValue() : Le mot clé %s non defini", str_.c_str());
+
 	return 0.0f;
 }
 
 /**
  * pour l'IA
  */
-float CharacterLocal::GetParameterValue( long id_, CharacterLocal *pLocal )
+float CharacterLocal::GetParameterValue(long id_, CharacterLocal* pLocal)
 {
-	switch ( id_ )
+	switch (id_)
 	{
 	case IA_KEY_WORD_DIST_BETWEEN_PLAYER:
-		{
-			D3DXVECTOR3 vec = GetPosition() - pLocal->GetPosition();
-			return D3DXVec3Length( &vec );
-		}
-		break;
+	{
+		D3DXVECTOR3 vec = GetPosition() - pLocal->GetPosition();
+		return D3DXVec3Length(&vec);
+	}
+	break;
 
 	case IA_KEY_WORD_OPPONENT_IS_ATTACKING:
 
 		break;
 	}
-	
+
 	return 0.0f;
 }
 
 /**
  *
  */
-void CharacterLocal::SetCommandType( CommandType type_ )
+void CharacterLocal::SetCommandType(CommandType type_)
 {
-	switch ( type_ )
+	switch (type_)
 	{
 	case COMMAND_TYPE_PLAYER:
 		m_pCommand = new CommandPlayer;
@@ -534,11 +527,11 @@ void CharacterLocal::SetCommandType( CommandType type_ )
  */
 void CharacterLocal::ChangeState(DWORD state_)
 {
-	std::map<long, StateDef>::iterator it = m_MapStateDef.find(state_);
+	auto it = m_MapStateDef.find(state_);
 
-	if ( it == m_MapStateDef.end() )
+	if (it == m_MapStateDef.end())
 	{
-		Window::Error( true, "cCharacterLocal::ChangeState() : Le statedef %d n'existe pas", state_);
+		Window::Error(true, "cCharacterLocal::ChangeState() : Le statedef %d n'existe pas", state_);
 		return;
 	}
 
@@ -547,21 +540,21 @@ void CharacterLocal::ChangeState(DWORD state_)
 	m_meshX.SetAnimationSet(m_CurrentStateDef.GetAnimId());
 	m_meshX.SetCurrentAnimationTime(0.0f, &m_matWorld);
 	//m_meshX.GetAnimationController()->UnkeyAllTrackEvents( m_meshX.GetCurrentTrack() );
-	m_meshX.GetAnimationController()->SetTrackSpeed( m_meshX.GetCurrentTrack(), m_CurrentStateDef.GetAnimSpeed() );
-	
+	m_meshX.GetAnimationController()->SetTrackSpeed(m_meshX.GetCurrentTrack(), m_CurrentStateDef.GetAnimSpeed());
+
 	CheckPersistentValue();
 
-	if ( m_CurrentStateDef.GetStateType() == STATE_TYPE_AIR && 
-		( m_CurrentStateDefId == STATE_DEF_IDLE_TO_AIR ||
-		m_CurrentStateDefId == STATE_DEF_IDLE_TO_AIR_BACKWARD ||
-		m_CurrentStateDefId == STATE_DEF_IDLE_TO_AIR_FORWARD )
+	if (m_CurrentStateDef.GetStateType() == STATE_TYPE_AIR &&
+		(m_CurrentStateDefId == STATE_DEF_IDLE_TO_AIR ||
+			m_CurrentStateDefId == STATE_DEF_IDLE_TO_AIR_BACKWARD ||
+			m_CurrentStateDefId == STATE_DEF_IDLE_TO_AIR_FORWARD)
 		)
 	{
-		m_vJumpVelocity = D3DXVECTOR3( 0.0f, 60.0f, 0.0f );
+		m_vJumpVelocity = D3DXVECTOR3(0.0f, 60.0f, 0.0f);
 
-		if ( m_CurrentStateDefId == STATE_DEF_IDLE_TO_AIR_BACKWARD )
+		if (m_CurrentStateDefId == STATE_DEF_IDLE_TO_AIR_BACKWARD)
 		{
-			if ( m_PosInScreen == CHARAC_RIGHT )
+			if (m_PosInScreen == CHARAC_RIGHT)
 			{
 				m_vJumpVelocity.x = 15.0f;
 			}
@@ -570,9 +563,9 @@ void CharacterLocal::ChangeState(DWORD state_)
 				m_vJumpVelocity.x = -15.0f;
 			}
 		}
-		else if ( m_CurrentStateDefId == STATE_DEF_IDLE_TO_AIR_FORWARD )
+		else if (m_CurrentStateDefId == STATE_DEF_IDLE_TO_AIR_FORWARD)
 		{
-			if ( m_PosInScreen == CHARAC_RIGHT )
+			if (m_PosInScreen == CHARAC_RIGHT)
 			{
 				m_vJumpVelocity.x = -15.0f;
 			}
@@ -590,7 +583,7 @@ void CharacterLocal::ChangeState(DWORD state_)
 }
 
 /**
- * 
+ *
  */
 void CharacterLocal::CheckPersistentValue()
 {
@@ -609,32 +602,33 @@ void CharacterLocal::InitCharacValue()
 }
 
 /**
- * 
+ *
  */
-void CharacterLocal::CheckState(StateDef &state_)
+void CharacterLocal::CheckState(StateDef& state_)
 {
-	std::vector<StateController> &stateController = state_.GetStateController();
-	std::vector<StateController>::iterator it;
+	auto stateController = state_.GetStateController();
 
-	for ( it = stateController.begin(); it != stateController.end(); it++ )
+	for (auto it = stateController.begin(); it != stateController.end(); ++it)
 	{
-		if ( it->Check() )
+		auto* controller = *it;
+
+		if (controller->Check())
 		{
-			switch ( it->GetType() )
+			switch (controller->GetType())
 			{
 			case STATE_CONTROLLER_TYPE_CHANGE_ANIM:
-				
+
 				break;
 
-			case STATE_CONTROLLER_TYPE_CHANGE_STATE:				
-				if ( it->GetValue().type == STATE_CONTROLLER_VALUE_TYPE_FLOAT &&
-					( ( m_bCommandActivated && m_CurrentStateDef.GetPlayerCtrl() ) ) ||
-					m_bCommandActivated == false )
+			case STATE_CONTROLLER_TYPE_CHANGE_STATE:
+				if (controller->GetValue().type == STATE_CONTROLLER_VALUE_TYPE_FLOAT &&
+					((m_bCommandActivated && m_CurrentStateDef.GetPlayerCtrl())) ||
+					m_bCommandActivated == false)
 				{
-					DWORD val = (DWORD) it->GetValue().real;
-					if ( m_CurrentStateDefId != val || m_CurrentStateDefId == STATE_DEF_HIT_STAND )
+					DWORD val = (DWORD)controller->GetValue().real;
+					if (m_CurrentStateDefId != val || m_CurrentStateDefId == STATE_DEF_HIT_STAND)
 					{
-						ChangeState( val );
+						ChangeState(val);
 						return;
 					}
 				}
@@ -644,88 +638,88 @@ void CharacterLocal::CheckState(StateDef &state_)
 				break;
 
 			case STATE_CONTROLLER_TYPE_CTRL_SET:
-				
+
 				break;
 
 			case STATE_CONTROLLER_TYPE_HIT_DEF:
 				m_bCollAttActivated = true;
-				m_CurrentStateDef.SetHitHeight( it->GetHitHeight() );
+				m_CurrentStateDef.SetHitHeight(controller->GetHitHeight());
 				break;
 
 			case STATE_CONTROLLER_TYPE_MOVE_PLAYER:
-				if ( it->GetValue().type == STATE_CONTROLLER_VALUE_TYPE_VEC3 )
+				if (controller->GetValue().type == STATE_CONTROLLER_VALUE_TYPE_VEC3)
 				{
 					//TODO : trouver une solution pour avoir acces au temps plus simplement
 					//TODO : deplacement selon les coordonnées locales du perso
-					SetPosition ( GetPosition() + it->GetValue().vec3 );
+					SetPosition(GetPosition() + controller->GetValue().vec3);
 				}
 				else
 				{
-					Window::Error( false, "CheckState() : it->GetValue().type != STATE_CONTROLLER_VALUE_TYPE_FLOAT" );
+					Window::Error(false, "CheckState() : controller->GetValue().type != STATE_CONTROLLER_VALUE_TYPE_FLOAT");
 				}
 				break;
 
 			case STATE_CONTROLLER_TYPE_MOVE_PLAYER_BY_TIME:
-				if ( it->GetValue().type == STATE_CONTROLLER_VALUE_TYPE_VEC3 )
-				{ 
+				if (controller->GetValue().type == STATE_CONTROLLER_VALUE_TYPE_VEC3)
+				{
 					//TODO : deplacement selon les coordonnées locales du perso
 					//TODO : trouver une solution pour avoir acces au temps plus simplement
-					float time = (float) GameCore::Instance().GetGraphic().FrameTime() / 1000.0f;
-					SetPosition ( GetPosition() + it->GetValue().vec3 * time);
+					float time = (float)GameCore::Instance().GetGraphic().FrameTime() / 1000.0f;
+					SetPosition(GetPosition() + controller->GetValue().vec3 * time);
 				}
 				else
 				{
-					Window::Error( false, "CheckState() : it->GetValue().type != STATE_CONTROLLER_VALUE_TYPE_FLOAT" );
+					Window::Error(false, "CheckState() : controller->GetValue().type != STATE_CONTROLLER_VALUE_TYPE_FLOAT");
 				}
 				break;
 
 			case STATE_CONTROLLER_TYPE_MOVE_FORWARD:
-				if ( it->GetValue().type == STATE_CONTROLLER_VALUE_TYPE_FLOAT )
+				if (controller->GetValue().type == STATE_CONTROLLER_VALUE_TYPE_FLOAT)
 				{
 					//TODO : savoir si moins ou plus par rapport a l'adversaire et a la camera
-					float time = (float) GameCore::Instance().GetGraphic().FrameTime() / 1000.0f;
-					SetPosition ( GetPosition() + m_vDir * it->GetValue().real * time);
+					float time = (float)GameCore::Instance().GetGraphic().FrameTime() / 1000.0f;
+					SetPosition(GetPosition() + m_vDir * controller->GetValue().real * time);
 				}
 				else
 				{
-					Window::Error( false, "CheckState() : it->GetValue().type != STATE_CONTROLLER_VALUE_TYPE_FLOAT" );
+					Window::Error(false, "CheckState() : controller->GetValue().type != STATE_CONTROLLER_VALUE_TYPE_FLOAT");
 				}
 				break;
 
 			case STATE_CONTROLLER_TYPE_MOVE_BACKWARD:
-				if ( it->GetValue().type == STATE_CONTROLLER_VALUE_TYPE_FLOAT )
+				if (controller->GetValue().type == STATE_CONTROLLER_VALUE_TYPE_FLOAT)
 				{
 					//TODO : savoir si moins ou plus par rapport a l'adversaire et a la camera
-					float time = (float) GameCore::Instance().GetGraphic().FrameTime() / 1000.0f;
-					SetPosition ( GetPosition() - m_vDir * it->GetValue().real * time);
+					float time = (float)GameCore::Instance().GetGraphic().FrameTime() / 1000.0f;
+					SetPosition(GetPosition() - m_vDir * controller->GetValue().real * time);
 				}
 				else
 				{
-					Window::Error( false, "CheckState() : it->GetValue().type != STATE_CONTROLLER_VALUE_TYPE_FLOAT" );
+					Window::Error(false, "CheckState() : controller->GetValue().type != STATE_CONTROLLER_VALUE_TYPE_FLOAT");
 				}
 				break;
 
 			case STATE_CONTROLLER_TYPE_MOVE_STRAFE_RIGHT:
-				if ( it->GetValue().type == STATE_CONTROLLER_VALUE_TYPE_FLOAT )
+				if (controller->GetValue().type == STATE_CONTROLLER_VALUE_TYPE_FLOAT)
 				{
-					float time = (float) GameCore::Instance().GetGraphic().FrameTime() / 1000.0f;
-					SetPosition ( GetPosition() + m_vRight * it->GetValue().real * time);
+					float time = (float)GameCore::Instance().GetGraphic().FrameTime() / 1000.0f;
+					SetPosition(GetPosition() + m_vRight * controller->GetValue().real * time);
 				}
 				else
 				{
-					Window::Error( false, "CheckState() : it->GetValue().type != STATE_CONTROLLER_VALUE_TYPE_FLOAT" );
+					Window::Error(false, "CheckState() : controller->GetValue().type != STATE_CONTROLLER_VALUE_TYPE_FLOAT");
 				}
 				break;
 
 			case STATE_CONTROLLER_TYPE_MOVE_STRAFE_LEFT:
-				if ( it->GetValue().type == STATE_CONTROLLER_VALUE_TYPE_FLOAT )
+				if (controller->GetValue().type == STATE_CONTROLLER_VALUE_TYPE_FLOAT)
 				{
-					float time = (float) GameCore::Instance().GetGraphic().FrameTime() / 1000.0f;
-					SetPosition ( GetPosition() - m_vRight * it->GetValue().real * time);
+					float time = (float)GameCore::Instance().GetGraphic().FrameTime() / 1000.0f;
+					SetPosition(GetPosition() - m_vRight * controller->GetValue().real * time);
 				}
 				else
 				{
-					Window::Error( false, "CheckState() : it->GetValue().type != STATE_CONTROLLER_VALUE_TYPE_FLOAT" );
+					Window::Error(false, "CheckState() : controller->GetValue().type != STATE_CONTROLLER_VALUE_TYPE_FLOAT");
 				}
 				break;
 			}
@@ -741,13 +735,11 @@ void CharacterLocal::Init()
 	m_CurrentStateDef = m_MapStateDef.find(STATE_DEF_IDLE)->second;
 	m_CurrentStateDefId = STATE_DEF_IDLE;
 	m_PrevStateDefId = m_CurrentStateDefId;
-	m_meshX.SetAnimationSet( m_CurrentStateDef.GetAnimId() );
+	m_meshX.SetAnimationSet(m_CurrentStateDef.GetAnimId());
 
-	std::map< long, StateDef >::iterator it;
-	
-	for ( it = m_MapStateDef.begin(); it != m_MapStateDef.end(); it++ )
+	for (std::map<long, StateDef>::iterator it = m_MapStateDef.begin(); it != m_MapStateDef.end(); ++it)
 	{
-		it->second.SetTriggersCharacterAdr( this );
+		it->second.SetTriggersCharacterAdr(this);
 	}
 
 	//D3DXVec3Cross( &m_vRight, &m_vDir, &m_vUp );
@@ -756,38 +748,38 @@ void CharacterLocal::Init()
 /**
  *
  */
-void CharacterLocal::CheckCollision( CharacterLocal *pCharac_ )
+void CharacterLocal::CheckCollision(CharacterLocal* pCharac_)
 {
-	std::vector<CharacterCollision> &collAtt = m_CurrentStateDef.GetCollisionAtt();
-	std::vector<CharacterCollision> &collDef = m_CurrentStateDef.GetCollisionDef();
+	std::vector<CharacterCollision>& collAtt = m_CurrentStateDef.GetCollisionAtt();
+	std::vector<CharacterCollision>& collDef = m_CurrentStateDef.GetCollisionDef();
 	std::vector<CharacterCollision>::iterator it1, it2;
-	
+
 	//attaque
-	if ( m_CurrentStateDef.GetMoveType() == MOVE_TYPE_ATTACK && /*m_bHit == false &&*/ m_bCollAttActivated == true )
+	if (m_CurrentStateDef.GetMoveType() == MOVE_TYPE_ATTACK && /*m_bHit == false &&*/ m_bCollAttActivated == true)
 	{
 		//TODO : verification du declenchement de l'attaque
-		for ( it1 = collAtt.begin(); it1 != collAtt.end(); it1++ )
+		for (it1 = collAtt.begin(); it1 != collAtt.end(); ++it1)
 		{
-			for ( it2 = pCharac_->GetCurrentState()->GetCollisionDef().begin(); it2 != pCharac_->GetCurrentState()->GetCollisionDef().end(); it2++ )
+			for (it2 = pCharac_->GetCurrentState()->GetCollisionDef().begin(); it2 != pCharac_->GetCurrentState()->GetCollisionDef().end(); ++it2)
 			{
-				if ( it1->Collision( &*it2 ) )
+				if (it1->Collision(&*it2))
 				{
 					m_bHit = true;
-					m_PauseTime = GetController( STATE_CONTROLLER_TYPE_HIT_DEF )->GetPauseTimeP1();
-					pCharac_->SetIsHit( true );
-					pCharac_->SetHitHeight( m_CurrentStateDef.GetHitHeight() );
+					m_PauseTime = GetController(STATE_CONTROLLER_TYPE_HIT_DEF)->GetPauseTimeP1();
+					pCharac_->SetIsHit(true);
+					pCharac_->SetHitHeight(m_CurrentStateDef.GetHitHeight());
 					//pCharac_->Update( 0.0f );
-					pCharac_->SetPauseTime( GetController( STATE_CONTROLLER_TYPE_HIT_DEF )->GetPauseTimeP2() );
+					pCharac_->SetPauseTime(GetController(STATE_CONTROLLER_TYPE_HIT_DEF)->GetPauseTimeP2());
 
 					//TODO verifier si guarde ou pas
-					pCharac_->SetLife( pCharac_->GetLife() - GetController( STATE_CONTROLLER_TYPE_HIT_DEF )->GetDamage() );
+					pCharac_->SetLife(pCharac_->GetLife() - GetController(STATE_CONTROLLER_TYPE_HIT_DEF)->GetDamage());
 
-					GetController( STATE_CONTROLLER_TYPE_HIT_DEF )->InActive();
+					GetController(STATE_CONTROLLER_TYPE_HIT_DEF)->InActive();
 					break; //return
 				}
 			}
 
-			if ( m_bHit )
+			if (m_bHit)
 			{
 				break;
 			}
@@ -795,46 +787,45 @@ void CharacterLocal::CheckCollision( CharacterLocal *pCharac_ )
 	}
 
 	//defense
-	if ( pCharac_->GetCurrentState()->GetMoveType() == MOVE_TYPE_ATTACK /*&& m_bIsHit == false*/ )
+	if (pCharac_->GetCurrentState()->GetMoveType() == MOVE_TYPE_ATTACK /*&& m_bIsHit == false*/)
 	{
 		//TODO : verification du declenchement de l'attaque
-		for ( it1 = collDef.begin(); it1 != collDef.end(); it1++ )
+		for (it1 = collDef.begin(); it1 != collDef.end(); ++it1)
 		{
-			for ( it2 = pCharac_->GetCurrentState()->GetCollisionAtt().begin(); it2 != pCharac_->GetCurrentState()->GetCollisionAtt().end(); it2++ )
+			for (it2 = pCharac_->GetCurrentState()->GetCollisionAtt().begin(); it2 != pCharac_->GetCurrentState()->GetCollisionAtt().end(); ++it2)
 			{
-				if ( it1->Collision( &*it2 ) )
+				if (it1->Collision(&*it2))
 				{
-					if ( pCharac_->GetController( STATE_CONTROLLER_TYPE_HIT_DEF ) != NULL )
+					if (pCharac_->GetController(STATE_CONTROLLER_TYPE_HIT_DEF) != nullptr)
 					{
 						//si non guard
 						m_bIsHit = true;
 						m_HitHeight = pCharac_->GetHitHeight();
-						pCharac_->SetHit( true );
+						pCharac_->SetHit(true);
 
-						m_PauseTime = pCharac_->GetController( STATE_CONTROLLER_TYPE_HIT_DEF )->GetPauseTimeP2();
-						pCharac_->SetPauseTime( pCharac_->GetController( STATE_CONTROLLER_TYPE_HIT_DEF )->GetPauseTimeP1() );
+						m_PauseTime = pCharac_->GetController(STATE_CONTROLLER_TYPE_HIT_DEF)->GetPauseTimeP2();
+						pCharac_->SetPauseTime(pCharac_->GetController(STATE_CONTROLLER_TYPE_HIT_DEF)->GetPauseTimeP1());
 
-						m_Life -= pCharac_->GetController( STATE_CONTROLLER_TYPE_HIT_DEF )->GetDamage();
+						m_Life -= pCharac_->GetController(STATE_CONTROLLER_TYPE_HIT_DEF)->GetDamage();
 
-						pCharac_->GetController( STATE_CONTROLLER_TYPE_HIT_DEF )->InActive();
+						pCharac_->GetController(STATE_CONTROLLER_TYPE_HIT_DEF)->InActive();
 					}
-					
+
 					return;
 				}
 			}
 		}
 	}
 
-	
+
 
 	//TODO : avec rotation car les joueurs pourront plus tard se desaxer
 	//penetration entre les 2 joueurs
-	if ( Collision::AxisAlignedBoundingBox( m_CharacterBox, GetPosition(), pCharac_->GetCharacterBox(), pCharac_->GetPosition() ) )
+	if (Collision::AxisAlignedBoundingBox(m_CharacterBox, GetPosition(), pCharac_->GetCharacterBox(), pCharac_->GetPosition()))
 	{
-		float x;
-		x = GetPosition().x - pCharac_->GetPosition().x;
+		float x = GetPosition().x - pCharac_->GetPosition().x;
 
-		if ( x < 0.0 )
+		if (x < 0.0)
 		{
 			x = -x;
 		}
@@ -842,20 +833,20 @@ void CharacterLocal::CheckCollision( CharacterLocal *pCharac_ )
 		x -= m_CharacterBox.GetMax().x + pCharac_->GetCharacterBox().GetMax().x;
 		x /= 2.0f;
 
-		if ( x < 0.0 )
+		if (x < 0.0)
 		{
 			x = -x;
 		}
 
 		/*vec = m_vDir;
 		vec.x *= x;*/
-		bool P1PosChanged = SetPosition( GetPosition() - m_vDir * x );
-		
-		D3DXVECTOR3 vec = pCharac_->GetPosition() -  m_vDir * -x;
+		bool P1PosChanged = SetPosition(GetPosition() - m_vDir * x);
 
-		if ( P1PosChanged )
+		D3DXVECTOR3 vec = pCharac_->GetPosition() - m_vDir * -x;
+
+		if (P1PosChanged)
 		{
-			pCharac_->SetPosition( vec );
+			pCharac_->SetPosition(vec);
 		}
 		else
 		{
@@ -870,7 +861,7 @@ void CharacterLocal::CheckCollision( CharacterLocal *pCharac_ )
 /**
  *
  */
-void CharacterLocal::SetIsHit( bool value_ )
+void CharacterLocal::SetIsHit(bool value_)
 {
 	m_bIsHit = value_;
 }
@@ -886,7 +877,7 @@ bool CharacterLocal::GetIsHit() const
 /**
  *
  */
-void CharacterLocal::SetHit( bool value_ )
+void CharacterLocal::SetHit(bool value_)
 {
 	m_bHit = value_;
 }
@@ -902,7 +893,7 @@ bool CharacterLocal::GetHit() const
 /**
  *
  */
-void CharacterLocal::SetHitHeight( eHitHeight h_ )
+void CharacterLocal::SetHitHeight(eHitHeight h_)
 {
 	m_HitHeight = h_;
 }
@@ -918,7 +909,7 @@ eHitHeight CharacterLocal::GetHitHeight() const
 /**
  *
  */
-void CharacterLocal::SetPauseTime( int p_ )
+void CharacterLocal::SetPauseTime(int p_)
 {
 	m_PauseTime = p_;
 }
@@ -934,7 +925,7 @@ int CharacterLocal::GetPauseTime() const
 /**
  *
  */
-void CharacterLocal::SetCommandActivated( bool v_ )
+void CharacterLocal::SetCommandActivated(bool v_)
 {
 	m_bCommandActivated = v_;
 }
@@ -950,7 +941,7 @@ bool CharacterLocal::GetCommandActivated() const
 /**
  *
  */
-StateDef *CharacterLocal::GetCurrentState()
+StateDef* CharacterLocal::GetCurrentState()
 {
 	return &m_CurrentStateDef;
 }
@@ -958,7 +949,7 @@ StateDef *CharacterLocal::GetCurrentState()
 /**
  *
  */
-void CharacterLocal::SetLife( int v_ )
+void CharacterLocal::SetLife(int v_)
 {
 	m_Life = v_;
 }
@@ -974,7 +965,7 @@ int CharacterLocal::GetLife() const
 /**
  *
  */
-BufferButton &CharacterLocal::GetBufferButton()
+BufferButton& CharacterLocal::GetBufferButton()
 {
 	return m_BufferButton;
 }
@@ -983,17 +974,17 @@ BufferButton &CharacterLocal::GetBufferButton()
  * Verification des parametres ???
  * ex : saut, hit, etc..
  */
-void CharacterLocal::CheckUsualParameters( float time_ )
+void CharacterLocal::CheckUsualParameters(float time_)
 {
-	if ( m_bHit )
+	if (m_bHit)
 	{
 		//pauseTime
 		//hit++
 	}
-	else if ( m_bIsHit 
-			&& m_CurrentStateDefId != STATE_DEF_HIT_AIR 
-			&& m_CurrentStateDefId != STATE_DEF_HIT_CROUCH 
-			&& m_CurrentStateDefId != STATE_DEF_HIT_STAND )
+	else if (m_bIsHit
+		&& m_CurrentStateDefId != STATE_DEF_HIT_AIR
+		&& m_CurrentStateDefId != STATE_DEF_HIT_CROUCH
+		&& m_CurrentStateDefId != STATE_DEF_HIT_STAND)
 	{
 		//si guard ou non
 		//vie - power
@@ -1002,22 +993,22 @@ void CharacterLocal::CheckUsualParameters( float time_ )
 	}
 	/*else if ( m_CurrentStateDef. )
 	{
-		
+
 	}*/
 
 	//a changer pour le cas general
-	if ( m_PauseTime <= 0 )
+	if (m_PauseTime <= 0)
 	{
-		if ( m_CurrentStateDef.GetStateType() == STATE_TYPE_AIR )
+		if (m_CurrentStateDef.GetStateType() == STATE_TYPE_AIR)
 		{
 			//TODO : dans le charac::SetPosition
 			m_vJumpVelocity += m_vGravity * time_;
-			SetPosition( GetPosition() + m_vJumpVelocity * time_ );
+			SetPosition(GetPosition() + m_vJumpVelocity * time_);
 
-			if ( GetPosition().y < 0.0f )
+			if (GetPosition().y < 0.0f)
 			{
-				SetPosition( D3DXVECTOR3( GetPosition().x, 0.0f, GetPosition().z) );
-				m_vJumpVelocity = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+				SetPosition(D3DXVECTOR3(GetPosition().x, 0.0f, GetPosition().z));
+				m_vJumpVelocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 			}
 		}
 	}
@@ -1026,19 +1017,17 @@ void CharacterLocal::CheckUsualParameters( float time_ )
 /**
  *
  */
-StateController *CharacterLocal::GetController( eStateControllerType type_ )
+StateController* CharacterLocal::GetController(eStateControllerType type_)
 {
-	std::vector<StateController>::iterator it;
-
-	for ( it = m_CurrentStateDef.GetStateController().begin(); it != m_CurrentStateDef.GetStateController().end(); it++ )
+	for (auto it = m_CurrentStateDef.GetStateController().begin(); it != m_CurrentStateDef.GetStateController().end(); ++it)
 	{
-		if ( it->GetType() == type_ && it->IsActive() )
+		if ((*it)->GetType() == type_ && (*it)->IsActive())
 		{
-			return &*it;
+			return &**it;
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 /**
@@ -1046,22 +1035,21 @@ StateController *CharacterLocal::GetController( eStateControllerType type_ )
  */
 void CharacterLocal::InitOBB()
 {
-	std::map<long, StateDef>::iterator it;
 	std::vector<std::string>::iterator itName;
-	LPD3DXFRAME pFrame = NULL;
+	LPD3DXFRAME pFrame = nullptr;
 
-	for ( it = m_MapStateDef.begin(); it != m_MapStateDef.end(); it++ )
+	for (std::map<long, StateDef>::iterator it = m_MapStateDef.begin(); it != m_MapStateDef.end(); ++it)
 	{
-		for ( itName = it->second.GetCollisionAttBonesName().begin(); itName != it->second.GetCollisionAttBonesName().end(); itName++ )
+		for (itName = it->second.GetCollisionAttBonesName().begin(); itName != it->second.GetCollisionAttBonesName().end(); ++itName)
 		{
-			pFrame = D3DXFrameFind( m_meshX.GetFrameRoot(), itName->c_str() );
-			it->second.AddCollisionAtt( pFrame );
+			pFrame = D3DXFrameFind(m_meshX.GetFrameRoot(), itName->c_str());
+			it->second.AddCollisionAtt(pFrame);
 		}
 
-		for ( itName = it->second.GetCollisionDefBonesName().begin(); itName != it->second.GetCollisionDefBonesName().end(); itName++ )
+		for (itName = it->second.GetCollisionDefBonesName().begin(); itName != it->second.GetCollisionDefBonesName().end(); ++itName)
 		{
-			pFrame = D3DXFrameFind( m_meshX.GetFrameRoot(), itName->c_str() );
-			it->second.AddCollisionDef( pFrame );
+			pFrame = D3DXFrameFind(m_meshX.GetFrameRoot(), itName->c_str());
+			it->second.AddCollisionDef(pFrame);
 		}
 
 		it->second.GetCollisionAttBonesName().clear();
@@ -1074,112 +1062,112 @@ void CharacterLocal::InitOBB()
  */
 void CharacterLocal::CheckStandardDisplacement()
 {
-	CommandPlayer *pCommandPlayer = dynamic_cast<CommandPlayer *> (m_pCommand);
-	CommandIA *pCommandIA = dynamic_cast<CommandIA *> (m_pCommand);
+	auto pCommandPlayer = dynamic_cast<CommandPlayer*> (m_pCommand);
+	auto pCommandIA = dynamic_cast<CommandIA*> (m_pCommand);
 
-	if ( pCommandPlayer )
+	if (pCommandPlayer)
 	{
-		ApplyStandardDisplacement( pCommandPlayer->CheckDisplacement( m_PosInScreen, m_BufferButton ) );
+		ApplyStandardDisplacement(pCommandPlayer->CheckDisplacement(m_PosInScreen, m_BufferButton));
 	}
-	else if ( pCommandIA )
+	else if (pCommandIA)
 	{
-		ApplyStandardDisplacement( pCommandIA->GetDisplacement() );
+		ApplyStandardDisplacement(pCommandIA->GetDisplacement());
 	}
 }
 
 /**
  *
  */
-void CharacterLocal::ApplyStandardDisplacement( eCommandId id_ )
+void CharacterLocal::ApplyStandardDisplacement(eCommandId id_)
 {
-	switch ( id_ )
+	switch (id_)
 	{
 	case COMMAND_ID_WALK_FORWARD:
-		if ( m_CurrentStateDef.GetPlayerCtrl() &&
-			m_CurrentStateDefId != STATE_DEF_WALK_FORWARD && 
-			m_CurrentStateDef.GetStateType() == STATE_TYPE_STAND )
+		if (m_CurrentStateDef.GetPlayerCtrl() &&
+			m_CurrentStateDefId != STATE_DEF_WALK_FORWARD &&
+			m_CurrentStateDef.GetStateType() == STATE_TYPE_STAND)
 		{
-			ChangeState( STATE_DEF_WALK_FORWARD );
+			ChangeState(STATE_DEF_WALK_FORWARD);
 		}
-		else if ( m_CurrentStateDef.GetPlayerCtrl() &&
+		else if (m_CurrentStateDef.GetPlayerCtrl() &&
 			m_CurrentStateDefId != STATE_DEF_CROUCH_TO_IDLE &&
-			m_CurrentStateDef.GetStateType() == STATE_TYPE_CROUCH )
+			m_CurrentStateDef.GetStateType() == STATE_TYPE_CROUCH)
 		{
-			ChangeState( STATE_DEF_CROUCH_TO_IDLE );
+			ChangeState(STATE_DEF_CROUCH_TO_IDLE);
 		}
 		break;
 
 	case COMMAND_ID_WALK_BACKWARD:
-		if ( m_CurrentStateDef.GetPlayerCtrl() &&
-			m_CurrentStateDefId != STATE_DEF_WALK_BACKWARD && 
-			m_CurrentStateDef.GetStateType() == STATE_TYPE_STAND )
+		if (m_CurrentStateDef.GetPlayerCtrl() &&
+			m_CurrentStateDefId != STATE_DEF_WALK_BACKWARD &&
+			m_CurrentStateDef.GetStateType() == STATE_TYPE_STAND)
 		{
-			ChangeState( STATE_DEF_WALK_BACKWARD );
+			ChangeState(STATE_DEF_WALK_BACKWARD);
 		}
-		else if ( m_CurrentStateDef.GetPlayerCtrl() &&
+		else if (m_CurrentStateDef.GetPlayerCtrl() &&
 			m_CurrentStateDefId != STATE_DEF_CROUCH_TO_IDLE &&
-			m_CurrentStateDef.GetStateType() == STATE_TYPE_CROUCH )
+			m_CurrentStateDef.GetStateType() == STATE_TYPE_CROUCH)
 		{
-			ChangeState( STATE_DEF_CROUCH_TO_IDLE );
+			ChangeState(STATE_DEF_CROUCH_TO_IDLE);
 		}
 		break;
 
 	case COMMAND_ID_JUMP:
-		if ( m_CurrentStateDef.GetPlayerCtrl() &&
-			( m_CurrentStateDef.GetStateType() == STATE_TYPE_CROUCH || 
-				m_CurrentStateDef.GetStateType() == STATE_TYPE_STAND ) &&
-			m_CurrentStateDefId != STATE_DEF_IDLE_TO_AIR )
+		if (m_CurrentStateDef.GetPlayerCtrl() &&
+			(m_CurrentStateDef.GetStateType() == STATE_TYPE_CROUCH ||
+				m_CurrentStateDef.GetStateType() == STATE_TYPE_STAND) &&
+			m_CurrentStateDefId != STATE_DEF_IDLE_TO_AIR)
 		{
-			ChangeState( STATE_DEF_IDLE_TO_AIR );
+			ChangeState(STATE_DEF_IDLE_TO_AIR);
 		}
 		break;
 
 	case COMMAND_ID_JUMP_BACKWARD:
-		if ( m_CurrentStateDef.GetPlayerCtrl() &&
-			( m_CurrentStateDef.GetStateType() == STATE_TYPE_CROUCH || 
-				m_CurrentStateDef.GetStateType() == STATE_TYPE_STAND ) &&
-			m_CurrentStateDefId != STATE_DEF_IDLE_TO_AIR )
+		if (m_CurrentStateDef.GetPlayerCtrl() &&
+			(m_CurrentStateDef.GetStateType() == STATE_TYPE_CROUCH ||
+				m_CurrentStateDef.GetStateType() == STATE_TYPE_STAND) &&
+			m_CurrentStateDefId != STATE_DEF_IDLE_TO_AIR)
 		{
-			ChangeState( STATE_DEF_IDLE_TO_AIR_BACKWARD );
+			ChangeState(STATE_DEF_IDLE_TO_AIR_BACKWARD);
 		}
 		break;
 
 	case COMMAND_ID_JUMP_FORWARD:
-		if ( m_CurrentStateDef.GetPlayerCtrl() &&
-			( m_CurrentStateDef.GetStateType() == STATE_TYPE_CROUCH || 
-				m_CurrentStateDef.GetStateType() == STATE_TYPE_STAND ) &&
-			m_CurrentStateDefId != STATE_DEF_IDLE_TO_AIR )
+		if (m_CurrentStateDef.GetPlayerCtrl() &&
+			(m_CurrentStateDef.GetStateType() == STATE_TYPE_CROUCH ||
+				m_CurrentStateDef.GetStateType() == STATE_TYPE_STAND) &&
+			m_CurrentStateDefId != STATE_DEF_IDLE_TO_AIR)
 		{
-			ChangeState( STATE_DEF_IDLE_TO_AIR_FORWARD );
+			ChangeState(STATE_DEF_IDLE_TO_AIR_FORWARD);
 		}
 		break;
 
 	case COMMAND_ID_CROUCH:
-		if ( m_CurrentStateDef.GetPlayerCtrl() &&
+		if (m_CurrentStateDef.GetPlayerCtrl() &&
 			m_CurrentStateDef.GetStateType() == STATE_TYPE_STAND &&
-			m_CurrentStateDefId != STATE_DEF_IDLE_TO_CROUCH )
+			m_CurrentStateDefId != STATE_DEF_IDLE_TO_CROUCH)
 		{
-			ChangeState( STATE_DEF_IDLE_TO_CROUCH );
+			ChangeState(STATE_DEF_IDLE_TO_CROUCH);
 		}
 		break;
-	
+
 	case COMMAND_ID_NONE:
-		if ( m_CurrentStateDef.GetPlayerCtrl() &&
+		if (m_CurrentStateDef.GetPlayerCtrl() &&
 			m_CurrentStateDef.GetStateType() == STATE_TYPE_STAND &&
-			m_CurrentStateDefId != STATE_DEF_IDLE )
+			m_CurrentStateDefId != STATE_DEF_IDLE)
 		{
-			ChangeState( STATE_DEF_IDLE );
+			ChangeState(STATE_DEF_IDLE);
 		}
-		else if ( m_CurrentStateDef.GetPlayerCtrl() &&
+		else if (m_CurrentStateDef.GetPlayerCtrl() &&
 			m_CurrentStateDef.GetStateType() == STATE_TYPE_CROUCH &&
-			m_CurrentStateDefId != STATE_DEF_CROUCH_TO_IDLE )
+			m_CurrentStateDefId != STATE_DEF_CROUCH_TO_IDLE)
 		{
-			ChangeState( STATE_DEF_CROUCH_TO_IDLE );
+			ChangeState(STATE_DEF_CROUCH_TO_IDLE);
 		}
 		break;
 	}//fin switch
 }
-	
+
 
 //#define EDITOR
 
@@ -1188,16 +1176,16 @@ void CharacterLocal::ApplyStandardDisplacement( eCommandId id_ )
 /**
  *
  */
-bool CharacterLocal::CheckGetParameterValue( std::string &str_)
+bool CharacterLocal::CheckGetParameterValue(std::string& str_)
 {
-	if ( str_.size() == 0)
+	if (str_.size() == 0)
 	{
 		return false;
 	}
 
-	if ( str_.at(0) == TRIGGER_KEY_WORD_COMMAND_NAME )
+	if (str_.at(0) == TRIGGER_KEY_WORD_COMMAND_NAME)
 	{
-		if ( *str_.rbegin() == TRIGGER_KEY_WORD_COMMAND_NAME )
+		if (*str_.rbegin() == TRIGGER_KEY_WORD_COMMAND_NAME)
 		{
 			return true;
 		}
@@ -1206,27 +1194,27 @@ bool CharacterLocal::CheckGetParameterValue( std::string &str_)
 			return false;
 		}
 	}
-	else if ( str_.compare(TRIGGER_KEY_WORD_CTRL) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_COMMAND) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_S) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_C) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_A) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_STATE_TYPE) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_STATE_NO) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_HIT) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_IS_HIT) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_ANIMID) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_ANIM_TIME) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_POS_X) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_POS_Y) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_POS_Z) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_END_ANIM_REACH) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_VEL_X) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_VEL_Y) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_VEL_Z) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_JUMP_VEL_X) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_JUMP_VEL_Y) == 0 ||
-			str_.compare(TRIGGER_KEY_WORD_JUMP_VEL_Z) == 0 )
+	else if (str_.compare(TRIGGER_KEY_WORD_CTRL) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_COMMAND) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_S) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_C) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_A) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_STATE_TYPE) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_STATE_NO) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_HIT) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_IS_HIT) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_ANIMID) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_ANIM_TIME) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_POS_X) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_POS_Y) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_POS_Z) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_END_ANIM_REACH) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_VEL_X) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_VEL_Y) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_VEL_Z) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_JUMP_VEL_X) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_JUMP_VEL_Y) == 0 ||
+		str_.compare(TRIGGER_KEY_WORD_JUMP_VEL_Z) == 0)
 	{
 		return true;
 	}
@@ -1240,9 +1228,9 @@ bool CharacterLocal::CheckGetParameterValue( std::string &str_)
 void CharacterLocal::InitCommunParameters()
 {
 	//TODO les states predefinis
-	StateDef *stateDef = NULL;
-	StateController *stateController = NULL;
-	Trigger *trigger = NULL;
+	StateDef* stateDef = nullptr;
+	StateController* stateController = nullptr;
+	Trigger* trigger = nullptr;
 	sStateControllerValue stateControllerValue;
 
 	////////////////////////////////////////////////////////////////////////
@@ -1250,109 +1238,109 @@ void CharacterLocal::InitCommunParameters()
 	stateDef = new StateDef;
 	stateController = new StateController;
 	trigger = new Trigger;
-	
+
 	stateController->SetName("ghost HitStand");
 	stateController->SetType(STATE_CONTROLLER_TYPE_CHANGE_STATE);
 	stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
 	stateControllerValue.real = STATE_DEF_HIT_STAND;
-	stateController->SetValue( stateControllerValue );
+	stateController->SetValue(stateControllerValue);
 
 	trigger->SetCharacter(this);
 	trigger->SetExpression("(ishit) && (statetype = S)");
 	stateController->AddTrigger(*trigger);
 
 	stateDef->AddStateController(*stateController);
-/*
+	/*
+		////////////////////
+
+
+		stateController = NULL;
+		trigger = NULL;
+
+		stateController = new cStateController;
+		trigger = new cTrigger;
+
+		stateController->SetName("ghost WalkForward");
+		stateController->SetType(STATE_CONTROLLER_TYPE_CHANGE_STATE);
+		stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
+		stateControllerValue.real = STATE_DEF_WALK_FORWARD;
+		stateController->SetValue( stateControllerValue );
+
+		trigger->SetCharacter(this);
+		trigger->SetExpression("(command = forward) && (statetype = S)");
+		stateController->AddTrigger(*trigger);
+
+		stateDef->AddStateController(*stateController);
+
+		////////////////////
+
+
+		stateController = NULL;
+		trigger = NULL;
+
+		stateController = new cStateController;
+		trigger = new cTrigger;
+
+		stateController->SetName("ghost BackWard");
+		stateController->SetType(STATE_CONTROLLER_TYPE_CHANGE_STATE);
+		stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
+		stateControllerValue.real = STATE_DEF_WALK_BACKWARD;
+		stateController->SetValue( stateControllerValue );
+
+		trigger->SetCharacter(this);
+		trigger->SetExpression("(command = backward) && (statetype = S)");
+		stateController->AddTrigger(*trigger);
+
+		stateDef->AddStateController(*stateController);
+
+		////////////////////
+
+
+		stateController = NULL;
+		trigger = NULL;
+
+		stateController = new cStateController;
+		trigger = new cTrigger;
+
+		stateController->SetName("ghost idle to Crouch");
+		stateController->SetType(STATE_CONTROLLER_TYPE_CHANGE_STATE);
+		stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
+		stateControllerValue.real = STATE_DEF_IDLE_TO_CROUCH;
+		stateController->SetValue( stateControllerValue );
+
+		trigger->SetCharacter(this);
+		trigger->SetExpression("(command = down) && (statetype = S)");
+		stateController->AddTrigger(*trigger);
+
+		stateDef->SetDescription( "Crouch" );
+		stateDef->AddStateController(*stateController);
+
+		////////////////////
+
+
+		stateController = NULL;
+		trigger = NULL;
+
+		stateController = new cStateController;
+		trigger = new cTrigger;
+
+		stateController->SetName("ghost Crouch");
+		stateController->SetType(STATE_CONTROLLER_TYPE_CHANGE_STATE);
+		stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
+		stateControllerValue.real = STATE_DEF_CROUCH;
+		stateController->SetValue( stateControllerValue );
+
+		trigger->SetCharacter(this);
+		trigger->SetExpression("(command = crouch) && (statetype = C)");
+		stateController->AddTrigger(*trigger);
+
+		stateDef->AddStateController(*stateController);
+	*/
 	////////////////////
-	delete stateController;
-	delete trigger;
-	stateController = NULL;
-	trigger = NULL;
 
-	stateController = new cStateController;
-	trigger = new cTrigger;
-	
-	stateController->SetName("ghost WalkForward");
-	stateController->SetType(STATE_CONTROLLER_TYPE_CHANGE_STATE);
-	stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
-	stateControllerValue.real = STATE_DEF_WALK_FORWARD;
-	stateController->SetValue( stateControllerValue );
 
-	trigger->SetCharacter(this);
-	trigger->SetExpression("(command = forward) && (statetype = S)");
-	stateController->AddTrigger(*trigger);
-
-	stateDef->AddStateController(*stateController);
-
-	////////////////////
-	delete stateController;
-	delete trigger;
-	stateController = NULL;
-	trigger = NULL;
-
-	stateController = new cStateController;
-	trigger = new cTrigger;
-
-	stateController->SetName("ghost BackWard");
-	stateController->SetType(STATE_CONTROLLER_TYPE_CHANGE_STATE);
-	stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
-	stateControllerValue.real = STATE_DEF_WALK_BACKWARD;
-	stateController->SetValue( stateControllerValue );
-
-	trigger->SetCharacter(this);
-	trigger->SetExpression("(command = backward) && (statetype = S)");
-	stateController->AddTrigger(*trigger);
-
-	stateDef->AddStateController(*stateController);
-
-	////////////////////
-	delete stateController;
-	delete trigger;
-	stateController = NULL;
-	trigger = NULL;
-
-	stateController = new cStateController;
-	trigger = new cTrigger;
-
-	stateController->SetName("ghost idle to Crouch");
-	stateController->SetType(STATE_CONTROLLER_TYPE_CHANGE_STATE);
-	stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
-	stateControllerValue.real = STATE_DEF_IDLE_TO_CROUCH;
-	stateController->SetValue( stateControllerValue );
-
-	trigger->SetCharacter(this);
-	trigger->SetExpression("(command = down) && (statetype = S)");
-	stateController->AddTrigger(*trigger);
-
-	stateDef->SetDescription( "Crouch" );
-	stateDef->AddStateController(*stateController);
-
-	////////////////////
-	delete stateController;
-	delete trigger;
-	stateController = NULL;
-	trigger = NULL;
-
-	stateController = new cStateController;
-	trigger = new cTrigger;
-
-	stateController->SetName("ghost Crouch");
-	stateController->SetType(STATE_CONTROLLER_TYPE_CHANGE_STATE);
-	stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
-	stateControllerValue.real = STATE_DEF_CROUCH;
-	stateController->SetValue( stateControllerValue );
-
-	trigger->SetCharacter(this);
-	trigger->SetExpression("(command = crouch) && (statetype = C)");
-	stateController->AddTrigger(*trigger);
-
-	stateDef->AddStateController(*stateController);
-*/
-	////////////////////
-	delete stateController;
-	delete trigger;
-	stateController = NULL;
-	trigger = NULL;
+	stateController = nullptr;
+	trigger = nullptr;
 
 	stateController = new StateController;
 	trigger = new Trigger;
@@ -1361,7 +1349,7 @@ void CharacterLocal::InitCommunParameters()
 	stateController->SetType(STATE_CONTROLLER_TYPE_CHANGE_STATE);
 	stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
 	stateControllerValue.real = 1000; // PUNCH LIGHT
-	stateController->SetValue( stateControllerValue );
+	stateController->SetValue(stateControllerValue);
 
 	trigger->SetCharacter(this);
 	trigger->SetExpression("(command = \"PunchLight\") && (statetype = S)");
@@ -1370,10 +1358,10 @@ void CharacterLocal::InitCommunParameters()
 	stateDef->AddStateController(*stateController);
 
 	////////////////////
-	delete stateController;
-	delete trigger;
-	stateController = NULL;
-	trigger = NULL;
+
+
+	stateController = nullptr;
+	trigger = nullptr;
 
 	stateController = new StateController;
 	trigger = new Trigger;
@@ -1382,7 +1370,7 @@ void CharacterLocal::InitCommunParameters()
 	stateController->SetType(STATE_CONTROLLER_TYPE_CHANGE_STATE);
 	stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
 	stateControllerValue.real = 1001; // CROUCH PUNCH LIGHT
-	stateController->SetValue( stateControllerValue );
+	stateController->SetValue(stateControllerValue);
 
 	trigger->SetCharacter(this);
 	trigger->SetExpression("(command = \"PunchLight\") && (statetype = C)");
@@ -1391,10 +1379,10 @@ void CharacterLocal::InitCommunParameters()
 	stateDef->AddStateController(*stateController);
 
 	////////////////////
-	delete stateController;
-	delete trigger;
-	stateController = NULL;
-	trigger = NULL;
+
+
+	stateController = nullptr;
+	trigger = nullptr;
 
 	stateController = new StateController;
 	trigger = new Trigger;
@@ -1403,7 +1391,7 @@ void CharacterLocal::InitCommunParameters()
 	stateController->SetType(STATE_CONTROLLER_TYPE_CHANGE_STATE);
 	stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
 	stateControllerValue.real = STATE_DEF_IDLE_TO_AIR;
-	stateController->SetValue( stateControllerValue );
+	stateController->SetValue(stateControllerValue);
 
 	trigger->SetCharacter(this);
 	trigger->SetExpression("(command = up) && ( (statetype = C) || (statetype = S) )");
@@ -1412,10 +1400,10 @@ void CharacterLocal::InitCommunParameters()
 	stateDef->AddStateController(*stateController);
 
 	////////////////////
-	delete stateController;
-	delete trigger;
-	stateController = NULL;
-	trigger = NULL;
+
+
+	stateController = nullptr;
+	trigger = nullptr;
 
 	stateController = new StateController;
 	trigger = new Trigger;
@@ -1424,24 +1412,24 @@ void CharacterLocal::InitCommunParameters()
 	stateController->SetType(STATE_CONTROLLER_TYPE_CHANGE_STATE);
 	stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
 	stateControllerValue.real = STATE_DEF_AIR_TO_IDLE;
-	stateController->SetValue( stateControllerValue );
+	stateController->SetValue(stateControllerValue);
 
 	trigger->SetCharacter(this);
-	trigger->SetExpression("(posy <= 0.0 ) && (statetype = A) && (stateno != 300)" );
+	trigger->SetExpression("(posy <= 0.0 ) && (statetype = A) && (stateno != 300)");
 	stateController->AddTrigger(*trigger);
 
 	stateDef->AddStateController(*stateController);
 
 	////////////////////
-	stateDef->SetDescription( "Ghost" );
+	stateDef->SetDescription("Ghost");
 	m_MapStateDef[STATE_DEF_GHOST] = *stateDef;
 
 	delete stateDef;
-	delete stateController;
-	delete trigger;
-	stateDef = NULL;
-	stateController = NULL;
-	trigger = NULL;
+
+
+	stateDef = nullptr;
+	stateController = nullptr;
+	trigger = nullptr;
 
 	////////////////////////////////////////////////////////////////////////
 	stateDef = new StateDef;
@@ -1462,7 +1450,7 @@ void CharacterLocal::InitCommunParameters()
 	//stateDef->SetSprPriority(1);
 	stateDef->SetVelset(0.0f, 0.0f);
 
-	stateDef->SetDescription( "Idle" );
+	stateDef->SetDescription("Idle");
 	m_MapStateDef[STATE_DEF_IDLE] = *stateDef;
 
 	////////////////////////////////////////////////////////////////////////
@@ -1494,7 +1482,7 @@ void CharacterLocal::InitCommunParameters()
 	stateController->SetType(STATE_CONTROLLER_TYPE_CHANGE_STATE);
 	stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
 	stateControllerValue.real = STATE_DEF_IDLE;
-	stateController->SetValue( stateControllerValue );
+	stateController->SetValue(stateControllerValue);
 
 	trigger->SetCharacter(this);
 	trigger->SetExpression("command != forward");
@@ -1503,8 +1491,8 @@ void CharacterLocal::InitCommunParameters()
 	stateDef->AddStateController(*stateController);
 
 	//-------------------
-	delete stateController;
-	delete trigger;
+
+
 	stateController = new StateController;
 	trigger = new Trigger;
 
@@ -1512,9 +1500,9 @@ void CharacterLocal::InitCommunParameters()
 	stateController->SetType(STATE_CONTROLLER_TYPE_MOVE_FORWARD);
 	stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
 	stateControllerValue.real = 3.0f;
-	stateController->SetValue( stateControllerValue );
+	stateController->SetValue(stateControllerValue);
 
-	trigger->SetPersistence( true );
+	trigger->SetPersistence(true);
 	trigger->SetCharacter(this);
 	trigger->SetExpression("1");
 	stateController->AddTrigger(*trigger);
@@ -1522,12 +1510,12 @@ void CharacterLocal::InitCommunParameters()
 	stateDef->AddStateController(*stateController);
 	//------------------
 
-	delete stateController;
-	delete trigger;
-	stateController = NULL;
-	trigger = NULL;
 
-	stateDef->SetDescription( "WalkForward" );
+
+	stateController = nullptr;
+	trigger = nullptr;
+
+	stateDef->SetDescription("WalkForward");
 	m_MapStateDef[STATE_DEF_WALK_FORWARD] = *stateDef;
 
 	////////////////////////////////////////////////////////////////////////
@@ -1559,7 +1547,7 @@ void CharacterLocal::InitCommunParameters()
 	stateController->SetType(STATE_CONTROLLER_TYPE_CHANGE_STATE);
 	stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
 	stateControllerValue.real = STATE_DEF_IDLE;
-	stateController->SetValue( stateControllerValue );
+	stateController->SetValue(stateControllerValue);
 
 	trigger->SetCharacter(this);
 	trigger->SetExpression("command != backward");
@@ -1568,8 +1556,8 @@ void CharacterLocal::InitCommunParameters()
 	stateDef->AddStateController(*stateController);
 
 	//-----------------------------------------
-	delete stateController;
-	delete trigger;
+
+
 	stateController = new StateController;
 	trigger = new Trigger;
 
@@ -1577,7 +1565,7 @@ void CharacterLocal::InitCommunParameters()
 	stateController->SetType(STATE_CONTROLLER_TYPE_MOVE_BACKWARD);
 	stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
 	stateControllerValue.real = 3.0f;
-	stateController->SetValue( stateControllerValue );
+	stateController->SetValue(stateControllerValue);
 
 	trigger->SetCharacter(this);
 	trigger->SetExpression("1");
@@ -1586,12 +1574,12 @@ void CharacterLocal::InitCommunParameters()
 	stateDef->AddStateController(*stateController);
 	//-----------------------------------------
 
-	delete stateController;
-	delete trigger;
-	stateController = NULL;
-	trigger = NULL;
 
-	stateDef->SetDescription( "WalkBackward" );
+
+	stateController = nullptr;
+	trigger = nullptr;
+
+	stateDef->SetDescription("WalkBackward");
 	m_MapStateDef[STATE_DEF_WALK_BACKWARD] = *stateDef;
 
 	////////////////////////////////////////////////////////////////////////
@@ -1615,7 +1603,7 @@ void CharacterLocal::InitCommunParameters()
 	//stateDef->SetSprPriority(1);
 	stateDef->SetVelset(0.0f, 0.0f);
 
-	stateDef->SetDescription( "Idle to crouch" );
+	stateDef->SetDescription("Idle to crouch");
 	m_MapStateDef[STATE_DEF_IDLE_TO_CROUCH] = *stateDef;
 
 	////////////////////////////////////////////////////////////////////////
@@ -1646,7 +1634,7 @@ void CharacterLocal::InitCommunParameters()
 	stateController->SetType(STATE_CONTROLLER_TYPE_CHANGE_STATE);
 	stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
 	stateControllerValue.real = STATE_DEF_CROUCH_TO_IDLE;
-	stateController->SetValue( stateControllerValue );
+	stateController->SetValue(stateControllerValue);
 
 	trigger->SetCharacter(this);
 	trigger->SetExpression("command != down");
@@ -1654,12 +1642,12 @@ void CharacterLocal::InitCommunParameters()
 
 	stateDef->AddStateController(*stateController);
 
-	delete stateController;
-	delete trigger;
-	stateController = NULL;
-	trigger = NULL;
 
-	stateDef->SetDescription( "Crouch" );
+
+	stateController = nullptr;
+	trigger = nullptr;
+
+	stateDef->SetDescription("Crouch");
 	m_MapStateDef[STATE_DEF_CROUCH] = *stateDef;
 
 	////////////////////////////////////////////////////////////////////////
@@ -1683,7 +1671,7 @@ void CharacterLocal::InitCommunParameters()
 	//stateDef->SetSprPriority(1);
 	stateDef->SetVelset(0.0f, 0.0f);
 
-	stateDef->SetDescription( "Crouch to idle" );
+	stateDef->SetDescription("Crouch to idle");
 	m_MapStateDef[STATE_DEF_CROUCH_TO_IDLE] = *stateDef;
 
 	////////////////////////////////////////////////////////////////////////
@@ -1707,7 +1695,7 @@ void CharacterLocal::InitCommunParameters()
 	//stateDef->SetSprPriority(1);
 	stateDef->SetVelset(0.0f, 0.0f);
 
-	stateDef->SetDescription( "Stand2Air" );
+	stateDef->SetDescription("Stand2Air");
 	m_MapStateDef[STATE_DEF_IDLE_TO_AIR] = *stateDef;
 
 	////////////////////////////////////////////////////////////////////////
@@ -1731,7 +1719,7 @@ void CharacterLocal::InitCommunParameters()
 	//stateDef->SetSprPriority(1);
 	stateDef->SetVelset(0.0f, 0.0f);
 
-	stateDef->SetDescription( "AirIdle" );
+	stateDef->SetDescription("AirIdle");
 	m_MapStateDef[STATE_DEF_AIR_IDLE] = *stateDef;
 
 	////////////////////////////////////////////////////////////////////////
@@ -1755,7 +1743,7 @@ void CharacterLocal::InitCommunParameters()
 	//stateDef->SetSprPriority(1);
 	stateDef->SetVelset(0.0f, 0.0f);
 
-	stateDef->SetDescription( "Air2Stand" );
+	stateDef->SetDescription("Air2Stand");
 	m_MapStateDef[STATE_DEF_AIR_TO_IDLE] = *stateDef;
 
 	////////////////////////////////////////////////////////////////////////
@@ -1779,7 +1767,7 @@ void CharacterLocal::InitCommunParameters()
 	//stateDef->SetSprPriority(1);
 	stateDef->SetVelset(0.0f, 0.0f);
 
-	stateDef->SetDescription( "Hit stand" );
+	stateDef->SetDescription("Hit stand");
 	m_MapStateDef[STATE_DEF_HIT_STAND] = *stateDef;
 
 	////////////////////////////////////////////////////////////////////////
@@ -1803,7 +1791,7 @@ void CharacterLocal::InitCommunParameters()
 	stateDef->SetPowerAdd(10);
 	//stateDef->SetSprPriority(1);
 	stateDef->SetVelset(0.0f, 0.0f);
-	stateDef->SetDescription( "Punch" );
+	stateDef->SetDescription("Punch");
 
 	//Controller HITDEF
 	stateController = new StateController;
@@ -1811,7 +1799,7 @@ void CharacterLocal::InitCommunParameters()
 
 	stateController->SetName("HitDef");
 	stateController->SetType(STATE_CONTROLLER_TYPE_HIT_DEF);
-	stateController->SetHitHeight( HIT_HIGH );
+	stateController->SetHitHeight(HIT_HIGH);
 	stateController->SetHitSound(0);
 	stateController->SetGuardSound(0);
 	stateController->SetDamage(20);
@@ -1821,7 +1809,7 @@ void CharacterLocal::InitCommunParameters()
 	stateController->SetSparkNo(-1);
 	stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
 	stateControllerValue.real = 0.0f;
-	stateController->SetValue( stateControllerValue );
+	stateController->SetValue(stateControllerValue);
 
 	trigger->SetCharacter(this);
 	trigger->SetExpression("(animtime >= 0.1) && ( animtime <= 0.2)");
@@ -1829,10 +1817,10 @@ void CharacterLocal::InitCommunParameters()
 
 	stateDef->AddStateController(*stateController);
 
-	delete stateController;
-	delete trigger;
-	stateController = NULL;
-	trigger = NULL;
+
+
+	stateController = nullptr;
+	trigger = nullptr;
 
 	m_MapStateDef[1000] = *stateDef;
 
@@ -1855,7 +1843,7 @@ void CharacterLocal::InitCommunParameters()
 	stateDef->SetPowerAdd(10);
 	//stateDef->SetSprPriority(1);
 	stateDef->SetVelset(0.0f, 0.0f);
-	stateDef->SetDescription( "Crouch punch" );
+	stateDef->SetDescription("Crouch punch");
 
 	//Controller HITDEF
 	stateController = new StateController;
@@ -1863,7 +1851,7 @@ void CharacterLocal::InitCommunParameters()
 
 	stateController->SetName("HitDef");
 	stateController->SetType(STATE_CONTROLLER_TYPE_HIT_DEF);
-	stateController->SetHitHeight( HIT_LOW );
+	stateController->SetHitHeight(HIT_LOW);
 	stateController->SetHitSound(0);
 	stateController->SetGuardSound(0);
 	stateController->SetDamage(20);
@@ -1873,7 +1861,7 @@ void CharacterLocal::InitCommunParameters()
 	stateController->SetSparkNo(-1);
 	stateControllerValue.type = STATE_CONTROLLER_VALUE_TYPE_FLOAT;
 	stateControllerValue.real = 0.0f;
-	stateController->SetValue( stateControllerValue );
+	stateController->SetValue(stateControllerValue);
 
 	trigger->SetCharacter(this);
 	trigger->SetExpression("(animtime >= 0.16) && ( animtime <= 0.23)");
@@ -1881,19 +1869,19 @@ void CharacterLocal::InitCommunParameters()
 
 	stateDef->AddStateController(*stateController);
 
-	delete stateController;
-	delete trigger;
-	stateController = NULL;
-	trigger = NULL;
+
+
+	stateController = nullptr;
+	trigger = nullptr;
 
 	m_MapStateDef[1001] = *stateDef;
 
 	////////////////////////////////////////////////////////////////////////
 
 	delete stateDef;
-	stateDef = NULL;
+	stateDef = nullptr;
 
-	ButtonCombination *buttonCombination = NULL;
+	ButtonCombination* buttonCombination = nullptr;
 	ButtonCombination::sCombination combination;
 
 	//TODO command predefini
@@ -1954,7 +1942,7 @@ void CharacterLocal::InitCommunParameters()
 /**
  *
  */
-std::map< long, StateDef > &CharacterLocal::GetStateDef()
+std::map< long, StateDef >& CharacterLocal::GetStateDef()
 {
 	return m_MapStateDef;
 }
@@ -1962,29 +1950,29 @@ std::map< long, StateDef > &CharacterLocal::GetStateDef()
 /**
  *
  */
-void CharacterLocal::AddStateDef( DWORD id_, StateDef &stateDef_)
+void CharacterLocal::AddStateDef(DWORD id_, StateDef& stateDef_)
 {
 #ifdef _DEBUG
-	std::map<long, StateDef>::iterator it = m_MapStateDef.find(id_);
+	auto it = m_MapStateDef.find(id_);
 
-	if ( it != m_MapStateDef.end() )
-		Window::Error( false, "Le stateDef %d deja existant!", id_);
+	if (it != m_MapStateDef.end())
+		Window::Error(false, "Le stateDef %d deja existant!", id_);
 #endif
 
 	m_MapStateDef[id_] = stateDef_;
 }
 
 /**
- * 
+ *
  */
-StateDef *CharacterLocal::GetStateDef(DWORD id_)
+StateDef* CharacterLocal::GetStateDef(DWORD id_)
 {
-	std::map<long, StateDef>::iterator it = m_MapStateDef.find(id_);
+	auto it = m_MapStateDef.find(id_);
 
-	if ( it == m_MapStateDef.end() )
+	if (it == m_MapStateDef.end())
 	{
-		Window::Error( false, "Le stateDef %d n'existe pas!", id_);
-		return NULL;
+		Window::Error(false, "Le stateDef %d n'existe pas!", id_);
+		return nullptr;
 	}
 
 	return &it->second;
@@ -1997,9 +1985,9 @@ Command* CharacterLocal::GetCommand()
 }
 
 #ifdef SHOW_DEBUG
-	bool CharacterLocal::GetPlayerCtrl()
-	{
-		return m_CurrentStateDef.GetPlayerCtrl();
-	}
+bool CharacterLocal::GetPlayerCtrl()
+{
+	return m_CurrentStateDef.GetPlayerCtrl();
+}
 #endif
 

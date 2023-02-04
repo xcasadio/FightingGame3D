@@ -4,7 +4,7 @@
 #include "Graphic.h"
 #include "Pad.h"
 #include "Texture.h"
-#include "Config/Export.h"
+#include "FG_Export.h"
 
 #include "DebugEngine/DebugNew.h"
 
@@ -13,7 +13,7 @@ using namespace GameEngine;
 /**
  *
  */
-class GAME_ENGINE_EXPORT StageSelection :
+class FIGHTING_GAME_EXPORT StageSelection :
 	public IGameState
 {
 public:
@@ -25,26 +25,26 @@ public:
 	/**
 	 *
 	 */
-	~StageSelection();
+	~StageSelection() override;
 
 	/**
 	 *
 	 */
-	bool Init();
+	bool Init() override;
 
 	/**
 	 *
 	 */
-	bool Update( float elapsedTime_ );
+	bool Update(float elapsedTime_) override;
 
 	/**
 	 *
 	 */
-	void Draw( float elapsedTime_ );
+	void Draw(float elapsedTime_) override;
 
 private:
-	Graphic *m_pGraphic;
-	Pad *m_pPad1;
+	Graphic* m_pGraphic;
+	Pad* m_pPad1;
 	Texture m_Tex;
 };
 

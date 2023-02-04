@@ -1,5 +1,4 @@
-#ifndef LOGGERFILE_H
-#define LOGGERFILE_H
+#pragma once
 
 #include "Config/Export.h"
 #include "Logger.h"
@@ -8,17 +7,15 @@
 
 namespace GameEngine
 {
-    class GAME_ENGINE_EXPORT cLoggerFile : public ILogger
-    {
-    public :
-        cLoggerFile(const std::string& Filename = "Output.log");
-        ~cLoggerFile();
+	class GAME_ENGINE_EXPORT LoggerFile : public ILogger
+	{
+	public:
+		LoggerFile(const std::string& Filename = "Output.log");
+		~LoggerFile() override;
 
-    private :
-        virtual void Write(const std::string& Message);
-        std::ofstream m_File;
-    };
+	private:
+		virtual void Write(const std::string& Message);
+		std::ofstream m_File;
+	};
 
 } // namespace GameEngine
-
-#endif // LOGGERFILE_H

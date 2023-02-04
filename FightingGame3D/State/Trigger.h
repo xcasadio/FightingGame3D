@@ -10,21 +10,18 @@
 //GameEngine
 #include "DebugEngine/Exception.h"
 #include "Utilities/Serializable.h"
-#include "Config/Export.h"
+#include "FG_Export.h"
 
 #include "DebugEngine/DebugNew.h"
 
 using namespace GameEngine;
 
-class StateDef;
-class StateController;
-class Trigger;
 class Character;
 
 /**
  * definit un declencheur
  */
-class GAME_ENGINE_EXPORT Trigger :
+class FIGHTING_GAME_EXPORT Trigger :
 	public ISerializable
 {
 public:
@@ -33,8 +30,8 @@ public:
 	Trigger& operator = (const Trigger& trigger_);
 
 	// load/save
-	int Read(std::istream& is_);
-	std::ostream& operator >> (std::ostream& os_);
+	int Read(std::istream& is_) override;
+	std::ostream& operator >> (std::ostream& os_) override;
 
 	bool Result();
 	void SetExpression(const char* pExpression_);

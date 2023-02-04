@@ -16,7 +16,7 @@ StateController::StateController(void)
 /**
  *
  */
-StateController::StateController( const StateController &stateController_)
+StateController::StateController(const StateController& stateController_)
 {
 	Copy(stateController_);
 }
@@ -24,7 +24,7 @@ StateController::StateController( const StateController &stateController_)
 /**
  *
  */
-StateController &StateController::operator = ( const StateController &stateController_)
+StateController& StateController::operator = (const StateController& stateController_)
 {
 	Copy(stateController_);
 	return *this;
@@ -33,11 +33,11 @@ StateController &StateController::operator = ( const StateController &stateContr
 /**
  *
  */
-void StateController::Copy( const StateController &stateController_)
+void StateController::Copy(const StateController& stateController_)
 {
-	if ( this != &stateController_ )
+	if (this != &stateController_)
 	{
-		strcpy_s( m_Name, sizeof(m_Name), stateController_.m_Name);
+		strcpy_s(m_Name, sizeof(m_Name), stateController_.m_Name);
 		//m_Name = stateController_.m_Name;
 		m_Type = stateController_.m_Type;
 		m_Value = stateController_.m_Value;
@@ -72,49 +72,48 @@ void StateController::Copy( const StateController &stateController_)
  * @is flux d'entrée
  * @return le nombre d'octet lu
  */
-int StateController::Read( std::istream &is_ )
+int StateController::Read(std::istream& is_)
 {
 	int octetRead = is_.tellg();
-	Trigger *pTrigger = NULL;
 	size_t t;
 
-	is_.read( (char *) &m_Name, sizeof(m_Name) );
-	is_.read( (char *) &m_Type, sizeof(m_Type) );
-	is_.read( (char *) &m_Value, sizeof(m_Value) );
-	is_.read( (char *) &m_Attr1, sizeof(m_Attr1) );
-	is_.read( (char *) &m_Attr2, sizeof(m_Attr2) );
-	is_.read( (char *) &m_AnimType, sizeof(m_AnimType) );
-	is_.read( (char *) &m_Damage, sizeof(m_Damage) );
-	is_.read( (char *) &m_DamageGuard, sizeof(m_DamageGuard) );
-	is_.read( (char *) &m_GuardFlag, sizeof(m_GuardFlag) );
-	is_.read( (char *) &m_PauseTimeP1, sizeof(m_PauseTimeP1) );
-	is_.read( (char *) &m_PauseTimeP2, sizeof(m_PauseTimeP2) );
-	is_.read( (char *) &m_SparkNo, sizeof(m_SparkNo) );
-	is_.read( (char *) &m_vSparkPosition, sizeof(m_vSparkPosition) );
-	is_.read( (char *) &m_vSparkDirection, sizeof(m_vSparkDirection) );
-	is_.read( (char *) &m_HitSound, sizeof(m_HitSound) );
-	is_.read( (char *) &m_GuardSound, sizeof(m_GuardSound) );
-	is_.read( (char *) &m_GroundType, sizeof(m_GroundType) );
-	is_.read( (char *) &m_GroundSlideTime, sizeof(m_GroundSlideTime) );
-	is_.read( (char *) &m_GroundVelocity, sizeof(m_GroundVelocity) );
-	is_.read( (char *) &AirVelocity, sizeof(AirVelocity) );
-	is_.read( (char *) &m_Ctrl, sizeof(m_Ctrl) );
-	is_.read( (char *) &m_HitHeight, sizeof(m_HitHeight) );
-	
-	is_.read( (char *) &t, sizeof(t) );
+	is_.read((char*)&m_Name, sizeof(m_Name));
+	is_.read((char*)&m_Type, sizeof(m_Type));
+	is_.read((char*)&m_Value, sizeof(m_Value));
+	is_.read((char*)&m_Attr1, sizeof(m_Attr1));
+	is_.read((char*)&m_Attr2, sizeof(m_Attr2));
+	is_.read((char*)&m_AnimType, sizeof(m_AnimType));
+	is_.read((char*)&m_Damage, sizeof(m_Damage));
+	is_.read((char*)&m_DamageGuard, sizeof(m_DamageGuard));
+	is_.read((char*)&m_GuardFlag, sizeof(m_GuardFlag));
+	is_.read((char*)&m_PauseTimeP1, sizeof(m_PauseTimeP1));
+	is_.read((char*)&m_PauseTimeP2, sizeof(m_PauseTimeP2));
+	is_.read((char*)&m_SparkNo, sizeof(m_SparkNo));
+	is_.read((char*)&m_vSparkPosition, sizeof(m_vSparkPosition));
+	is_.read((char*)&m_vSparkDirection, sizeof(m_vSparkDirection));
+	is_.read((char*)&m_HitSound, sizeof(m_HitSound));
+	is_.read((char*)&m_GuardSound, sizeof(m_GuardSound));
+	is_.read((char*)&m_GroundType, sizeof(m_GroundType));
+	is_.read((char*)&m_GroundSlideTime, sizeof(m_GroundSlideTime));
+	is_.read((char*)&m_GroundVelocity, sizeof(m_GroundVelocity));
+	is_.read((char*)&AirVelocity, sizeof(AirVelocity));
+	is_.read((char*)&m_Ctrl, sizeof(m_Ctrl));
+	is_.read((char*)&m_HitHeight, sizeof(m_HitHeight));
 
-	for ( size_t i = 0; i < t; i++ )
+	is_.read((char*)&t, sizeof(t));
+
+	for (size_t i = 0; i < t; i++)
 	{
-		pTrigger = new Trigger;
+		Trigger* pTrigger = new Trigger;
 
-		pTrigger->Read( is_ );
-		m_Triggers.push_back( *pTrigger );
+		pTrigger->Read(is_);
+		m_Triggers.push_back(*pTrigger);
 
 		delete pTrigger;
-		pTrigger = NULL;
+		pTrigger = nullptr;
 	}
 
-	octetRead = (int) is_.tellg() - octetRead;
+	octetRead = (int)is_.tellg() - octetRead;
 
 	return octetRead;
 }
@@ -123,37 +122,35 @@ int StateController::Read( std::istream &is_ )
  * @os flux de sortie
  * @return le meme flux modifié
  */
-std::ostream &StateController::operator >> ( std::ostream &os_ )
+std::ostream& StateController::operator >> (std::ostream& os_)
 {
-	os_.write( (char *) &m_Name, sizeof(m_Name) );
-	os_.write( (char *) &m_Type, sizeof(m_Type) );
-	os_.write( (char *) &m_Value, sizeof(m_Value) );
-	os_.write( (char *) &m_Attr1, sizeof(m_Attr1) );
-	os_.write( (char *) &m_Attr2, sizeof(m_Attr2) );
-	os_.write( (char *) &m_AnimType, sizeof(m_AnimType) );
-	os_.write( (char *) &m_Damage, sizeof(m_Damage) );
-	os_.write( (char *) &m_DamageGuard, sizeof(m_DamageGuard) );
-	os_.write( (char *) &m_GuardFlag, sizeof(m_GuardFlag) );
-	os_.write( (char *) &m_PauseTimeP1, sizeof(m_PauseTimeP1) );
-	os_.write( (char *) &m_PauseTimeP2, sizeof(m_PauseTimeP2) );
-	os_.write( (char *) &m_SparkNo, sizeof(m_SparkNo) );
-	os_.write( (char *) &m_vSparkPosition, sizeof(m_vSparkPosition) );
-	os_.write( (char *) &m_vSparkDirection, sizeof(m_vSparkDirection) );
-	os_.write( (char *) &m_HitSound, sizeof(m_HitSound) );
-	os_.write( (char *) &m_GuardSound, sizeof(m_GuardSound) );
-	os_.write( (char *) &m_GroundType, sizeof(m_GroundType) );
-	os_.write( (char *) &m_GroundSlideTime, sizeof(m_GroundSlideTime) );
-	os_.write( (char *) &m_GroundVelocity, sizeof(m_GroundVelocity) );
-	os_.write( (char *) &AirVelocity, sizeof(AirVelocity) );
-	os_.write( (char *) &m_Ctrl, sizeof(m_Ctrl) );
-	os_.write( (char *) &m_HitHeight, sizeof(m_HitHeight) );
+	os_.write((char*)&m_Name, sizeof(m_Name));
+	os_.write((char*)&m_Type, sizeof(m_Type));
+	os_.write((char*)&m_Value, sizeof(m_Value));
+	os_.write((char*)&m_Attr1, sizeof(m_Attr1));
+	os_.write((char*)&m_Attr2, sizeof(m_Attr2));
+	os_.write((char*)&m_AnimType, sizeof(m_AnimType));
+	os_.write((char*)&m_Damage, sizeof(m_Damage));
+	os_.write((char*)&m_DamageGuard, sizeof(m_DamageGuard));
+	os_.write((char*)&m_GuardFlag, sizeof(m_GuardFlag));
+	os_.write((char*)&m_PauseTimeP1, sizeof(m_PauseTimeP1));
+	os_.write((char*)&m_PauseTimeP2, sizeof(m_PauseTimeP2));
+	os_.write((char*)&m_SparkNo, sizeof(m_SparkNo));
+	os_.write((char*)&m_vSparkPosition, sizeof(m_vSparkPosition));
+	os_.write((char*)&m_vSparkDirection, sizeof(m_vSparkDirection));
+	os_.write((char*)&m_HitSound, sizeof(m_HitSound));
+	os_.write((char*)&m_GuardSound, sizeof(m_GuardSound));
+	os_.write((char*)&m_GroundType, sizeof(m_GroundType));
+	os_.write((char*)&m_GroundSlideTime, sizeof(m_GroundSlideTime));
+	os_.write((char*)&m_GroundVelocity, sizeof(m_GroundVelocity));
+	os_.write((char*)&AirVelocity, sizeof(AirVelocity));
+	os_.write((char*)&m_Ctrl, sizeof(m_Ctrl));
+	os_.write((char*)&m_HitHeight, sizeof(m_HitHeight));
 
 	size_t t = m_Triggers.size();
-	os_.write( (char *) &t, sizeof(t) );
+	os_.write((char*)&t, sizeof(t));
 
-	std::vector<Trigger>::iterator it;
-	
-	for ( it = m_Triggers.begin(); it != m_Triggers.end(); it++ )
+	for (std::vector<Trigger>::iterator it = m_Triggers.begin(); it != m_Triggers.end(); ++it)
 	{
 		*it >> os_;
 	}
@@ -164,9 +161,9 @@ std::ostream &StateController::operator >> ( std::ostream &os_ )
 /**
  *
  */
-void StateController::SetName( const char *name_)
+void StateController::SetName(const char* name_)
 {
-	strcpy_s( m_Name, sizeof(m_Name), name_ );
+	strcpy_s(m_Name, sizeof(m_Name), name_);
 }
 
 /**
@@ -175,7 +172,7 @@ void StateController::SetName( const char *name_)
 std::string StateController::GetName() const
 {
 	std::string str;
-	str.append( m_Name );
+	str.append(m_Name);
 	return str;
 }
 
@@ -198,7 +195,7 @@ eStateControllerType StateController::GetType()
 /**
  *
  */
-void StateController::SetValue(sStateControllerValue &value_)
+void StateController::SetValue(sStateControllerValue& value_)
 {
 	m_Value = value_;
 }
@@ -214,7 +211,7 @@ sStateControllerValue StateController::GetValue()
 /**
  *
  */
-void StateController::SetHitSound( int v_)
+void StateController::SetHitSound(int v_)
 {
 	m_HitSound = v_;
 }
@@ -230,7 +227,7 @@ int StateController::GetHitSound() const
 /**
  *
  */
-void StateController::SetGuardSound( int v_)
+void StateController::SetGuardSound(int v_)
 {
 	m_GuardSound = v_;
 }
@@ -246,7 +243,7 @@ int StateController::GetGuardSound() const
 /**
  *
  */
-void StateController::SetDamage( int v_ )
+void StateController::SetDamage(int v_)
 {
 	m_Damage = v_;
 }
@@ -262,7 +259,7 @@ int StateController::GetDamage() const
 /**
  *
  */
-void StateController::SetGuardDamage( int v_ )
+void StateController::SetGuardDamage(int v_)
 {
 	m_DamageGuard = v_;
 }
@@ -278,7 +275,7 @@ int StateController::GetGuardDamage() const
 /**
  *
  */
-void StateController::SetPauseTimeP1( int v_ )
+void StateController::SetPauseTimeP1(int v_)
 {
 	m_PauseTimeP1 = v_;
 }
@@ -294,7 +291,7 @@ int StateController::GetPauseTimeP1() const
 /**
  *
  */
-void StateController::SetPauseTimeP2( int v_ )
+void StateController::SetPauseTimeP2(int v_)
 {
 	m_PauseTimeP2 = v_;
 }
@@ -310,7 +307,7 @@ int StateController::GetPauseTimeP2() const
 /**
  *
  */
-void StateController::SetSparkNo( int v_ )
+void StateController::SetSparkNo(int v_)
 {
 	m_SparkNo = v_;
 }
@@ -326,7 +323,7 @@ int StateController::GetSparkNo() const
 /**
  *
  */
-void StateController::SetSparkDirection( D3DXVECTOR3 &vec_ )
+void StateController::SetSparkDirection(D3DXVECTOR3& vec_)
 {
 	m_vSparkDirection = vec_;
 }
@@ -342,7 +339,7 @@ D3DXVECTOR3 StateController::GetSparkDirection() const
 /**
  *
  */
-void StateController::SetSparkPosition( D3DXVECTOR3 &vec_ )
+void StateController::SetSparkPosition(D3DXVECTOR3& vec_)
 {
 	m_vSparkPosition = vec_;
 }
@@ -358,7 +355,7 @@ D3DXVECTOR3 StateController::GetSparkPosition() const
 /**
  *
  */
-void StateController::AddTrigger( Trigger &trigger_)
+void StateController::AddTrigger(Trigger& trigger_)
 {
 	m_Triggers.push_back(trigger_);
 }
@@ -368,18 +365,14 @@ void StateController::AddTrigger( Trigger &trigger_)
  */
 bool StateController::Check()
 {
-	if ( m_bActivated == false )
+	if (m_bActivated == false)
 	{
 		return false;
 	}
 
-	//on verifie chaque trigger
-	//si un trigger est declenché alors renvoie vrai
-	std::vector<Trigger>::iterator it;
-
-	for ( it = m_Triggers.begin(); it != m_Triggers.end(); it++)
+	for (std::vector<Trigger>::iterator it = m_Triggers.begin(); it != m_Triggers.end(); ++it)
 	{
-		if ( it->Result() )
+		if (it->Result())
 		{
 			return true;
 		}
@@ -395,9 +388,7 @@ void StateController::ReArmTriggers()
 {
 	m_bActivated = true;
 
-	std::vector<Trigger>::iterator it;
-
-	for ( it = m_Triggers.begin(); it != m_Triggers.end(); it++ )
+	for (std::vector<Trigger>::iterator it = m_Triggers.begin(); it != m_Triggers.end(); ++it)
 	{
 		it->ReArm();
 	}
@@ -406,20 +397,18 @@ void StateController::ReArmTriggers()
 /**
  *
  */
-void StateController::SetTriggersCharacterAdr( Character *pCharac_ )
+void StateController::SetTriggersCharacterAdr(Character* pCharac_)
 {
-	std::vector<Trigger>::iterator it;
-	
-	for ( it = m_Triggers.begin(); it != m_Triggers.end(); it++ )
+	for (std::vector<Trigger>::iterator it = m_Triggers.begin(); it != m_Triggers.end(); ++it)
 	{
-		it->SetCharacterAdr( pCharac_ );
+		it->SetCharacterAdr(pCharac_);
 	}
 }
 
 /**
  *
  */
-void StateController::SetHitHeight( eHitHeight h_ )
+void StateController::SetHitHeight(eHitHeight h_)
 {
 	m_HitHeight = h_;
 }
@@ -450,9 +439,9 @@ void StateController::InActive()
 
 #ifdef EDITOR
 /**
- * 
+ *
  */
-std::vector<Trigger> &StateController::GetTriggers()
+std::vector<Trigger>& StateController::GetTriggers()
 {
 	return m_Triggers;
 }
@@ -463,7 +452,7 @@ std::vector<Trigger> &StateController::GetTriggers()
 std::string StateController::ToString()
 {
 	std::string str = "";
-	str.append( m_Name );
+	str.append(m_Name);
 
 	//TODO type + value
 

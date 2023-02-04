@@ -4,6 +4,7 @@
 #include "Keys.h"
 
 #include "DebugEngine/DebugNew.h"
+#include "tinyxml/tinyxml.h"
 
 namespace GameEngine
 {
@@ -343,10 +344,73 @@ namespace GameEngine
 		}
 	}
 
-	/**
-	 *
-	 */
-	void Pad::Load(sPad *pConfig)
+
+	bool Pad::Load(const char* fileName_)
+	{
+		TiXmlDocument xmlDoc;
+		TiXmlElement* xmlElement = NULL;
+		int buttonId, input, key, type, joystick;
+
+		if (xmlDoc.LoadFile(fileName_) == false)
+		{
+			return false;
+		}
+
+		xmlElement = xmlDoc.FirstChildElement("PadConfig");
+
+		if (!xmlElement)
+			return false;
+
+		xmlElement = xmlElement->FirstChildElement("Button");
+
+		if (!xmlElement)
+			return false;
+
+		do
+		{
+			if (strcmp(xmlElement->Value(), "Button") != 0)
+				continue;
+
+			if (!xmlElement->Attribute("Id") || !xmlElement->Attribute("Input") || !xmlElement->Attribute("KeyId") || !xmlElement->Attribute("KeyType"))
+			{
+				Window::Error(false, "cPad::Load : attribut manquant");
+				return false;
+			}
+
+			xmlElement->QueryIntAttribute("Id", &buttonId);
+			xmlElement->QueryIntAttribute("Input", &input);
+			xmlElement->QueryIntAttribute("KeyId", &key);
+			xmlElement->QueryIntAttribute("KeyType", &type);
+
+			if (type == 0)
+			{
+				m_PadButton[buttonId].primaryKey.key = key;
+				m_PadButton[buttonId].primaryKey.input = (e_InputDevice)input;
+
+				if (xmlElement->Attribute("JoystickNum"))
+				{
+					xmlElement->QueryIntAttribute("JoystickNum", &joystick);
+					m_PadButton[buttonId].primaryKey.joystickNum = joystick;
+				}
+			}
+			else
+			{
+				m_PadButton[buttonId].secondaryKey.key = key;
+				m_PadButton[buttonId].secondaryKey.input = (e_InputDevice)input;
+
+				if (xmlElement->Attribute("JoystickNum"))
+				{
+					xmlElement->QueryIntAttribute("JoystickNum", &joystick);
+					m_PadButton[buttonId].secondaryKey.joystickNum = joystick;
+				}
+			}
+
+		} while ((xmlElement = xmlElement->NextSiblingElement()));
+
+		return true;
+	}
+
+	void Pad::Load(sPad* pConfig)
 	{
 		for (int i = 0; i < MAX_PAD_BUTTON; i++)
 		{

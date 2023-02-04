@@ -17,7 +17,7 @@
 #include "WorldPosition.h"
 #include "Window.h"
 #include "MediaPathManager.h"
-#include "Config/Export.h"
+#include "FG_Export.h"
 
 #include "Command.h"
 #include "Stage.h"
@@ -28,17 +28,17 @@
 
 using namespace GameEngine;
 
-class GAME_ENGINE_EXPORT GameRunStage:
+class FIGHTING_GAME_EXPORT GameRunStage :
 	public IGameState
 {
 public:
 	GameRunStage();
 	//GameRunTest(cGameStateManager *gameStateManager);
-	~GameRunStage();
+	~GameRunStage() override;
 
-	bool Init();
-	bool Update( float elapsedTime_ );
-	void Draw( float elapsedTime_ );
+	bool Init() override;
+	bool Update(float elapsedTime_) override;
+	void Draw(float elapsedTime_) override;
 
 private:
 	World m_Stage;

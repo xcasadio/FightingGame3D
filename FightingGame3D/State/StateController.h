@@ -4,7 +4,7 @@
 #include "stateDefTypes.h"
 #include "CharacterCollision.h"
 #include "Trigger.h"
-#include "Config/Export.h"
+#include "FG_Export.h"
 
 #include <vector>
 #include <string>
@@ -21,14 +21,14 @@ using namespace GameEngine;
 /**
  * Definit un evenement dans une state d'un joueur
  */
-class GAME_ENGINE_EXPORT StateController :
+class FIGHTING_GAME_EXPORT StateController :
 	public ISerializable
 {
 public:
 	/**
 	 *
 	 */
-	StateController(void);
+	StateController();
 
 	/**
 	 *
@@ -39,11 +39,12 @@ public:
 	 *
 	 */
 	StateController& operator = (const StateController& stateController_);
-	//~cStateController(void);
+
+	~StateController() override = default;
 
 	//load/save	
-	int Read(std::istream& is_);
-	std::ostream& operator >> (std::ostream& os_);
+	int Read(std::istream& is_) override;
+	std::ostream& operator >> (std::ostream& os_) override;
 
 	/**
 	 *

@@ -104,7 +104,7 @@ std::set<long> FSM<Tx, Ty>::Process()
 
 	if (m_CurrentStateId >= 0)
 	{
-		for (itTrans = m_States.at(m_CurrentStateId).GetTransition().begin(); itTrans != m_States.at(m_CurrentStateId).GetTransition().end(); itTrans++)
+		for (itTrans = m_States.at(m_CurrentStateId).GetTransition().begin(); itTrans != m_States.at(m_CurrentStateId).GetTransition().end(); ++itTrans)
 		{
 			if (itTrans->Process())
 			{
@@ -132,7 +132,7 @@ FSM_State<Tx, Ty>* FSM<Tx, Ty>::GetStateByID(DWORD id_)
 {
 	std::vector< FSM_State<Tx, Ty> >::iterator it;
 
-	for (it = m_States.begin(); it != m_States.end(); it++)
+	for (it = m_States.begin(); it != m_States.end(); ++it)
 	{
 		if (it->GetId() == id_)
 		{
@@ -161,7 +161,7 @@ void FSM<Tx, Ty>::SetCurrentStateId(int val_)
 	std::vector< FSM_State<Tx, Ty> >::iterator it;
 	DWORD i;
 
-	for (it = m_States.begin(), i = 0; it != m_States.end(); it++, i++)
+	for (it = m_States.begin(), i = 0; it != m_States.end(); ++it, i++)
 	{
 		if (it->GetId() == val_)
 		{

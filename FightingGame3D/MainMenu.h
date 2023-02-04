@@ -9,7 +9,7 @@
 #include "Graphic.h"
 #include "Pad.h"
 #include "Texture.h"
-#include "Config/Export.h"
+#include "FG_Export.h"
 
 using namespace GameEngine;
 
@@ -27,20 +27,20 @@ typedef enum eMenuID
 /**
  *
  */
-class GAME_ENGINE_EXPORT MainMenu :
+class FIGHTING_GAME_EXPORT MainMenu :
 	public IGameState
 {
 public:
 	MainMenu();
-	~MainMenu();
+	~MainMenu() override;
 
-	bool Init();
-	bool Update( float elapsedTime_ );
-	void Draw( float elapsedTime_ );
+	bool Init() override;
+	bool Update(float elapsedTime_) override;
+	void Draw(float elapsedTime_) override;
 
 private:
-	Graphic *m_pGraphic;
-	Pad *m_pPad1;
+	Graphic* m_pGraphic;
+	Pad* m_pPad1;
 
 	Texture m_Text, m_Bg;
 	int m_ChoosenMenu;

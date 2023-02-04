@@ -4,12 +4,12 @@
 #include <string>
 
 #include "DebugEngine/Exception.h"
-#include "Config/Export.h"
+#include "FG_Export.h"
 
 #include "DebugEngine/DebugNew.h"
 
 
-class GAME_ENGINE_EXPORT TriggerException : public GameEngine::Exception
+class FIGHTING_GAME_EXPORT TriggerException : public GameEngine::Exception
 {
 public:
 	TriggerException(const std::string& message_);

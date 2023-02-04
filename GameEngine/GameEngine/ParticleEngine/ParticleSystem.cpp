@@ -19,7 +19,7 @@ namespace GameEngine
 {
 	SINGLETON_IMPL(cParticleSystemManager)
 
-	cParticleSystemManager::~cParticleSystemManager()
+		cParticleSystemManager::~cParticleSystemManager()
 	{
 		Clear();
 	}
@@ -39,7 +39,7 @@ namespace GameEngine
 	{
 		std::vector<cParticleSystem*>::iterator it;
 
-		for (it = m_ParticleSystem.begin(); it != m_ParticleSystem.end(); it++)
+		for (it = m_ParticleSystem.begin(); it != m_ParticleSystem.end(); ++it)
 		{
 			if ((*it)->GetId() == id_)
 			{
@@ -57,7 +57,7 @@ namespace GameEngine
 	{
 		std::vector<cParticleSystem*>::iterator it;
 
-		for (it = m_ParticleSystem.begin(); it != m_ParticleSystem.end(); it++)
+		for (it = m_ParticleSystem.begin(); it != m_ParticleSystem.end(); ++it)
 		{
 			(*it)->Render();
 		}
@@ -70,7 +70,7 @@ namespace GameEngine
 	{
 		std::vector<cParticleSystem*>::iterator it;
 
-		for (it = m_ParticleSystem.begin(); it != m_ParticleSystem.end(); it++)
+		for (it = m_ParticleSystem.begin(); it != m_ParticleSystem.end(); ++it)
 		{
 			(*it)->Update(time_);
 		}
@@ -83,7 +83,7 @@ namespace GameEngine
 	{
 		std::vector<cParticleSystem*>::iterator it;
 
-		for (it = m_ParticleSystem.begin(); it != m_ParticleSystem.end(); it++)
+		for (it = m_ParticleSystem.begin(); it != m_ParticleSystem.end(); ++it)
 		{
 			delete (*it);
 		}
@@ -278,7 +278,7 @@ namespace GameEngine
 		m_pVisualObject->SetRenderMode();
 
 		// Loop through all particles and draw them
-		for (it = m_Particles.begin(); it != m_Particles.end(); it++)
+		for (it = m_Particles.begin(); it != m_Particles.end(); ++it)
 		{
 			for (i = 0; i < m_pVisualObject->GetMaterialNumber(); i++)
 			{
@@ -388,7 +388,7 @@ namespace GameEngine
 			if (m_Particles.size() == 0 || pos_ >= m_Particles.size())
 				break;
 
-			for (it = m_Particles.begin() + pos_; it != m_Particles.end(); it++)
+			for (it = m_Particles.begin() + pos_; it != m_Particles.end(); ++it)
 			{
 				pos_++;
 

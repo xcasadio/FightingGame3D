@@ -2,7 +2,7 @@
 
 #include "MeshXAnimated.h"
 #include "Utilities/Serializable.h"
-#include "Config/Export.h"
+#include "FG_Export.h"
 
 #include "Command.h"
 #include "State/StateDef.h"
@@ -24,7 +24,7 @@ using namespace GameEngine;
 /**
  *
  */
-class GAME_ENGINE_EXPORT CharacterLocal :
+class FIGHTING_GAME_EXPORT CharacterLocal :
 	public Character,
 	public ISerializable
 {
@@ -39,7 +39,7 @@ public:
 	/**
 	 *
 	 */
-	virtual ~CharacterLocal();
+	~CharacterLocal() override;
 
 	/**
 	 *
@@ -49,24 +49,24 @@ public:
 	/**
 	 *
 	 */
-	bool LoadSpecial(TiXmlElement* pElementRoot);
+	bool LoadSpecial(TiXmlElement* pElementRoot) override;
 
 	/**
 	 * @is flux d'entrée
 	 * @return le nombre d'octet lu
 	 */
-	int Read(std::istream& is_);
+	int Read(std::istream& is_) override;
 
 	/**
 	 * @os flux de sortie
 	 * @return le meme flux modifié
 	 */
-	std::ostream& operator >> (std::ostream& os_);
+	std::ostream& operator >> (std::ostream& os_) override;
 
 	/**
 	 *
 	 */
-	void Update(const float time_, Character* pCharac_ = NULL);
+	void Update(const float time_, Character* pCharac_ = nullptr) override;
 
 	/**
 	 *
@@ -96,7 +96,7 @@ public:
 	/**
 	 *
 	 */
-	void Init();
+	void Init() override;
 
 	/**
 	 *

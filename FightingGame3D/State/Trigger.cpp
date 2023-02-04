@@ -11,7 +11,7 @@
  */
 Trigger::Trigger()
 {
-	m_pCharacter = NULL;
+	m_pCharacter = nullptr;
 	m_bPersistence = true;
 	m_bTriggered = false;
 }
@@ -111,7 +111,7 @@ void Trigger::ReArm()
 bool Trigger::Result()
 {
 	std::string str(m_Expression);
-	CharacterLocal* pLocal = dynamic_cast<CharacterLocal*> (m_pCharacter);
+	auto pLocal = dynamic_cast<CharacterLocal*> (m_pCharacter);
 
 	if (m_bPersistence == true || m_bTriggered == false)
 	{
@@ -162,13 +162,11 @@ std::vector<std::string> Trigger::SplitExpression(const char* pExpression_)
 	std::vector<std::string> stringArray;
 	std::string str(pExpression_);
 
-	size_t found;
-	found = str.find_first_of(OPERATOR_STRING);
-	int taille = 0;
+	size_t found = str.find_first_of(OPERATOR_STRING);
 
 	while (found != std::string::npos)
 	{
-		taille = 1;
+		int taille = 1;
 
 		if (found < str.size() - 1)
 		{
@@ -251,13 +249,12 @@ std::vector<std::string> Trigger::SplitExpression(const char* pExpression_)
 
 	//des chaines vides peuvent exister
 	bool end = false;
-	std::vector<std::string>::iterator it;
 
 	while (!end)
 	{
 		end = true;
 
-		for (it = stringArray.begin(); it != stringArray.end(); it++)
+		for (std::vector<std::string>::iterator it = stringArray.begin(); it != stringArray.end(); ++it)
 		{
 			if (it->size() == 0)
 			{
@@ -352,12 +349,9 @@ float Trigger::GetValue(std::string str_)
 	//c'est un mot cle
 	if (found != std::string::npos)
 	{
-		//TODO si "" => command
-		//TODO cherche mot cle
-		CharacterLocal* pCharacLocal = NULL;
-		pCharacLocal = dynamic_cast<CharacterLocal*> (m_pCharacter);
+		CharacterLocal* pCharacLocal = dynamic_cast<CharacterLocal*>(m_pCharacter);
 
-		if (pCharacLocal == NULL)
+		if (pCharacLocal == nullptr)
 		{
 			//TODO : exception
 		}
@@ -557,9 +551,9 @@ bool Trigger::CheckGetValue(std::string str_)
 		//TODO si "" => command
 		//TODO cherche mot cle
 
-		CharacterLocal* pCharacLocal = dynamic_cast<CharacterLocal*> (m_pCharacter);
+		auto pCharacLocal = dynamic_cast<CharacterLocal*> (m_pCharacter);
 
-		if (pCharacLocal == NULL)
+		if (pCharacLocal == nullptr)
 		{
 
 		}

@@ -14,6 +14,7 @@ namespace GameEngine
 	class GAME_ENGINE_EXPORT ISerializable
 	{
 	public:
+		virtual ~ISerializable() = default;
 		/**
 		 * Permet de charger un fichier de serialisation
 		 * @param fileName_ nom du fichier à ouvrir

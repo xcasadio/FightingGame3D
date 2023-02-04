@@ -2,7 +2,7 @@
 
 namespace GameEngine
 {
-	cLoggerFile::cLoggerFile(const std::string& Filename) :
+	LoggerFile::LoggerFile(const std::string& Filename) :
 		m_File(Filename.c_str())
 	{
 		if (!m_File)
@@ -13,7 +13,7 @@ namespace GameEngine
 		m_File << "  ===========================================" << std::endl << std::endl;
 	}
 
-	cLoggerFile::~cLoggerFile()
+	LoggerFile::~LoggerFile()
 	{
 		m_File << std::endl;
 		m_File << "  ===========================================" << std::endl;
@@ -21,7 +21,7 @@ namespace GameEngine
 		m_File << "  ===========================================" << std::endl;
 	}
 
-	void cLoggerFile::Write(const std::string& Message)
+	void LoggerFile::Write(const std::string& Message)
 	{
 		//Assert(m_File.is_open());
 

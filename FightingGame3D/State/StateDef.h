@@ -6,7 +6,7 @@
 //GameEngine
 #include "DebugEngine/Exception.h"
 #include "Utilities/Serializable.h"
-#include "Config/Export.h"
+#include "FG_Export.h"
 
 #include <vector>
 #include <string>
@@ -25,7 +25,7 @@ class Character;
 /**
  * Definit un etat du joueur
  */
-class GAME_ENGINE_EXPORT StateDef :
+class FIGHTING_GAME_EXPORT StateDef :
 	public ISerializable
 {
 public:
@@ -34,8 +34,8 @@ public:
 	StateDef& operator = (const StateDef& stateDef_);
 
 	//Load/save
-	int Read(std::istream& is_);
-	std::ostream& operator >> (std::ostream& os_);
+	int Read(std::istream& is_) override;
+	std::ostream& operator >> (std::ostream& os_) override;
 
 	void SetStateType(eStateType state_);
 	eStateType GetStateType() const;
@@ -77,7 +77,7 @@ public:
 	bool GetHitCountPersist() const;
 
 	void AddStateController(StateController& state_);
-	std::vector<StateController>& GetStateController();
+	std::vector<StateController*>& GetStateController();
 
 	void Start();
 	DWORD GetElapsedTime() const;
@@ -172,7 +172,7 @@ protected:
 	//utiliser pour le chargement des persos, car chargement différé des collisions
 	std::vector<std::string> m_CollisionAttBonesName, m_CollisionDefBonesName;
 
-	std::vector<StateController> m_StateController;
+	std::vector<StateController*> m_StateController;
 
 	char m_szDescription[128];
 

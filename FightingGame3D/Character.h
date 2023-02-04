@@ -10,7 +10,7 @@
 #include "Command.h"
 #include "State/StateDef.h"
 #include "MeshX.h"
-#include "Config/Export.h"
+#include "FG_Export.h"
 
 #include "tinyxml/tinyxml.h"
 
@@ -40,7 +40,7 @@ enum
 class World;
 
 
-class GAME_ENGINE_EXPORT Character
+class FIGHTING_GAME_EXPORT Character
 {
 public:
 	/**

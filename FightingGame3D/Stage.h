@@ -5,7 +5,7 @@
 #include "Font.h"
 #include "Texture.h"
 #include "Pad.h"
-#include "Config/Export.h"
+#include "FG_Export.h"
 
 #include "Character.h"
 
@@ -30,7 +30,7 @@ typedef struct sStageLoadingParams
 /**
  *
  */
-class GAME_ENGINE_EXPORT World
+class FIGHTING_GAME_EXPORT World
 {
 public:
 	/**

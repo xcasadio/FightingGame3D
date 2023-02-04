@@ -9,13 +9,13 @@
 
 #include "MeshX.h"
 #include "MeshHierarchy.h"
-#include "Config/Export.h"
+#include "FG_Export.h"
 
 #include "DebugEngine/DebugNew.h"
 
 using namespace GameEngine;
 
-class GAME_ENGINE_EXPORT CharacterCollision
+class FIGHTING_GAME_EXPORT CharacterCollision
 {
 public:
 	CharacterCollision();

@@ -14,7 +14,7 @@
  */
 StateDef::StateDef(void)
 {
-	m_StateType = STATE_TYPE_UNCHANGED; 
+	m_StateType = STATE_TYPE_UNCHANGED;
 	m_MoveType = MOVE_TYPE_UNCHANGED;
 	m_Physics = PHYSIC_TYPE_UNCHANGED;
 	m_AnimId = -1;
@@ -38,7 +38,7 @@ StateDef::StateDef(void)
 /**
  *
  */
-StateDef::StateDef( const StateDef &stateDef_ )
+StateDef::StateDef(const StateDef& stateDef_)
 {
 	Copy(stateDef_);
 }
@@ -46,7 +46,7 @@ StateDef::StateDef( const StateDef &stateDef_ )
 /**
  *
  */
-StateDef &StateDef::operator = ( const StateDef &stateDef_ )
+StateDef& StateDef::operator = (const StateDef& stateDef_)
 {
 	Copy(stateDef_);
 
@@ -56,13 +56,13 @@ StateDef &StateDef::operator = ( const StateDef &stateDef_ )
 /**
  *
  */
-void StateDef::Copy(const StateDef &stateDef_ )
+void StateDef::Copy(const StateDef& stateDef_)
 {
-	if ( this != &stateDef_ )
+	if (this != &stateDef_)
 	{
-		strcpy_s( m_szDescription, sizeof(m_szDescription), stateDef_.m_szDescription );
+		strcpy_s(m_szDescription, sizeof(m_szDescription), stateDef_.m_szDescription);
 
-		m_StateType = stateDef_.m_StateType; 
+		m_StateType = stateDef_.m_StateType;
 		m_MoveType = stateDef_.m_MoveType;
 		m_Physics = stateDef_.m_Physics;
 		m_AnimId = stateDef_.m_AnimId;
@@ -92,77 +92,76 @@ void StateDef::Copy(const StateDef &stateDef_ )
  * @is flux d'entrée
  * @return le nombre d'octet lu
  */
-int StateDef::Read( std::istream &is_ )
+int StateDef::Read(std::istream& is_)
 {
 	int octetRead = is_.tellg();
 	size_t t, k;
-	char *pBuf = NULL;
-	StateController *pStateController = NULL;
+	char* pBuf = nullptr;
+	StateController* pStateController = nullptr;
 
-	is_.read( (char *) &m_szDescription, sizeof(m_szDescription) );
-	is_.read( (char *) &m_StateType, sizeof(m_StateType) );
-	is_.read( (char *) &m_MoveType, sizeof(m_MoveType) );
-	is_.read( (char *) &m_Physics, sizeof(m_Physics) );
-	is_.read( (char *) &m_AnimId, sizeof(m_AnimId) );
-	is_.read( (char *) &m_AnimSpeed, sizeof(m_AnimSpeed) );
-	is_.read( (char *) &m_VelsetX, sizeof(m_VelsetX) );
-	is_.read( (char *) &m_VelsetY, sizeof(m_VelsetY) );
-	is_.read( (char *) &m_PlayerCtrl, sizeof(m_PlayerCtrl) );
-	is_.read( (char *) &m_PowerAdd, sizeof(m_PowerAdd) );
-	is_.read( (char *) &m_Juggle, sizeof(m_Juggle) );
-	is_.read( (char *) &m_FaceP2, sizeof(m_FaceP2) );
-	is_.read( (char *) &m_HitDefPersist, sizeof(m_HitDefPersist) );
-	is_.read( (char *) &m_MoveHitPersist, sizeof(m_MoveHitPersist) );
-	is_.read( (char *) &m_HitCountPersist, sizeof(m_HitCountPersist) );
+	is_.read((char*)&m_szDescription, sizeof(m_szDescription));
+	is_.read((char*)&m_StateType, sizeof(m_StateType));
+	is_.read((char*)&m_MoveType, sizeof(m_MoveType));
+	is_.read((char*)&m_Physics, sizeof(m_Physics));
+	is_.read((char*)&m_AnimId, sizeof(m_AnimId));
+	is_.read((char*)&m_AnimSpeed, sizeof(m_AnimSpeed));
+	is_.read((char*)&m_VelsetX, sizeof(m_VelsetX));
+	is_.read((char*)&m_VelsetY, sizeof(m_VelsetY));
+	is_.read((char*)&m_PlayerCtrl, sizeof(m_PlayerCtrl));
+	is_.read((char*)&m_PowerAdd, sizeof(m_PowerAdd));
+	is_.read((char*)&m_Juggle, sizeof(m_Juggle));
+	is_.read((char*)&m_FaceP2, sizeof(m_FaceP2));
+	is_.read((char*)&m_HitDefPersist, sizeof(m_HitDefPersist));
+	is_.read((char*)&m_MoveHitPersist, sizeof(m_MoveHitPersist));
+	is_.read((char*)&m_HitCountPersist, sizeof(m_HitCountPersist));
 
 
 	//TODO : initialisation des collision différées
 	//methode : lister les noms des bones
 
 	//collision att
-	is_.read( (char *) &t, sizeof(t) );
-	
-	for ( size_t i = 0; i < t; i++ )
-	{
-		is_.read( (char *) &k, sizeof(k) );
-		pBuf = new char[k];
-		is_.read( (char *) pBuf, k * sizeof(char) );
+	is_.read((char*)&t, sizeof(t));
 
-		m_CollisionAttBonesName.push_back( pBuf );
+	for (size_t i = 0; i < t; i++)
+	{
+		is_.read((char*)&k, sizeof(k));
+		pBuf = new char[k];
+		is_.read((char*)pBuf, k * sizeof(char));
+
+		m_CollisionAttBonesName.push_back(pBuf);
 
 		delete[] pBuf;
-		pBuf = NULL;
+		pBuf = nullptr;
 	}
 
 	//collision def
-	is_.read( (char *) &t, sizeof(t) );
-	
-	for ( size_t i = 0; i < t; i++ )
-	{
-		is_.read( (char *) &k, sizeof(k) );
-		pBuf = new char[k];
-		is_.read( (char *) pBuf, k * sizeof(char) );
+	is_.read((char*)&t, sizeof(t));
 
-		m_CollisionDefBonesName.push_back( pBuf );
+	for (size_t i = 0; i < t; i++)
+	{
+		is_.read((char*)&k, sizeof(k));
+		pBuf = new char[k];
+		is_.read((char*)pBuf, k * sizeof(char));
+
+		m_CollisionDefBonesName.push_back(pBuf);
 
 		delete[] pBuf;
-		pBuf = NULL;
+		pBuf = nullptr;
 	}
 
-	is_.read( (char *) &t, sizeof(t) );
+	is_.read((char*)&t, sizeof(t));
 
-	for ( size_t i = 0; i < t; i++ )
+	for (size_t i = 0; i < t; i++)
 	{
 		pStateController = new StateController;
 
-		pStateController->Read( is_ );
-		m_StateController.push_back( *pStateController );
+		pStateController->Read(is_);
+		m_StateController.push_back(pStateController);
 
-		delete pStateController;
-		pStateController = NULL;
+		pStateController = nullptr;
 	}
 
-	octetRead = (int) is_.tellg() - octetRead;
+	octetRead = (int)is_.tellg() - octetRead;
 
 	return octetRead;
 }
@@ -171,63 +170,61 @@ int StateDef::Read( std::istream &is_ )
  * @os flux de sortie
  * @return le meme flux modifié
  */
-std::ostream &StateDef::operator >> ( std::ostream &os_ )
+std::ostream& StateDef::operator >> (std::ostream& os_)
 {
 	size_t t;
 
-	os_.write( (char *) &m_szDescription, sizeof(m_szDescription) );
-	os_.write( (char *) &m_StateType, sizeof(m_StateType) );
-	os_.write( (char *) &m_MoveType, sizeof(m_MoveType) );
-	os_.write( (char *) &m_Physics, sizeof(m_Physics) );
-	os_.write( (char *) &m_AnimId, sizeof(m_AnimId) );
-	os_.write( (char *) &m_AnimSpeed, sizeof(m_AnimSpeed) );
-	os_.write( (char *) &m_VelsetX, sizeof(m_VelsetX) );
-	os_.write( (char *) &m_VelsetY, sizeof(m_VelsetY) );
-	os_.write( (char *) &m_PlayerCtrl, sizeof(m_PlayerCtrl) );
-	os_.write( (char *) &m_PowerAdd, sizeof(m_PowerAdd) );
-	os_.write( (char *) &m_Juggle, sizeof(m_Juggle) );
-	os_.write( (char *) &m_FaceP2, sizeof(m_FaceP2) );
-	os_.write( (char *) &m_HitDefPersist, sizeof(m_HitDefPersist) );
-	os_.write( (char *) &m_MoveHitPersist, sizeof(m_MoveHitPersist) );
-	os_.write( (char *) &m_HitCountPersist, sizeof(m_HitCountPersist) );
+	os_.write((char*)&m_szDescription, sizeof(m_szDescription));
+	os_.write((char*)&m_StateType, sizeof(m_StateType));
+	os_.write((char*)&m_MoveType, sizeof(m_MoveType));
+	os_.write((char*)&m_Physics, sizeof(m_Physics));
+	os_.write((char*)&m_AnimId, sizeof(m_AnimId));
+	os_.write((char*)&m_AnimSpeed, sizeof(m_AnimSpeed));
+	os_.write((char*)&m_VelsetX, sizeof(m_VelsetX));
+	os_.write((char*)&m_VelsetY, sizeof(m_VelsetY));
+	os_.write((char*)&m_PlayerCtrl, sizeof(m_PlayerCtrl));
+	os_.write((char*)&m_PowerAdd, sizeof(m_PowerAdd));
+	os_.write((char*)&m_Juggle, sizeof(m_Juggle));
+	os_.write((char*)&m_FaceP2, sizeof(m_FaceP2));
+	os_.write((char*)&m_HitDefPersist, sizeof(m_HitDefPersist));
+	os_.write((char*)&m_MoveHitPersist, sizeof(m_MoveHitPersist));
+	os_.write((char*)&m_HitCountPersist, sizeof(m_HitCountPersist));
 
 	//enregistrement pour chargement différer
 	//collision att
 	t = m_CollisionAtt.size();
-	os_.write( (char *) &t, sizeof(t) );
+	os_.write((char*)&t, sizeof(t));
 
 	std::vector<CharacterCollision>::iterator itCollision;
-	
-	for ( itCollision = m_CollisionAtt.begin(); itCollision != m_CollisionAtt.end(); itCollision++ )
+
+	for (itCollision = m_CollisionAtt.begin(); itCollision != m_CollisionAtt.end(); ++itCollision)
 	{
 		t = itCollision->GetBoneName().size() + 1;
-		os_.write( (char *) &t, sizeof(t) );
-		os_.write( (char *) itCollision->GetBoneName().c_str(), ( t - 1 ) * sizeof(char) );
+		os_.write((char*)&t, sizeof(t));
+		os_.write((char*)itCollision->GetBoneName().c_str(), (t - 1) * sizeof(char));
 		t = '\0';
-		os_.write( (char *) &t, sizeof(char) );
+		os_.write((char*)&t, sizeof(char));
 	}
 
 	//collision def
 	t = m_CollisionDef.size();
-	os_.write( (char *) &t, sizeof(t) );
-	
-	for ( itCollision = m_CollisionDef.begin(); itCollision != m_CollisionDef.end(); itCollision++ )
+	os_.write((char*)&t, sizeof(t));
+
+	for (itCollision = m_CollisionDef.begin(); itCollision != m_CollisionDef.end(); ++itCollision)
 	{
 		t = itCollision->GetBoneName().size() + 1;
-		os_.write( (char *) &t, sizeof(t) );
-		os_.write( (char *) itCollision->GetBoneName().c_str(), ( t - 1 ) * sizeof(char) );
+		os_.write((char*)&t, sizeof(t));
+		os_.write((char*)itCollision->GetBoneName().c_str(), (t - 1) * sizeof(char));
 		t = '\0';
-		os_.write( (char *) &t, sizeof(char) );
+		os_.write((char*)&t, sizeof(char));
 	}
 
 	t = m_StateController.size();
-	os_.write( (char *) &t, sizeof(t) );
+	os_.write((char*)&t, sizeof(t));
 
-	std::vector<StateController>::iterator itController;
-	
-	for ( itController = m_StateController.begin();	itController != m_StateController.end(); itController++ )
+	for (auto itController = m_StateController.begin(); itController != m_StateController.end(); ++itController)
 	{
-		*itController >> os_;
+		**itController >> os_;
 	}
 
 	return os_;
@@ -300,7 +297,7 @@ int StateDef::GetAnimId() const
 /**
  *
  */
-void StateDef::SetAnimSpeed( float speed_)
+void StateDef::SetAnimSpeed(float speed_)
 {
 	m_AnimSpeed = speed_;
 }
@@ -325,14 +322,14 @@ void StateDef::SetVelset(float velsetX_, float velsetY_)
 /**
  *
  */
-void StateDef::GetVelset(float *velsetX_, float *velsetY_) const
+void StateDef::GetVelset(float* velsetX_, float* velsetY_) const
 {
-	if ( velsetX_ != NULL )
+	if (velsetX_ != nullptr)
 	{
 		*velsetX_ = m_VelsetX;
 	}
 
-	if ( velsetY_ != NULL )
+	if (velsetY_ != nullptr)
 	{
 		*velsetY_ = m_VelsetY;
 	}
@@ -453,15 +450,15 @@ bool StateDef::GetHitCountPersist() const
 /**
  *
  */
-void StateDef::AddStateController( StateController &state_)
+void StateDef::AddStateController(StateController& state_)
 {
-	m_StateController.push_back(state_);
+	m_StateController.push_back(&state_);
 }
 
 /**
  *
  */
-std::vector<StateController> &StateDef::GetStateController()
+std::vector<StateController*>& StateDef::GetStateController()
 {
 	return m_StateController;
 }
@@ -487,18 +484,16 @@ DWORD StateDef::GetElapsedTime() const
  */
 void StateDef::ReArmTrigger()
 {
-	std::vector<StateController>::iterator it;
-	
-	for ( it = m_StateController.begin(); it != m_StateController.end(); it++ )
+	for (auto it = m_StateController.begin(); it != m_StateController.end(); ++it)
 	{
-		it->ReArmTriggers();
+		(*it)->ReArmTriggers();
 	}
 }
 
 /**
  *
  */
-std::vector<CharacterCollision> &StateDef::GetCollisionAtt()
+std::vector<CharacterCollision>& StateDef::GetCollisionAtt()
 {
 	return m_CollisionAtt;
 }
@@ -506,7 +501,7 @@ std::vector<CharacterCollision> &StateDef::GetCollisionAtt()
 /**
  *
  */
-std::vector<CharacterCollision> &StateDef::GetCollisionDef()
+std::vector<CharacterCollision>& StateDef::GetCollisionDef()
 {
 	return m_CollisionDef;
 }
@@ -514,23 +509,23 @@ std::vector<CharacterCollision> &StateDef::GetCollisionDef()
 /**
  *
  */
-void StateDef::AddCollisionAtt( LPD3DXFRAME pFrame )
+void StateDef::AddCollisionAtt(LPD3DXFRAME pFrame)
 {
 	CharacterCollision collision;
-	collision.SetHierarchy( pFrame );
+	collision.SetHierarchy(pFrame);
 
-	m_CollisionAtt.push_back( collision );
+	m_CollisionAtt.push_back(collision);
 }
 
 /**
  *
  */
-void StateDef::AddCollisionDef( LPD3DXFRAME pFrame )
+void StateDef::AddCollisionDef(LPD3DXFRAME pFrame)
 {
 	CharacterCollision collision;
-	collision.SetHierarchy( pFrame );
+	collision.SetHierarchy(pFrame);
 
-	m_CollisionDef.push_back( collision );
+	m_CollisionDef.push_back(collision);
 }
 
 /**
@@ -552,7 +547,7 @@ void StateDef::ClearCollisionDef()
 /**
  *
  */
-std::vector<std::string> &StateDef::GetCollisionAttBonesName()
+std::vector<std::string>& StateDef::GetCollisionAttBonesName()
 {
 	return m_CollisionAttBonesName;
 }
@@ -560,7 +555,7 @@ std::vector<std::string> &StateDef::GetCollisionAttBonesName()
 /**
  *
  */
-std::vector<std::string> &StateDef::GetCollisionDefBonesName()
+std::vector<std::string>& StateDef::GetCollisionDefBonesName()
 {
 	return m_CollisionDefBonesName;
 }
@@ -568,7 +563,7 @@ std::vector<std::string> &StateDef::GetCollisionDefBonesName()
 /**
  *
  */
-const char *StateDef::GetDescription()
+const char* StateDef::GetDescription()
 {
 	return m_szDescription;
 }
@@ -576,25 +571,23 @@ const char *StateDef::GetDescription()
 /**
  *
  */
-void StateDef::SetDescription( const char *desc_ )
+void StateDef::SetDescription(const char* desc_)
 {
-	strcpy_s( m_szDescription, 128, desc_ );
+	strcpy_s(m_szDescription, 128, desc_);
 }
 
-void StateDef::SetTriggersCharacterAdr( Character *pCharac_ )
+void StateDef::SetTriggersCharacterAdr(Character* pCharac_)
 {
-	std::vector<StateController>::iterator it;
-	
-	for ( it = m_StateController.begin(); it != m_StateController.end(); it++ )
+	for (auto it = m_StateController.begin(); it != m_StateController.end(); ++it)
 	{
-		it->SetTriggersCharacterAdr( pCharac_ );
+		(*it)->SetTriggersCharacterAdr(pCharac_);
 	}
 }
 
 /**
  *
  */
-void StateDef::SetHitHeight( eHitHeight h_ )
+void StateDef::SetHitHeight(eHitHeight h_)
 {
 	m_HitHeight = h_;
 }

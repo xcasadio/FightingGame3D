@@ -7,7 +7,7 @@
 #include "FSM/FSM.h"
 #include "FSM/FSM_State.h"
 #include "FSM/FSM_Transition.h"
-#include "Config/Export.h"
+#include "FG_Export.h"
 
 #include <vector>
 #include <deque>
@@ -46,14 +46,14 @@ typedef enum eCommandId
 	COMMAND_ID_CROUCH,
 
 	COMMAND_ID_FIRST_CUSTOM_COMMAND, // le debut des id pour les commandes 
-									//definit pour les joueurs
+	//definit pour les joueurs
 } eCommandId;
 
 /**
  * Definition des commandes (combinaisons de touches correspondant à un mouvement )
  * d'un joueur.
  */
-class GAME_ENGINE_EXPORT Command
+class FIGHTING_GAME_EXPORT Command
 {
 public:
 	/*
@@ -139,13 +139,13 @@ public:
 	/**
 	 *
 	 */
-	~CommandPlayer();
+	~CommandPlayer() override;
 
 	/**
 	 * Verifie le state activité par les commandes du joueur
 	 * @return le nom de la commande activée
 	 */
-	void CheckCommand(char posInScreen_, BufferButton& buffer_);
+	void CheckCommand(char posInScreen_, BufferButton& buffer_) override;
 
 	/**
 	 * Verifie les boutons de deplacement car ce sont des cas speciaux.
@@ -314,7 +314,7 @@ private:
  * Definition des commandes (combinaisons de touches correspondant à un mouvement )
  * d'un joueur.
  */
-class CommandIA :
+class FIGHTING_GAME_EXPORT CommandIA :
 	public Command
 {
 public:
@@ -326,7 +326,7 @@ public:
 	/**
 	 *
 	 */
-	~CommandIA();
+	~CommandIA() override;
 
 	/**
 	 *
@@ -337,7 +337,7 @@ public:
 	 * Verifie le state activité par les commandes du joueur
 	 * @return le nom de la commande activée
 	 */
-	void CheckCommand(char posInScreen_, BufferButton& buffer_);
+	void CheckCommand(char posInScreen_, BufferButton& buffer_) override;
 
 	/**
 	 * Verifie les boutons de deplacement car ce sont des cas speciaux.
@@ -362,7 +362,7 @@ private:
 /**
  * Definit une combination de touches
  */
-class ButtonCombination :
+class FIGHTING_GAME_EXPORT ButtonCombination :
 	public ISerializable
 {
 public:
@@ -412,13 +412,13 @@ public:
 	 * @is flux d'entrée
 	 * @return le nombre d'octet lu
 	 */
-	int Read(std::istream& is_);
+	int Read(std::istream& is_) override;
 
 	/**
 	 * @os flux de sortie
 	 * @return le meme flux modifié
 	 */
-	std::ostream& operator >> (std::ostream& os_);
+	std::ostream& operator >> (std::ostream& os_) override;
 
 	/**
 	 *
@@ -513,7 +513,7 @@ private:
  * Enregistre dans le temps et selon un laps de temps les combinaisons de boutons
  * effectué par le joueur
  */
-class BufferButton/* : public ISingleton<cBufferButton>*/
+class FIGHTING_GAME_EXPORT BufferButton/* : public ISingleton<cBufferButton>*/
 {
 	//MAKE_SINGLETON(cBufferButton)
 

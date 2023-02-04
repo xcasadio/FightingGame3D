@@ -42,7 +42,7 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	void IGameState::SetInitialised( bool val_ )
+	void IGameState::SetInitialised(bool val_)
 	{
 		m_Initialised = val_;
 	}
@@ -50,7 +50,7 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	void IGameState::SetDestroy( bool val_ )
+	void IGameState::SetDestroy(bool val_)
 	{
 		m_ToDestroy = val_;
 	}
@@ -66,9 +66,9 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	bool IGameState::AddState(IGameState *pState_)
+	bool IGameState::AddState(IGameState* pState_)
 	{
-		if ( pState_ == NULL)
+		if (pState_ == NULL)
 			return false;
 
 		GameCore::Instance().GetGameStateManager()->Push(pState_);
@@ -83,13 +83,13 @@ namespace GameEngine
 	 */
 	cGameStateManager::~cGameStateManager()
 	{
-		std::list<IGameState *>::iterator it;
+		std::list<IGameState*>::iterator it;
 
-		for ( it = m_ListGameState.begin(); it != m_ListGameState.end(); it++ )
+		for (it = m_ListGameState.begin(); it != m_ListGameState.end(); ++it)
 		{
 			delete (*it);
 		}
-		
+
 		m_ListGameState.clear();
 	}
 
@@ -98,50 +98,50 @@ namespace GameEngine
 	 */
 	bool cGameStateManager::Run()
 	{
-		Graphic &graphic = GameCore::Instance().GetGraphic();
+		Graphic& graphic = GameCore::Instance().GetGraphic();
 		float time = graphic.FrameTime() / 1000.0f;
 
-		if ( m_ListGameState.size() > 0 ) 
+		if (m_ListGameState.size() > 0)
 		{
-			IGameState *c = m_ListGameState.back();
+			IGameState* c = m_ListGameState.back();
 
-			if ( c->GetDestroy() )
+			if (c->GetDestroy())
 			{
 				return Pop();
 			}
 			else
 			{
-				if ( c->IsInitialised() == false )
+				if (c->IsInitialised() == false)
 				{
-					if ( c->Init() == false)
+					if (c->Init() == false)
 					{
 						return Pop();
 					}
 
-					c->SetInitialised( true );
+					c->SetInitialised(true);
 				}
-				
+
 				//TODO : refaire
-				if ( GameCore::Instance().WindowIsClosing() )
+				if (GameCore::Instance().WindowIsClosing())
 				{
-					while ( Pop() ) {}
+					while (Pop()) {}
 					return false;
 				}
 
-				if ( c->Update( time ) ) // si changement de state en cours
+				if (c->Update(time)) // si changement de state en cours
 				{
 					//TODO : refaire
-					if ( GameCore::Instance().WindowIsClosing() )
+					if (GameCore::Instance().WindowIsClosing())
 					{
-						while ( Pop() ) {}
+						while (Pop()) {}
 						return false;
 					}
 
 					//graphic.Clear( GameCore::GetClearColor() );
 
-					if ( graphic.BeginScene() )
+					if (graphic.BeginScene())
 					{
-						c->Draw( time );
+						c->Draw(time);
 
 						graphic.EndScene();
 					}
@@ -155,7 +155,7 @@ namespace GameEngine
 				}*/
 			}
 		}
-		else 
+		else
 			return false;
 
 		//return Pop();
@@ -167,13 +167,13 @@ namespace GameEngine
 	 */
 	bool cGameStateManager::Pop()
 	{
-		IGameState *c = m_ListGameState.back();
+		IGameState* c = m_ListGameState.back();
 		delete c;
 
 		m_ListGameState.pop_back();
 
-		if ( m_ListGameState.size() == 0)
-			return false; 
+		if (m_ListGameState.size() == 0)
+			return false;
 
 		return true;
 	}
@@ -181,7 +181,7 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	void cGameStateManager::Push(IGameState *state)
+	void cGameStateManager::Push(IGameState* state)
 	{
 		m_ListGameState.push_back(state);
 	}

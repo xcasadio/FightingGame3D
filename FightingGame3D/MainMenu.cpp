@@ -14,8 +14,8 @@
  */
 MainMenu::MainMenu()
 {
-	m_pGraphic = NULL;
-	m_pPad1 = NULL;
+	m_pGraphic = nullptr;
+	m_pPad1 = nullptr;
 	m_ChoosenMenu = MENU_ARCADE;
 }
 
@@ -31,7 +31,7 @@ MainMenu::~MainMenu()
  *
  */
 bool MainMenu::Init()
-{	
+{
 	m_RectArcade.left = 0;
 	m_RectArcade.top = 0;
 	m_RectArcade.right = 128;
@@ -48,17 +48,17 @@ bool MainMenu::Init()
 	m_RectQuit.bottom = 128;
 
 	m_pGraphic = &GameCore::Instance().GetGraphic();
-	m_pPad1 = &GameCore::Instance().GetPad( 0 );
+	m_pPad1 = &GameCore::Instance().GetPad(0);
 
-	if ( m_Bg.Load("main_menu.png") == false )
+	if (m_Bg.Load("main_menu.png") == false)
 	{
-		Window::Error( true, "impossible de charger 'main_menu.png'" );
+		Window::Error(true, "impossible de charger 'main_menu.png'");
 		return false;
 	}
 
-	if ( m_Text.Load("main_menu_text.png") == false )
+	if (m_Text.Load("main_menu_text.png") == false)
 	{
-		Window::Error( true, "impossible de charger 'main_menu_text.png'" );
+		Window::Error(true, "impossible de charger 'main_menu_text.png'");
 		return false;
 	}
 
@@ -68,13 +68,13 @@ bool MainMenu::Init()
 /**
  *
  */
-bool MainMenu::Update( float elapsedTime_ )
+bool MainMenu::Update(float elapsedTime_)
 {
 	GameCore::Instance().ReadAllInputDevice();
 
-	if ( m_pPad1->ButtonPressed( PAD_DOWN ) )
+	if (m_pPad1->ButtonPressed(PAD_DOWN))
 	{
-		if ( m_ChoosenMenu == MENU_QUIT )
+		if (m_ChoosenMenu == MENU_QUIT)
 		{
 			m_ChoosenMenu = MENU_ARCADE;
 		}
@@ -84,9 +84,9 @@ bool MainMenu::Update( float elapsedTime_ )
 		}
 	}
 
-	if ( m_pPad1->ButtonPressed( PAD_UP ) )
+	if (m_pPad1->ButtonPressed(PAD_UP))
 	{
-		if ( m_ChoosenMenu == MENU_ARCADE )
+		if (m_ChoosenMenu == MENU_ARCADE)
 		{
 			m_ChoosenMenu = MENU_QUIT;
 		}
@@ -100,38 +100,38 @@ bool MainMenu::Update( float elapsedTime_ )
 	{
 	}*/
 
-	if ( m_pPad1->ButtonPressed( PAD_OK ) )
+	if (m_pPad1->ButtonPressed(PAD_OK))
 	{
-		switch ( m_ChoosenMenu )
+		switch (m_ChoosenMenu)
 		{
 		case MENU_ARCADE:
-			GameCore::Instance().GetGameStateManager()->Push( new CharacterSelection/*GameRunStage*/ );
+			GameCore::Instance().GetGameStateManager()->Push(new CharacterSelection/*GameRunStage*/);
 			break;
 
 		case MENU_VERSUS:
-			GameCore::Instance().GetGameStateManager()->Push( new GameRunStage );
+			GameCore::Instance().GetGameStateManager()->Push(new GameRunStage);
 			break;
 
 		case MENU_QUIT:
-			SetDestroy( true );
+			SetDestroy(true);
 			return false;
 			break;
 		}
 	}
-	
+
 	return true;
 }
 
 /**
  *
  */
-void MainMenu::Draw( float elapsedTime_ )
+void MainMenu::Draw(float elapsedTime_)
 {
 	DWORD arcadeColor = 0xffffffff, versusColor = 0xffffffff, quitColor = 0xffffffff;
 
-	m_pGraphic->Clear( 0xffffffff );
+	m_pGraphic->Clear(0xffffffff);
 
-	switch ( m_ChoosenMenu )
+	switch (m_ChoosenMenu)
 	{
 	case MENU_ARCADE:
 		arcadeColor = 0xffff0000;
@@ -148,12 +148,12 @@ void MainMenu::Draw( float elapsedTime_ )
 
 	m_pGraphic->BeginSprite(D3DXSPRITE_ALPHABLEND);
 
-	int center = (int) ( 512.0f - (float) (m_RectArcade.right - m_RectArcade.left) / 2.0f );
+	int center = (int)(512.0f - (float)(m_RectArcade.right - m_RectArcade.left) / 2.0f);
 
-	m_Bg.Blit( 0, 0 );
-	m_Text.Blit( center, 500, m_RectArcade.left, m_RectArcade.top, m_RectArcade.right - m_RectArcade.left, m_RectArcade.bottom - m_RectArcade.top, 1.0f, 1.0f, 0.0f, arcadeColor );
-	m_Text.Blit( center, 550, m_RectVersus.left, m_RectVersus.top, m_RectVersus.right - m_RectVersus.left, m_RectVersus.bottom - m_RectVersus.top, 1.0f, 1.0f, 0.0f, versusColor );
-	m_Text.Blit( center, 600, m_RectQuit.left, m_RectQuit.top, m_RectQuit.right - m_RectQuit.left, m_RectQuit.bottom - m_RectQuit.top, 1.0f, 1.0f, 0.0f, quitColor );
-	
+	m_Bg.Blit(0, 0);
+	m_Text.Blit(center, 500, m_RectArcade.left, m_RectArcade.top, m_RectArcade.right - m_RectArcade.left, m_RectArcade.bottom - m_RectArcade.top, 1.0f, 1.0f, 0.0f, arcadeColor);
+	m_Text.Blit(center, 550, m_RectVersus.left, m_RectVersus.top, m_RectVersus.right - m_RectVersus.left, m_RectVersus.bottom - m_RectVersus.top, 1.0f, 1.0f, 0.0f, versusColor);
+	m_Text.Blit(center, 600, m_RectQuit.left, m_RectQuit.top, m_RectQuit.right - m_RectQuit.left, m_RectQuit.bottom - m_RectQuit.top, 1.0f, 1.0f, 0.0f, quitColor);
+
 	m_pGraphic->EndSprite();
 }

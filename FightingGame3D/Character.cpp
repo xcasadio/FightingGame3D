@@ -20,20 +20,6 @@
 
 D3DXVECTOR3 Character::m_vUp(0.0f, 1.0f, 0.0f);
 
-//=====================================================================================
-//=====================================================================================
-
-/**
- *
- *
-eCharacterControllerType cCharacterController::GetType()
-{
-	return m_Type;
-}*/
-
-//=====================================================================================
-//=====================================================================================
-
 /**
  *
  */
@@ -62,7 +48,6 @@ Character::~Character()
 bool Character::LoadCommun(const char* fileName)
 {
 	TiXmlDocument xmlDoc;
-	TiXmlElement* pElementRoot = NULL, * pElement = NULL;
 
 	if (xmlDoc.LoadFile(fileName) == false)
 	{
@@ -71,13 +56,13 @@ bool Character::LoadCommun(const char* fileName)
 	}
 
 	//on cherche les differents noeuds qu'on passe aux autres classes
-	pElementRoot = xmlDoc.FirstChildElement("Character");
+	TiXmlElement* pElementRoot = xmlDoc.FirstChildElement("Character");
 
 	if (!pElementRoot)
 		return false;
 
 	//On charge les caracteristiques du perso ------------------------------
-	pElement = pElementRoot->FirstChildElement("Status");
+	TiXmlElement* pElement = pElementRoot->FirstChildElement("Status");
 
 	if (!pElement)
 		return false;
@@ -116,7 +101,7 @@ bool Character::LoadCommun(const char* fileName)
  */
 void Character::Free()
 {
-	m_pStage = NULL;
+	m_pStage = nullptr;
 	m_Name.clear();
 	m_meshX.Free();
 }
@@ -146,11 +131,7 @@ void Character::SetInitialPosition(const D3DXVECTOR3& pos_)
  */
 bool Character::SetPosition(const D3DXVECTOR3& pos_)
 {
-	//TODO : verif dans le stage
-	//TODO : jump si characLocal
-	D3DXVECTOR3 dim;
-
-	dim = m_CharacterBox.GetMax() - m_CharacterBox.GetMin();
+	D3DXVECTOR3 dim = m_CharacterBox.GetMax() - m_CharacterBox.GetMin();
 
 	/*cFrustum frustum;
 	bool completelyContained = false;*/
@@ -178,7 +159,7 @@ bool Character::SetPosition(const D3DXVECTOR3& pos_)
 #endif
 
 	//pour les variables de 
-	CharacterLocal* pLocal = dynamic_cast<CharacterLocal*> (this);
+	auto pLocal = dynamic_cast<CharacterLocal*> (this);
 
 	if (pLocal)
 	{
@@ -254,7 +235,7 @@ bool Character::LoadMesh(TiXmlElement* pElement_)
 {
 	const char* fileName = pElement_->Attribute("fileName");
 
-	if (fileName == NULL)
+	if (fileName == nullptr)
 	{
 		Window::Error(false, "cCharacter::LoadMesh() : attribut fileName : %s", fileName);
 		return false;
@@ -322,22 +303,11 @@ std::string Character::GetMeshFileName()
 }
 #endif
 
-#ifdef SHOW_DEBUG//_DEBUG
-/**
- *
- */
+#if defined( SHOW_DEBUG) || defined(EDITOR)
+
 MeshXAnimated* Character::GetMesh()
 {
 	return &m_meshX;
 }
 
-#elif EDITOR
-
-/**
- *
- */
-MeshXAnimated* Character::GetMesh()
-{
-	return &m_meshX;
-}
-#endif  // _DEBUG
+#endif

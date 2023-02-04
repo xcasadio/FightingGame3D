@@ -7,8 +7,8 @@
 
 StageSelection::StageSelection()
 {
-	m_pGraphic = NULL;
-	m_pPad1 = NULL;
+	m_pGraphic = nullptr;
+	m_pPad1 = nullptr;
 }
 
 StageSelection::~StageSelection()
@@ -16,9 +16,9 @@ StageSelection::~StageSelection()
 }
 
 bool StageSelection::Init()
-{	
+{
 	m_pGraphic = &GameCore::Instance().GetGraphic();
-	m_pPad1 = &GameCore::Instance().GetPad( 0 );
+	m_pPad1 = &GameCore::Instance().GetPad(0);
 
 	/*if ( m_Tex.Load("main_menu.png") == false )
 	{
@@ -28,25 +28,25 @@ bool StageSelection::Init()
 	return true;
 }
 
-bool StageSelection::Update( float elapsedTime_ )
+bool StageSelection::Update(float elapsedTime_)
 {
 	GameCore::Instance().ReadAllInputDevice();
 
-	if ( m_pPad1->ButtonPressed( PAD_BUTTON_8 ) )
+	if (m_pPad1->ButtonPressed(PAD_BUTTON_8))
 	{
-		SetDestroy( true );
+		SetDestroy(true);
 		return false;
 	}
 
-	if ( m_pPad1->ButtonPressed( PAD_OK ) )
+	if (m_pPad1->ButtonPressed(PAD_OK))
 	{
-		GameCore::Instance().GetGameStateManager()->Push( new GameRunStage );
+		GameCore::Instance().GetGameStateManager()->Push(new GameRunStage);
 	}
-	
+
 	return true;
 }
 
-void StageSelection::Draw( float elapsedTime_ )
+void StageSelection::Draw(float elapsedTime_)
 {
 	/*
 	m_pGraphic->BeginSprite(D3DXSPRITE_ALPHABLEND);
