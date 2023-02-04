@@ -256,7 +256,7 @@ std::vector<std::string> Trigger::SplitExpression(const char* pExpression_)
 
 		for (auto it = stringArray.begin(); it != stringArray.end(); ++it)
 		{
-			if (it->->empty())
+			if (it->empty())
 			{
 				stringArray.erase(it);
 				end = false;
