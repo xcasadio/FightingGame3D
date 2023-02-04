@@ -5,73 +5,73 @@
 
 namespace GameEngine
 {
-	SINGLETON_IMPL(cPhysicEngine)
+	SINGLETON_IMPL(PhysicEngine)
 
-	cPhysicParameters::cPhysicParameters()
+		PhysicParameters::PhysicParameters()
 	{
-		cPhysicEngine::Instance().AddObject( this );
+		PhysicEngine::Instance().AddObject(this);
 	}
 
-	cPhysicParameters::~cPhysicParameters()
+	PhysicParameters::~PhysicParameters()
 	{
-		cPhysicEngine::Instance().DeleteObject( this );
+		PhysicEngine::Instance().DeleteObject(this);
 	}
 
 	//=====================================================================================
 	//=====================================================================================
-	cPhysicEngine::cPhysicEngine(void)
+	PhysicEngine::PhysicEngine()
 	{
 	}
 
-	cPhysicEngine::~cPhysicEngine(void)
+	PhysicEngine::~PhysicEngine()
 	{
 	}
 
 	/**
 	 *
 	 */
-	cPhysicSpaceWarp *cPhysicEngine::AddSpaceWarp( eSpaceWarpType type_ )
+	PhysicSpaceWarp* PhysicEngine::AddSpaceWarp(eSpaceWarpType type_)
 	{
-		switch ( type_ )
+		switch (type_)
 		{
 		case SPACEWARP_TYPE_DEFLECTOR:
-			{
-				cPhysicDeflector *pDeflector = new cPhysicDeflector();
-				//m_SpaceWarp( 
-			}
-			break;
+		{
+			auto pDeflector = new PhysicDeflector();
+			//m_SpaceWarp( 
+		}
+		break;
 
 		case SPACEWARP_TYPE_FORCE:
-			{
+		{
 
-			}
-			break;
+		}
+		break;
 		}
 
-		return NULL;
+		return nullptr;
 	}
 
 	/**
 	 *
 	 */
-	void cPhysicEngine::AddObject( cPhysicParameters *param_ )
+	void PhysicEngine::AddObject(PhysicParameters* param_)
 	{
-		m_ParametersObjects.insert( param_ );
+		m_ParametersObjects.insert(param_);
 	}
 
 	/**
 	 *
 	 */
-	void cPhysicEngine::DeleteObject( cPhysicParameters *param_ )
+	void PhysicEngine::DeleteObject(PhysicParameters* param_)
 	{
-		std::set<cPhysicParameters *>::iterator it = m_ParametersObjects.find( param_ );
+		auto it = m_ParametersObjects.find(param_);
 
-		if ( it == m_ParametersObjects.end() )
+		if (it == m_ParametersObjects.end())
 		{
 			return;
 		}
 
-		m_ParametersObjects.erase( it );
+		m_ParametersObjects.erase(it);
 	}
 
 } // namespace gameEngine

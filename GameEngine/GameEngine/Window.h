@@ -19,13 +19,13 @@ namespace GameEngine
 		Window();
 		~Window();
 
-		bool Create( unsigned int width_, unsigned int height_, const char *caption, bool windowed, HWND parent = NULL);
+		bool Create(unsigned int width_, unsigned int height_, const char* caption, bool windowed, HWND parent = nullptr);
 		HWND GethWnd();
 		HINSTANCE GethInst();
 
 		DWORD GetScreenWidth();
 		DWORD GetScreenHeight();
-		WNDCLASSEX &GetWndClassEX();
+		WNDCLASSEX& GetWndClassEX();
 		DWORD GetStyle();
 		DWORD GetXPos();
 		DWORD GetYPos();
@@ -36,7 +36,7 @@ namespace GameEngine
 		void SetXPos(DWORD x);
 		void SetYPos(DWORD y);
 
-		static bool Error(bool fatal_, const char *text_, ...);
+		static bool Error(bool fatal_, const char* text_, ...);
 
 		bool Move(long XPos, long YPos);
 		bool Resize(long Width, long Height);

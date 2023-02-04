@@ -257,11 +257,11 @@ void World::ShowDebug(FontDX& font)
 		sprintf_s(buf, sizeof(buf), "Touched: %d, HIT: %d", pCharacLocal->GetIsHit() ? 1 : 0, pCharacLocal->GetHit() ? 1 : 0);
 		font.Print(buf, 0, 20);
 
-		for (size_t i = 0; i < pCharacLocal->GetCommand()->GetCommands()->size(); i++)
+		for (auto& i : *pCharacLocal->GetCommand()->GetCommands())
 		{
-			if (pCharacLocal->GetCommand()->GetCommands()->at(i).GetActivated())
+			if (i.GetActivated())
 			{
-				str.append(pCharacLocal->GetCommand()->GetCommands()->at(i).GetName());
+				str.append(i.GetName());
 				str.append("\n");
 			}
 		}
@@ -285,11 +285,11 @@ void World::ShowDebug(FontDX& font)
 
 		str.clear();
 
-		for (size_t i = 0; i < pCharacLocal->GetCommand()->GetCommands()->size(); i++)
+		for (auto& i : *pCharacLocal->GetCommand()->GetCommands())
 		{
-			if (pCharacLocal->GetCommand()->GetCommands()->at(i).GetActivated())
+			if (i.GetActivated())
 			{
-				str.append(pCharacLocal->GetCommand()->GetCommands()->at(i).GetName());
+				str.append(i.GetName());
 				str.append("\n");
 			}
 		}
@@ -335,7 +335,7 @@ void World::ComputeCameraPosition()
 
 	D3DXVec3Normalize( &vDir, &vDir );*/
 
-	D3DXVECTOR3 vDir = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+	auto vDir = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 
 	//calcul la distance
 	float fDistance = fabsf(m_CharacP1->GetPosition().x) + fabsf(m_CharacP2->GetPosition().x) + radiusP1 + radiusP2;

@@ -26,8 +26,10 @@ namespace GameEngine
 	////////////////////////////////////////////////////////////
 	IResource::~IResource()
 	{
-		if (m_Name != "")
+		if (!m_Name.empty())
+		{
 			ResourceManager::Instance().Remove(m_Name);
+		}
 	}
 
 
@@ -66,7 +68,9 @@ namespace GameEngine
 
 		// S'il n'y a plus de référence sur la ressource, on la détruit
 		if (RefCount == 0)
+		{
 			delete this;
+		}
 
 		return RefCount;
 	}

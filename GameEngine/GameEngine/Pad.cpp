@@ -154,14 +154,11 @@ namespace GameEngine
 	 */
 	void Pad::UpdateButton()
 	{
-		bool state;
-		int i;
-
 		m_ButtonState = 0;
 
-		for (i = 0; i < MAX_PAD_BUTTON; i++)
+		for (int i = 0; i < MAX_PAD_BUTTON; i++)
 		{
-			state = false;
+			bool state = false;
 
 			if (m_PadButton[i].primaryKey.input != InputDevice::INPUT_DEVICE_TYPE_NONE)
 			{
@@ -185,7 +182,7 @@ namespace GameEngine
 					break;
 
 				case InputDevice::INPUT_DEVICE_TYPE_JOYSTICK:
-					if (Input::g_pInputDevice[m_PadButton[i].primaryKey.joystickNum] != NULL)
+					if (Input::g_pInputDevice[m_PadButton[i].primaryKey.joystickNum] != nullptr)
 					{
 						if (Input::g_pInputDevice[m_PadButton[i].primaryKey.joystickNum]->GetButtonState((char)m_PadButton[i].primaryKey.key))
 						{
@@ -221,7 +218,7 @@ namespace GameEngine
 				break;
 
 			case InputDevice::INPUT_DEVICE_TYPE_JOYSTICK:
-				if (Input::g_pInputDevice[m_PadButton[i].secondaryKey.joystickNum] != NULL)
+				if (Input::g_pInputDevice[m_PadButton[i].secondaryKey.joystickNum] != nullptr)
 				{
 					if (Input::g_pInputDevice[m_PadButton[i].secondaryKey.joystickNum]->GetButtonState((char)m_PadButton[i].secondaryKey.key))
 					{
@@ -348,7 +345,6 @@ namespace GameEngine
 	bool Pad::Load(const char* fileName_)
 	{
 		TiXmlDocument xmlDoc;
-		TiXmlElement* xmlElement = NULL;
 		int buttonId, input, key, type, joystick;
 
 		if (xmlDoc.LoadFile(fileName_) == false)
@@ -356,20 +352,26 @@ namespace GameEngine
 			return false;
 		}
 
-		xmlElement = xmlDoc.FirstChildElement("PadConfig");
+		TiXmlElement* xmlElement = xmlDoc.FirstChildElement("PadConfig");
 
 		if (!xmlElement)
+		{
 			return false;
+		}
 
 		xmlElement = xmlElement->FirstChildElement("Button");
 
 		if (!xmlElement)
+		{
 			return false;
+		}
 
 		do
 		{
 			if (strcmp(xmlElement->Value(), "Button") != 0)
+			{
 				continue;
+			}
 
 			if (!xmlElement->Attribute("Id") || !xmlElement->Attribute("Input") || !xmlElement->Attribute("KeyId") || !xmlElement->Attribute("KeyType"))
 			{

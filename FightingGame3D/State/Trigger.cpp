@@ -242,7 +242,7 @@ std::vector<std::string> Trigger::SplitExpression(const char* pExpression_)
 		found = str.find_first_of(OPERATOR_STRING);
 	}
 
-	if (str.size() > 0)
+	if (!str.empty())
 	{
 		stringArray.push_back(Trim(str));
 	}
@@ -254,9 +254,9 @@ std::vector<std::string> Trigger::SplitExpression(const char* pExpression_)
 	{
 		end = true;
 
-		for (std::vector<std::string>::iterator it = stringArray.begin(); it != stringArray.end(); ++it)
+		for (auto it = stringArray.begin(); it != stringArray.end(); ++it)
 		{
-			if (it->size() == 0)
+			if (it->->empty())
 			{
 				stringArray.erase(it);
 				end = false;
@@ -339,7 +339,7 @@ float Trigger::Interpreter(const char* pExpression_)
  */
 float Trigger::GetValue(std::string str_)
 {
-	if (str_.size() == 0)
+	if (str_.empty())
 	{
 		throw TriggerException("Trigger::GetValue() string vide");
 	}
@@ -349,7 +349,7 @@ float Trigger::GetValue(std::string str_)
 	//c'est un mot cle
 	if (found != std::string::npos)
 	{
-		CharacterLocal* pCharacLocal = dynamic_cast<CharacterLocal*>(m_pCharacter);
+		auto pCharacLocal = dynamic_cast<CharacterLocal*>(m_pCharacter);
 
 		if (pCharacLocal == nullptr)
 		{
@@ -435,7 +435,7 @@ std::string Trigger::BuildExpression(std::vector<std::string>& stringArray, size
 	for (size_t i = start; i < end; i++)
 	{
 		//on supprime les parentheses du debut non necessaire
-		if (stringArray.at(i).compare("(") == 0 && str.size() == 0)
+		if (stringArray.at(i).compare("(") == 0 && str.empty())
 		{
 			delimiteur++;
 
@@ -538,7 +538,7 @@ bool Trigger::CheckInterpreter(const char* pExpression_)
  */
 bool Trigger::CheckGetValue(std::string str_)
 {
-	if (str_.size() == 0)
+	if (str_.empty())
 	{
 		return false;
 	}

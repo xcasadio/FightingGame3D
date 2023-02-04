@@ -21,7 +21,9 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int nCmdSh
 	g_hInst = hInst;
 
 	if (GameCore::Instance().GetGraphic().Init() == false)
+	{
 		return -1;
+	}
 
 	g_cameraModelViewer.SetRadius(30.0f);
 
@@ -62,7 +64,7 @@ BOOL CALLBACK MainDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_NOTIFY:
 	{
 		// mise à jour de l'affichage des dialogues enfants
-		LPNMHDR lpnmhdr = (LPNMHDR)lParam;
+		auto lpnmhdr = (LPNMHDR)lParam;
 		if (lpnmhdr->code == TCN_SELCHANGE)
 		{
 			CharacterEditor::UpdateChildTab(g_hWnd);
@@ -84,7 +86,7 @@ BOOL CALLBACK MainDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 
 				g_bThreadRunning = false;
-				g_hThread = NULL;
+				g_hThread = nullptr;
 			}
 
 			g_Charac.Free();
@@ -95,16 +97,16 @@ BOOL CALLBACK MainDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			g_bThreadEnd = false;
 
 			g_hThread = CreateThread(
-				NULL,                   // default security attributes
+				nullptr,                   // default security attributes
 				0,                      // use default stack size  
 				GraphicThreadFunction,       // thread function name
-				NULL,          // argument to thread function 
+				nullptr,          // argument to thread function 
 				0,                      // use default creation flags 
-				NULL);   // returns the thread identifier 
+				nullptr);   // returns the thread identifier 
 
 			g_bThreadRunning = true;
 
-			if (g_hThread == NULL)
+			if (g_hThread == nullptr)
 			{
 				exit(-1);
 			}
@@ -118,7 +120,9 @@ BOOL CALLBACK MainDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			g_ofn.lpstrDefExt = "charac";
 
 			if (!GetSaveFileName(&g_ofn))
+			{
 				return FALSE;
+			}
 
 			if (g_Charac.SaveSerialized(g_ofn.lpstrFile) == false)
 			{
@@ -135,7 +139,7 @@ BOOL CALLBACK MainDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			break;
 
 		case ID_FICHIER_ENREGISTRER:
-			if (g_FileName.size() > 0)
+			if (!g_FileName.empty())
 			{
 				if (g_Charac.SaveSerialized(g_FileName.c_str()) == false)
 				{
@@ -153,7 +157,9 @@ BOOL CALLBACK MainDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				g_ofn.lpstrDefExt = "charac";
 
 				if (!GetSaveFileName(&g_ofn))
+				{
 					return FALSE;
+				}
 
 				if (g_Charac.SaveSerialized(g_ofn.lpstrFile) == false)
 				{
@@ -176,7 +182,9 @@ BOOL CALLBACK MainDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			g_ofn.lpstrDefExt = "charac";
 
 			if (!GetOpenFileName(&g_ofn))
+			{
 				return FALSE;
+			}
 
 			if (g_hThread && g_bThreadRunning)
 			{
@@ -188,7 +196,7 @@ BOOL CALLBACK MainDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 
 				g_bThreadRunning = false;
-				g_hThread = NULL;
+				g_hThread = nullptr;
 			}
 
 			g_Charac.Free();
@@ -210,16 +218,16 @@ BOOL CALLBACK MainDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				g_bThreadEnd = false;
 
 				g_hThread = CreateThread(
-					NULL,                   // default security attributes
+					nullptr,                   // default security attributes
 					0,                      // use default stack size  
 					GraphicThreadFunction,       // thread function name
-					NULL,          // argument to thread function 
+					nullptr,          // argument to thread function 
 					0,                      // use default creation flags 
-					NULL);   // returns the thread identifier 
+					nullptr);   // returns the thread identifier 
 
 				g_bThreadRunning = true;
 
-				if (g_hThread == NULL)
+				if (g_hThread == nullptr)
 				{
 					exit(-1);
 				}
@@ -270,12 +278,12 @@ BOOL CALLBACK MainDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				exit(-1);
 			}
 
-			g_hThread = NULL;
+			g_hThread = nullptr;
 		}
 
-		for (int i = 0; i < MAX_CHILD_TAB; i++)
+		for (auto& i : g_aChildTab)
 		{
-			DestroyWindow(g_aChildTab[i]);
+			DestroyWindow(i);
 		}
 
 		break;
@@ -380,18 +388,18 @@ DWORD WINAPI GraphicThreadFunction(LPVOID lpParam)
 			{
 				if (g_bShowOBBAttack)
 				{
-					for (unsigned int i = 0; i < g_pStateDef->GetCollisionAtt().size(); i++)
+					for (auto& i : g_pStateDef->GetCollisionAtt())
 					{
-						graphic->GetDeviceCOM()->SetTransform(D3DTS_WORLD, &g_pStateDef->GetCollisionAtt().at(i).GetMatrixForDisplay());
+						graphic->GetDeviceCOM()->SetTransform(D3DTS_WORLD, &i.GetMatrixForDisplay());
 						meshX.Render(&matRed, false);
 					}
 				}
 
 				if (g_bShowOBBDefense)
 				{
-					for (unsigned int i = 0; i < g_pStateDef->GetCollisionDef().size(); i++)
+					for (auto& i : g_pStateDef->GetCollisionDef())
 					{
-						graphic->GetDeviceCOM()->SetTransform(D3DTS_WORLD, &g_pStateDef->GetCollisionDef().at(i).GetMatrixForDisplay());
+						graphic->GetDeviceCOM()->SetTransform(D3DTS_WORLD, &i.GetMatrixForDisplay());
 						meshX.Render(&matBlue, false);
 					}
 				}
@@ -455,7 +463,7 @@ DWORD WINAPI GraphicThreadFunction(LPVOID lpParam)
 //===================================================================================================
 BOOL APIENTRY  AddStateDefDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	static StateDef* s_pStateDef = NULL;
+	static StateDef* s_pStateDef = nullptr;
 	switch (uMsg)
 	{
 	case WM_INITDIALOG:
@@ -473,7 +481,7 @@ BOOL APIENTRY  AddStateDefDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
 		}
 		else
 		{
-			s_pStateDef = NULL;
+			s_pStateDef = nullptr;
 		}
 	}
 	break;
@@ -516,7 +524,7 @@ BOOL APIENTRY  AddStateDefDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
 
 						if (sel == CB_ERR)
 						{
-							MessageBox(NULL, "Erreur selectionne IDC_COMBO_STATE_DEF", "Erreur", MB_OK);
+							MessageBox(nullptr, "Erreur selectionne IDC_COMBO_STATE_DEF", "Erreur", MB_OK);
 							exit(-1);
 						}
 
@@ -619,7 +627,7 @@ BOOL APIENTRY  AddStateControllerDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam,
 		{
 		case IDOK:
 		{
-			if (g_pController->GetTriggers().size() == 0)
+			if (g_pController->GetTriggers().empty())
 			{
 				MessageBox(hWnd, "Vous devez créer au moins créer 1 Triggers", "Erreur", MB_OK);
 				return FALSE;
@@ -707,7 +715,7 @@ BOOL APIENTRY  AddStateControllerDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam,
 			}
 			else
 			{
-				if (g_pController == NULL)
+				if (g_pController == nullptr)
 				{
 					MessageBox(hWnd, "IDC_BUTTON_ADD_TRIGGER : g_pController == NULL", "Erreur", MB_OK);
 				}
@@ -769,7 +777,7 @@ BOOL APIENTRY  AddStateControllerDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam,
 
 		case IDC_BUTTON_VALUE:
 		{
-			if (g_pController == NULL)
+			if (g_pController == nullptr)
 			{
 				MessageBox(hWnd, "g_pController == NULL", "Erreur", MB_OK);
 				break;
@@ -868,7 +876,7 @@ BOOL APIENTRY  AddStateControllerDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam,
 			delete g_pController;
 		}
 
-		g_pController = NULL;
+		g_pController = nullptr;
 		break;
 
 	}
@@ -913,9 +921,9 @@ BOOL APIENTRY TriggerDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			s_bTriggerEdit = true;
 			g_pTrigger = (Trigger*)lParam;
 
-			if (g_pTrigger == NULL)
+			if (g_pTrigger == nullptr)
 			{
-				MessageBox(NULL, "TriggerDialogProc : dynamic_cast<Trigger *> (lParam)", "Erreur", MB_OK);
+				MessageBox(nullptr, "TriggerDialogProc : dynamic_cast<Trigger *> (lParam)", "Erreur", MB_OK);
 				PostQuitMessage(-1);
 			}
 
@@ -938,15 +946,15 @@ BOOL APIENTRY TriggerDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 			if (g_pTrigger->IsExpressionValid(buf) == false)
 			{
-				MessageBox(NULL, "Expression is not valid", "Erreur", MB_OK | MB_ICONWARNING);
+				MessageBox(nullptr, "Expression is not valid", "Erreur", MB_OK | MB_ICONWARNING);
 				return FALSE;
 			}
 			else
 			{
-				if (g_pController == NULL)
+				if (g_pController == nullptr)
 				{
 					//g_pController = new StateController;
-					MessageBox(NULL, "TriggerDialogProc(...) : IDOK : g_pController == NULL", "Erreur", MB_OK);
+					MessageBox(nullptr, "TriggerDialogProc(...) : IDOK : g_pController == NULL", "Erreur", MB_OK);
 				}
 				else
 				{
@@ -1010,7 +1018,7 @@ BOOL APIENTRY TriggerDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 			delete g_pTrigger;
 		}
 
-		g_pTrigger = NULL;
+		g_pTrigger = nullptr;
 		break;
 	}
 
@@ -1158,7 +1166,7 @@ BOOL APIENTRY EditValueStateControllerDialogProc(HWND hWnd, UINT uMsg, WPARAM wP
 //===================================================================================================
 BOOL APIENTRY  EditVectorDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	static D3DXVECTOR3* sVec = NULL;
+	static D3DXVECTOR3* sVec = nullptr;
 
 	switch (uMsg)
 	{
@@ -1239,16 +1247,16 @@ BOOL CALLBACK StateDefDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		}
 
 		g_hThread = CreateThread(
-			NULL,                   // default security attributes
+			nullptr,                   // default security attributes
 			0,                      // use default stack size  
 			GraphicThreadFunction,       // thread function name
-			NULL,          // argument to thread function 
+			nullptr,          // argument to thread function 
 			0,                      // use default creation flags 
-			NULL);   // returns the thread identifier 
+			nullptr);   // returns the thread identifier 
 
 		g_bThreadRunning = true;
 
-		if (g_hThread == NULL)
+		if (g_hThread == nullptr)
 		{
 			exit(-1);
 		}
@@ -1269,7 +1277,9 @@ BOOL CALLBACK StateDefDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 			// Ask for filename
 			if (!GetOpenFileName(&g_ofn))
+			{
 				return FALSE;
+			}
 
 			if (g_hThread)
 			{
@@ -1282,7 +1292,7 @@ BOOL CALLBACK StateDefDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 				g_bThreadRunning = false;
 
-				g_hThread = NULL;
+				g_hThread = nullptr;
 			}
 
 			if (g_Charac.GetMesh()->Load(g_ofn.lpstrFile) == false)
@@ -1302,16 +1312,16 @@ BOOL CALLBACK StateDefDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 				g_bThreadEnd = false;
 
 				g_hThread = CreateThread(
-					NULL,                   // default security attributes
+					nullptr,                   // default security attributes
 					0,                      // use default stack size  
 					GraphicThreadFunction,       // thread function name
-					NULL,          // argument to thread function 
+					nullptr,          // argument to thread function 
 					0,                      // use default creation flags 
-					NULL);   // returns the thread identifier 
+					nullptr);   // returns the thread identifier 
 
 				g_bThreadRunning = true;
 
-				if (g_hThread == NULL)
+				if (g_hThread == nullptr)
 				{
 					exit(-1);
 				}
@@ -1389,7 +1399,7 @@ BOOL CALLBACK StateDefDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 				SendMessage(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_COMBO_STATE_DEF), CB_DELETESTRING, sel, 0);
 				SendMessage(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_COMBO_STATE_DEF), CB_SETCURSEL, 0, 0);
 
-				if (g_Charac.GetStateDef().size() > 0)
+				if (!g_Charac.GetStateDef().empty())
 				{
 					g_StateDefId = STATE_DEF_IDLE;
 					g_pStateDef = &g_Charac.GetStateDef()[STATE_DEF_IDLE];
@@ -1399,7 +1409,7 @@ BOOL CALLBACK StateDefDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 				else
 				{
 					g_StateDefId = -2;
-					g_pStateDef = NULL;
+					g_pStateDef = nullptr;
 				}
 			}
 		}
@@ -1479,7 +1489,7 @@ BOOL CALLBACK StateDefDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 			break;
 
 		case IDC_EDIT_SPEED_ANIM:
-			if (g_pStateDef != NULL && HIWORD(wParam) == EN_CHANGE)
+			if (g_pStateDef != nullptr && HIWORD(wParam) == EN_CHANGE)
 			{
 				char buf[64];
 				GetWindowText(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_EDIT_SPEED_ANIM), buf, 63);
@@ -1660,11 +1670,11 @@ BOOL CALLBACK StateDefDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		{
 			HWND hWndDlg = GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_LIST_HIERARCHY);
 			int nbSel = ListBox_GetSelCount(hWndDlg);
-			int* pSel = NULL;
+			int* pSel = nullptr;
 			//int len;
 			char buf[512];
 
-			if (g_pStateDef == NULL)
+			if (g_pStateDef == nullptr)
 			{
 				break;
 			}
@@ -1709,7 +1719,7 @@ BOOL CALLBACK StateDefDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 		{
 			HWND hWndDlg = GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_LIST_HIERARCHY);
 			int nbSel = ListBox_GetSelCount(hWndDlg);
-			int* pSel = NULL;
+			int* pSel = nullptr;
 			//int len;
 			char buf[512];
 			std::map< long, StateDef >::iterator it;
@@ -1775,9 +1785,9 @@ BOOL CALLBACK StateDefDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 			{
 				int k;
 
-				for (unsigned int i = 0; i < g_pStateDef->GetCollisionAtt().size(); i++)
+				for (auto& i : g_pStateDef->GetCollisionAtt())
 				{
-					k = ListBox_FindString(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_LIST_HIERARCHY), 0, g_pStateDef->GetCollisionAtt().at(i).GetBoneName().c_str());
+					k = ListBox_FindString(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_LIST_HIERARCHY), 0, i.GetBoneName().c_str());
 					ListBox_SetSel(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_LIST_HIERARCHY), TRUE, k);
 				}
 			}
@@ -1798,9 +1808,9 @@ BOOL CALLBACK StateDefDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 			{
 				int k;
 
-				for (unsigned int i = 0; i < g_pStateDef->GetCollisionDef().size(); i++)
+				for (auto& i : g_pStateDef->GetCollisionDef())
 				{
-					k = ListBox_FindString(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_LIST_HIERARCHY), 0, g_pStateDef->GetCollisionDef().at(i).GetBoneName().c_str());
+					k = ListBox_FindString(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_LIST_HIERARCHY), 0, i.GetBoneName().c_str());
 					ListBox_SetSel(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_LIST_HIERARCHY), TRUE, k);
 				}
 			}
@@ -1980,7 +1990,7 @@ BOOL CALLBACK CommandDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 				g_Charac.GetCommand()->Add(*g_pCombination);
 
 				delete g_pCombination;
-				g_pCombination = NULL;
+				g_pCombination = nullptr;
 			}
 			break;
 
@@ -2043,7 +2053,7 @@ BOOL CALLBACK CommandDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 //===================================================================================================
 BOOL CALLBACK CommandAddDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	static  ButtonCombination* s_pCombination = NULL;
+	static  ButtonCombination* s_pCombination = nullptr;
 
 	switch (uMsg)
 	{
@@ -2066,7 +2076,7 @@ BOOL CALLBACK CommandAddDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 		}
 		else
 		{
-			s_pCombination = NULL;
+			s_pCombination = nullptr;
 
 			//s_pCombination = new cButtonCombination;
 			SetWindowText(GetDlgItem(hWnd, IDC_EDIT_COMMAND_NAME), "name");
@@ -2094,7 +2104,7 @@ BOOL CALLBACK CommandAddDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 				}
 				else
 				{
-					if (g_pCombination == NULL)
+					if (g_pCombination == nullptr)
 					{
 						g_pCombination = new ButtonCombination;
 					}
@@ -2103,7 +2113,7 @@ BOOL CALLBACK CommandAddDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 				}
 
 				delete g_pCombinationButton;
-				g_pCombinationButton = NULL;
+				g_pCombinationButton = nullptr;
 
 				ListBox_AddString(GetDlgItem(hWnd, IDC_LIST_COMMAND_BUTTON), g_szButtonString.c_str());
 
@@ -2117,7 +2127,7 @@ BOOL CALLBACK CommandAddDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 			if (sel != -1 /*&& g_pCombination->GetCombination()->size() > sel*/)
 			{
-				ButtonCombination::sCombination* pCombi = NULL;
+				ButtonCombination::sCombination* pCombi = nullptr;
 
 				if (s_pCombination)
 				{
@@ -2160,8 +2170,7 @@ BOOL CALLBACK CommandAddDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 		case IDC_BUTTON_COMMAND_DELETE:
 		{
-			int sel;
-			sel = ListBox_GetCurSel(GetDlgItem(hWnd, IDC_LIST_COMMAND_BUTTON));
+			int sel = ListBox_GetCurSel(GetDlgItem(hWnd, IDC_LIST_COMMAND_BUTTON));
 
 			if (sel != -1)
 			{
@@ -2185,7 +2194,7 @@ BOOL CALLBACK CommandAddDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 		{
 			bool checked = IsDlgButtonChecked(hWnd, IDC_CHECK_SUB_COMBINATION) == BST_CHECKED ? true : false;
 
-			if (g_pCombination && s_pCombination == NULL)
+			if (g_pCombination && s_pCombination == nullptr)
 			{
 				char buf[128];
 
@@ -2225,7 +2234,7 @@ BOOL CALLBACK CommandAddDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 			if (g_pCombination)
 			{
 				delete g_pCombination;
-				g_pCombination = NULL;
+				g_pCombination = nullptr;
 			}
 			EndDialog(hWnd, TRUE);
 			break;
@@ -2248,7 +2257,7 @@ BOOL CALLBACK CommandAddDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 //===================================================================================================
 BOOL CALLBACK CommandAddButtonDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	static ButtonCombination::sCombination* s_pCombinationButton = NULL;
+	static ButtonCombination::sCombination* s_pCombinationButton = nullptr;
 
 	switch (uMsg)
 	{
@@ -2267,7 +2276,7 @@ BOOL CALLBACK CommandAddButtonDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 
 		if (lParam == NULL)
 		{
-			s_pCombinationButton = NULL;
+			s_pCombinationButton = nullptr;
 
 			//ListBox_SetCurSel( GetDlgItem( hWnd, IDC_LIST_COMMAND_BUTTON ), 0 );
 			CheckDlgButton(hWnd, IDC_RADIO_BUTTON_PRESSED, BST_CHECKED);
@@ -2365,7 +2374,7 @@ BOOL CALLBACK CommandAddButtonDialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
 
 			if (nbSel > 0)
 			{
-				int* pSel = new int[nbSel];
+				auto pSel = new int[nbSel];
 				unsigned long button = 0;
 
 				ListBox_GetSelItems(hWndList, nbSel, pSel);

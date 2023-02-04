@@ -104,7 +104,7 @@ int StateController::Read(std::istream& is_)
 
 	for (size_t i = 0; i < t; i++)
 	{
-		Trigger* pTrigger = new Trigger;
+		auto pTrigger = new Trigger;
 
 		pTrigger->Read(is_);
 		m_Triggers.push_back(*pTrigger);
@@ -150,9 +150,9 @@ std::ostream& StateController::operator >> (std::ostream& os_)
 	size_t t = m_Triggers.size();
 	os_.write((char*)&t, sizeof(t));
 
-	for (std::vector<Trigger>::iterator it = m_Triggers.begin(); it != m_Triggers.end(); ++it)
+	for (auto& m_Trigger : m_Triggers)
 	{
-		*it >> os_;
+		m_Trigger >> os_;
 	}
 
 	return os_;
@@ -370,9 +370,9 @@ bool StateController::Check()
 		return false;
 	}
 
-	for (std::vector<Trigger>::iterator it = m_Triggers.begin(); it != m_Triggers.end(); ++it)
+	for (auto& m_Trigger : m_Triggers)
 	{
-		if (it->Result())
+		if (m_Trigger.Result())
 		{
 			return true;
 		}
@@ -388,9 +388,9 @@ void StateController::ReArmTriggers()
 {
 	m_bActivated = true;
 
-	for (std::vector<Trigger>::iterator it = m_Triggers.begin(); it != m_Triggers.end(); ++it)
+	for (auto& m_Trigger : m_Triggers)
 	{
-		it->ReArm();
+		m_Trigger.ReArm();
 	}
 }
 
@@ -399,9 +399,9 @@ void StateController::ReArmTriggers()
  */
 void StateController::SetTriggersCharacterAdr(Character* pCharac_)
 {
-	for (std::vector<Trigger>::iterator it = m_Triggers.begin(); it != m_Triggers.end(); ++it)
+	for (auto& m_Trigger : m_Triggers)
 	{
-		it->SetCharacterAdr(pCharac_);
+		m_Trigger.SetCharacterAdr(pCharac_);
 	}
 }
 

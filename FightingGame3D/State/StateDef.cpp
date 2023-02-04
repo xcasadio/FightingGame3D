@@ -222,9 +222,9 @@ std::ostream& StateDef::operator >> (std::ostream& os_)
 	t = m_StateController.size();
 	os_.write((char*)&t, sizeof(t));
 
-	for (auto itController = m_StateController.begin(); itController != m_StateController.end(); ++itController)
+	for (auto& itController : m_StateController)
 	{
-		**itController >> os_;
+		*itController >> os_;
 	}
 
 	return os_;
@@ -484,9 +484,9 @@ DWORD StateDef::GetElapsedTime() const
  */
 void StateDef::ReArmTrigger()
 {
-	for (auto it = m_StateController.begin(); it != m_StateController.end(); ++it)
+	for (auto& it : m_StateController)
 	{
-		(*it)->ReArmTriggers();
+		it->ReArmTriggers();
 	}
 }
 
@@ -578,9 +578,9 @@ void StateDef::SetDescription(const char* desc_)
 
 void StateDef::SetTriggersCharacterAdr(Character* pCharac_)
 {
-	for (auto it = m_StateController.begin(); it != m_StateController.end(); ++it)
+	for (auto& it : m_StateController)
 	{
-		(*it)->SetTriggersCharacterAdr(pCharac_);
+		it->SetTriggersCharacterAdr(pCharac_);
 	}
 }
 

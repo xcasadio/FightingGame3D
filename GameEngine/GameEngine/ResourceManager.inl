@@ -34,17 +34,17 @@
 template <class T>
 inline T* ResourceManager::Get(const std::string& Name) const
 {
-    // Recherche de la ressource
-    TResourcesMap::const_iterator It = m_Resources.find(Name);
+	// Recherche de la ressource
+	auto It = m_Resources.find(Name);
 
-    // Si on l'a trouvé on la renvoie, sinon on renvoie NULL
-    if (It != m_Resources.end())
-    {
-        It->second->AddRef();
-        return static_cast<T*>(It->second);
-    }
-    else
-    {
-        return NULL;
-    }
+	// Si on l'a trouvé on la renvoie, sinon on renvoie NULL
+	if (It != m_Resources.end())
+	{
+		It->second->AddRef();
+		return static_cast<T*>(It->second);
+	}
+	else
+	{
+		return nullptr;
+	}
 }

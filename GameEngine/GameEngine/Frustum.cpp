@@ -11,21 +11,22 @@ namespace GameEngine
 	bool Frustum::Construct(float ZDistance)
 	{
 		D3DXMATRIX Matrix, matView, matProj;
-		float ZMin, Q;
 
-		Graphic *Graphics = &GameCore::Instance().GetGraphic();
+		Graphic* Graphics = &GameCore::Instance().GetGraphic();
 
 		// Error checking
-		if(Graphics == NULL)
+		if (Graphics == nullptr)
+		{
 			return false;
+		}
 
 		// Calculate FOV data
 		Graphics->GetDeviceCOM()->GetTransform(D3DTS_PROJECTION, &matProj);
-		if(ZDistance != 0.0f)
+		if (ZDistance != 0.0f)
 		{
 			// Calculate new projection matrix based on distance provided
-			ZMin = -matProj._43 / matProj._33;
-			Q = ZDistance / (ZDistance - ZMin);
+			float ZMin = -matProj._43 / matProj._33;
+			float Q = ZDistance / (ZDistance - ZMin);
 			matProj._33 = Q;
 			matProj._43 = -Q * ZMin;
 		}
@@ -75,178 +76,183 @@ namespace GameEngine
 
 	bool Frustum::CheckPoint(float XPos, float YPos, float ZPos)
 	{
-		short i;
-
 		// Make sure point is in frustum
-		for( i=0; i<6; i++)
+		for (short i = 0; i < 6; i++)
 		{
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XPos, YPos, ZPos)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XPos, YPos, ZPos)) < 0.0f)
+			{
 				return false;
+			}
 		}
 
 		return true;
 	}
 
-	bool Frustum::CheckCube(float XCenter, float YCenter, float ZCenter, float Size, bool *CompletelyContained)
+	bool Frustum::CheckCube(float XCenter, float YCenter, float ZCenter, float Size, bool* CompletelyContained)
 	{
-		short i;
 		DWORD TotalIn = 0;
 
 		// Count the number of points inside the frustum
-		for(i=0; i<6; i++)
+		for (short i = 0; i < 6; i++)
 		{
 			DWORD Count = 8;
 			bool  PointIn = true;
 
 			// Test all eight points against plane
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter-Size, YCenter-Size, ZCenter-Size)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter - Size, YCenter - Size, ZCenter - Size)) < 0.0f)
 			{
 				PointIn = false;
 				Count--;
 			}
 
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter+Size, YCenter-Size, ZCenter-Size)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter + Size, YCenter - Size, ZCenter - Size)) < 0.0f)
 			{
 				PointIn = false;
 				Count--;
 			}
 
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter-Size, YCenter+Size, ZCenter-Size)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter - Size, YCenter + Size, ZCenter - Size)) < 0.0f)
 			{
 				PointIn = false;
 				Count--;
 			}
 
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter+Size, YCenter+Size, ZCenter-Size)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter + Size, YCenter + Size, ZCenter - Size)) < 0.0f)
 			{
 				PointIn = false;
 				Count--;
 			}
 
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter-Size, YCenter-Size, ZCenter+Size)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter - Size, YCenter - Size, ZCenter + Size)) < 0.0f)
 			{
 				PointIn = false;
 				Count--;
 			}
 
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter+Size, YCenter-Size, ZCenter+Size)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter + Size, YCenter - Size, ZCenter + Size)) < 0.0f)
 			{
 				PointIn = false;
 				Count--;
 			}
 
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter-Size, YCenter+Size, ZCenter+Size)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter - Size, YCenter + Size, ZCenter + Size)) < 0.0f)
 			{
 				PointIn = false;
 				Count--;
 			}
 
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter+Size, YCenter+Size, ZCenter+Size)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter + Size, YCenter + Size, ZCenter + Size)) < 0.0f)
 			{
 				PointIn = false;
 				Count--;
 			}
 
 			// If none contained, return false
-			if(Count == 0)
+			if (Count == 0)
+			{
 				return false;
+			}
 
 			// Update counter if they were all in front of plane
 			TotalIn += (PointIn == true) ? 1 : 0;
 		}
 
 		// Store bool flag if completely contained
-		if(CompletelyContained != NULL)
+		if (CompletelyContained != nullptr)
+		{
 			*CompletelyContained = (TotalIn == 6) ? true : false;
+		}
 
 		return true;
 	}
 
-	bool Frustum::CheckRectangle(float XCenter, float YCenter, float ZCenter, float XSize, float YSize, float ZSize, bool *CompletelyContained)
+	bool Frustum::CheckRectangle(float XCenter, float YCenter, float ZCenter, float XSize, float YSize, float ZSize, bool* CompletelyContained)
 	{
-		short i;
-
 		DWORD TotalIn = 0;
 
 		// Count the number of points inside the frustum
-		for(i=0; i<6; i++)
+		for (short i = 0; i < 6; i++)
 		{
 			DWORD Count = 8;
 			bool  PointIn = true;
 
 			// Test all eight points against plane
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter-XSize, YCenter-YSize, ZCenter-ZSize)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter - XSize, YCenter - YSize, ZCenter - ZSize)) < 0.0f)
 			{
 				PointIn = false;
 				Count--;
 			}
 
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter+XSize, YCenter-YSize, ZCenter-ZSize)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter + XSize, YCenter - YSize, ZCenter - ZSize)) < 0.0f)
 			{
 				PointIn = false;
 				Count--;
 			}
 
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter-XSize, YCenter+YSize, ZCenter-ZSize)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter - XSize, YCenter + YSize, ZCenter - ZSize)) < 0.0f)
 			{
 				PointIn = false;
 				Count--;
 			}
 
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter+XSize, YCenter+YSize, ZCenter-ZSize)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter + XSize, YCenter + YSize, ZCenter - ZSize)) < 0.0f)
 			{
 				PointIn = false;
 				Count--;
 			}
 
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter-XSize, YCenter-YSize, ZCenter+ZSize)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter - XSize, YCenter - YSize, ZCenter + ZSize)) < 0.0f)
 			{
 				PointIn = false;
 				Count--;
 			}
 
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter+XSize, YCenter-YSize, ZCenter+ZSize)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter + XSize, YCenter - YSize, ZCenter + ZSize)) < 0.0f)
 			{
 				PointIn = false;
 				Count--;
 			}
 
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter-XSize, YCenter+YSize, ZCenter+ZSize)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter - XSize, YCenter + YSize, ZCenter + ZSize)) < 0.0f)
 			{
 				PointIn = false;
 				Count--;
 			}
 
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter+XSize, YCenter+YSize, ZCenter+ZSize)) < 0.0f)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter + XSize, YCenter + YSize, ZCenter + ZSize)) < 0.0f)
 			{
 				PointIn = false;
 				Count--;
 			}
 
 			// If none contained, return false
-			if(Count == 0)
+			if (Count == 0)
+			{
 				return false;
+			}
 
 			// Update counter if they were all in front of plane
-			TotalIn += (PointIn == true) ? 1:0;
+			TotalIn += (PointIn == true) ? 1 : 0;
 		}
 
 		// Store bool flag if completely contained
-		if(CompletelyContained != NULL)
-			*CompletelyContained = (TotalIn == 6) ? true:false;
+		if (CompletelyContained != nullptr)
+		{
+			*CompletelyContained = (TotalIn == 6) ? true : false;
+		}
 
 		return true;
 	}
 
 	bool Frustum::CheckSphere(float XCenter, float YCenter, float ZCenter, float Radius)
 	{
-		short i;
-
 		// Make sure radius is in frustum
-		for(i=0; i<6; i++)
+		for (short i = 0; i < 6; i++)
 		{
-			if(D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter, YCenter, ZCenter)) < -Radius)
+			if (D3DXPlaneDotCoord(&m_Planes[i], &D3DXVECTOR3(XCenter, YCenter, ZCenter)) < -Radius)
+			{
 				return false;
+			}
 		}
 
 		return true;

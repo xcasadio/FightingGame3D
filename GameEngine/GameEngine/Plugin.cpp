@@ -14,7 +14,7 @@ namespace GameEngine
 			throw Exception(std::string("Can't load the plugin : ").append(Filename));
 		}
 
-		PtrFunc LoadFunc = reinterpret_cast<PtrFunc>(GetProcAddress(m_Library, "LoadPlugin"));
+		auto LoadFunc = reinterpret_cast<PtrFunc>(GetProcAddress(m_Library, "LoadPlugin"));
 		if (!LoadFunc)
 		{
 			throw Exception(std::string("Can't find the function 'LoadPlugin' in the plugin : ").append(Filename));
@@ -25,7 +25,7 @@ namespace GameEngine
 
 	Plugin::~Plugin()
 	{
-		PtrFunc UnloadFunc = reinterpret_cast<PtrFunc>(GetProcAddress(m_Library, "UnloadPlugin"));
+		auto UnloadFunc = reinterpret_cast<PtrFunc>(GetProcAddress(m_Library, "UnloadPlugin"));
 		if (!UnloadFunc)
 		{
 			throw Exception("Can't find the function 'UnloadPlugin' in the plugin");

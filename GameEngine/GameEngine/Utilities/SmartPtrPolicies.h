@@ -47,14 +47,18 @@ namespace GameEngine
 		static T* Clone(T* Ptr)
 		{
 			if (Ptr)
+			{
 				Ptr->AddRef();
+			}
 			return Ptr;
 		}
 
 		static void Release(T* Ptr)
 		{
 			if (Ptr)
+			{
 				Ptr->Release();
+			}
 		}
 
 		static void Swap(cResourceCOM&)

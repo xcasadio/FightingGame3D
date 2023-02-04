@@ -6,39 +6,39 @@
 namespace GameEngine
 {
 	/*
-	cPhysicSpaceWarp::cPhysicSpaceWarp(void)
+	PhysicSpaceWarp::PhysicSpaceWarp(void)
 	{
 	}
 
-	cPhysicSpaceWarp::~cPhysicSpaceWarp(void)
+	PhysicSpaceWarp::~PhysicSpaceWarp(void)
 	{
 	}
 	*/
 
 	//=====================================================================================
 	//=====================================================================================
-	cPhysicDeflector::cPhysicDeflector(void)
+	PhysicDeflector::PhysicDeflector(void)
 	{
 		m_Type = SPACEWARP_TYPE_DEFLECTOR;
 	}
-/*
-	cPhysicDeflector::~cPhysicDeflector(void)
-	{
-		
-	}
-*/
+	/*
+		PhysicDeflector::~PhysicDeflector(void)
+		{
+
+		}
+	*/
 
 	//=====================================================================================
 	//=====================================================================================
-	cPhysicForce::cPhysicForce(void)
+	PhysicForce::PhysicForce(void)
 	{
 		m_Type = SPACEWARP_TYPE_DEFLECTOR;
 	}
-/*
-	cPhysicForce::~cPhysicForce(void)
-	{
-		
-	}
-*/
+	/*
+		PhysicForce::~PhysicForce(void)
+		{
+
+		}
+	*/
 
 } // namespace GameEngine

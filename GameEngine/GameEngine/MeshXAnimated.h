@@ -26,42 +26,42 @@ namespace GameEngine
 		MeshXAnimated();
 
 		/**
-		 * 
+		 *
 		 */
 		~MeshXAnimated();
 
 		/**
-		 * 
+		 *
 		 */
-		bool Load( const char *fileName_);
+		bool Load(const char* fileName_);
 
 		/**
 		 *
 		 */
 		void Free();
-		
+
 		/**
-		 * 
+		 *
 		 */
 		void Draw();
 
 		/**
-		 * 
+		 *
 		 */
-		bool Update( const float time_, D3DXMATRIX *pMatWorld_);
+		bool Update(const float time_, D3DXMATRIX* pMatWorld_);
 
 		/**
-		 * 
+		 *
 		 */
 		std::string GetAnimationSetName(unsigned int index);
 
 		/**
-		 * 
+		 *
 		 */
-		void SetSkinningMethod( METHOD method_);
+		void SetSkinningMethod(METHOD method_);
 
 		/**
-		 * 
+		 *
 		 */
 		unsigned int GetCurrentAnimationSet() const;
 
@@ -71,7 +71,7 @@ namespace GameEngine
 		unsigned int GetNumberOfAnimationSet() const;
 
 		/**
-		 * 
+		 *
 		 */
 		METHOD GetMethod();
 
@@ -83,7 +83,7 @@ namespace GameEngine
 		/**
 		 *
 		 */
-		ID3DXAnimationController *GetAnimationController();
+		ID3DXAnimationController* GetAnimationController();
 
 		/**
 		 *
@@ -110,7 +110,7 @@ namespace GameEngine
 		 * totale de l'animation courante.
 		 * @param percentage_ le pourcentage par rapport au temps total de cette animation
 		 */
-		void SetCurrentAnimationTime( float percentage_, D3DXMATRIX *pMatWorld_ = NULL);
+		void SetCurrentAnimationTime(float percentage_, D3DXMATRIX* pMatWorld_ = nullptr);
 
 		/**
 		 * @return true si le mesh a correctement été chargé
@@ -124,7 +124,7 @@ namespace GameEngine
 		/**
 		 *
 		 */
-		BoundingSphere &GetBoundingSphere();
+		BoundingSphere& GetBoundingSphere();
 
 		/**
 		 *
@@ -134,7 +134,7 @@ namespace GameEngine
 	private:
 		METHOD						m_SkinningMethod;
 		LPD3DXFRAME					m_pFrameRoot;
-		ID3DXAnimationController*	m_pAnimController;
+		ID3DXAnimationController* m_pAnimController;
 		//D3DXVECTOR3					m_vObjectCenter;
 		//float						m_fObjectRadius;
 		BoundingSphere				m_BoundingSphere;
@@ -142,7 +142,7 @@ namespace GameEngine
 		bool			m_IsLoaded;
 
 		// Animation variables
-		unsigned int	m_CurrentAnimationSet;	
+		unsigned int	m_CurrentAnimationSet;
 		unsigned int	m_NumAnimationSets;
 		unsigned int	m_CurrentTrack;
 		float			m_CurrentTime;
@@ -151,32 +151,32 @@ namespace GameEngine
 		/**
 		 *
 		 */
-		HRESULT SetupBoneMatrixPointers( LPD3DXFRAME pFrame );
+		HRESULT SetupBoneMatrixPointers(LPD3DXFRAME pFrame);
 
 		/**
 		 *
 		 */
-		HRESULT SetupBoneMatrixPointersOnMesh( LPD3DXMESHCONTAINER pMeshContainerBase );
+		HRESULT SetupBoneMatrixPointersOnMesh(LPD3DXMESHCONTAINER pMeshContainerBase);
 
 		/**
 		 *
 		 */
-		void UpdateFrameMatrices( LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatrix );
+		void UpdateFrameMatrices(LPD3DXFRAME pFrameBase, LPD3DXMATRIX pParentMatrix);
 
 		/**
 		 *
 		 */
-		void ReleaseAttributeTable( LPD3DXFRAME pFrameBase );
+		void ReleaseAttributeTable(LPD3DXFRAME pFrameBase);
 
 		/**
 		 *
 		 */
-		void DrawFrame( LPD3DXFRAME pFrame );
+		void DrawFrame(LPD3DXFRAME pFrame);
 
 		/**
 		 *
 		 */
-		void DrawMeshContainer( LPD3DXMESHCONTAINER pMeshContainerBase, LPD3DXFRAME pFrameBase );
+		void DrawMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase, LPD3DXFRAME pFrameBase);
 	};
 
 } // namespace GameEngine

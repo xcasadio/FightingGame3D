@@ -17,7 +17,7 @@ namespace GameEngine
 {
 	class GameCore;
 	class cGameState;
-	class cGameStateManager;
+	class GameStateManager;
 
 	/**
 	 *
@@ -34,7 +34,7 @@ namespace GameEngine
 		 *
 		 */
 		virtual ~IGameState();
-		
+
 		/**
 		 *
 		 */
@@ -43,12 +43,12 @@ namespace GameEngine
 		/**
 		 *
 		 */
-		virtual bool Update( float elapsedTime_ ) = 0;
+		virtual bool Update(float elapsedTime_) = 0;
 
 		/**
 		 *
 		 */
-		virtual void Draw( float elapsedTime_ ) = 0;		
+		virtual void Draw(float elapsedTime_) = 0;
 
 		/**
 		 *
@@ -58,58 +58,58 @@ namespace GameEngine
 		/**
 		 *
 		 */
-		void SetInitialised( bool val_ );
-		
-		/**
-		 *
-		 */
-		void SetDestroy( bool val_ );
+		void SetInitialized(bool val_);
 
 		/**
 		 *
 		 */
-		bool GetDestroy() const;		
+		void SetDestroy(bool val_);
 
 		/**
 		 *
 		 */
-		bool AddState(IGameState *pState_);
+		bool GetDestroy() const;
+
+		/**
+		 *
+		 */
+		bool AddState(IGameState* pState_);
 
 	private:
 		bool m_Initialised;
 		bool m_ToDestroy;
 	};
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-	/**
-	 *
-	 */
-	class GAME_ENGINE_EXPORT cGameStateManager
+	/////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////
+		/**
+		 *
+		 */
+	class GAME_ENGINE_EXPORT GameStateManager
 	{
 	public:
 		/**
 		 *
 		 */
-		~cGameStateManager();
+		~GameStateManager();
 
 		/**
 		 *
 		 */
-		void Push(IGameState *gameState);
-		
+		void Push(IGameState* gameState);
+
 		/**
 		 *
 		 */
 		bool Pop();
-		
+
 		/**
 		 *
 		 */
 		bool Run();
 
 	private:
-		std::list<IGameState *> m_ListGameState;
+		std::list<IGameState*> m_ListGameState;
 	};
 } // namespace GameEngine
 

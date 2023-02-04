@@ -22,13 +22,13 @@ namespace GameEngine
 	 * Les space warp sont des objets invisibles qui créés des forces qui s'appliquent au monde
 	 * et pas seulement à un objet
 	 */
-	class GAME_ENGINE_EXPORT cPhysicSpaceWarp :
+	class GAME_ENGINE_EXPORT PhysicSpaceWarp :
 		public CoordinateSpace
 	{
 	public:
 		/*
-		cPhysicSpaceWarp(void);
-		virtual ~cPhysicSpaceWarp(void);
+		PhysicSpaceWarp(void);
+		virtual ~PhysicSpaceWarp(void);
 		*/
 
 	protected:
@@ -41,12 +41,12 @@ namespace GameEngine
 	/**
 	 * Les objets statiques de collisions
 	 */
-	class GAME_ENGINE_EXPORT cPhysicDeflector :
-		public cPhysicSpaceWarp
+	class GAME_ENGINE_EXPORT PhysicDeflector :
+		public PhysicSpaceWarp
 	{
 	public:
-		cPhysicDeflector(void);
-		//virtual ~cPhysicDeflector(void);
+		PhysicDeflector();
+		//virtual ~PhysicDeflector(void);
 
 	protected:
 		float m_Bounce;
@@ -59,12 +59,12 @@ namespace GameEngine
 	/**
 	 * Les forces appliquées aux mondes (ex: vent, gravité)
 	 */
-	class GAME_ENGINE_EXPORT cPhysicForce :
-		public cPhysicSpaceWarp
+	class GAME_ENGINE_EXPORT PhysicForce :
+		public PhysicSpaceWarp
 	{
 	public:
-		cPhysicForce(void);
-		//virtual ~cPhysicForce(void);
+		PhysicForce();
+		//virtual ~PhysicForce(void);
 
 	protected:
 		float m_fValue;

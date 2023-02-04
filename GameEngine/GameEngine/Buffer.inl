@@ -16,7 +16,7 @@ inline T* cBuffer<T>::GetBuffer() const
 template <class T>
 inline void* cBuffer<T>::Lock(unsigned long Offset, unsigned long Size, unsigned long Flags)
 {
-	void* Data = NULL;
+	void* Data = nullptr;
 	m_Buffer->Lock(Offset, Size, &Data, Enum::LockFlags(Flags));
 
 	return Data;
@@ -31,7 +31,7 @@ inline void cBuffer<T>::Unlock()
 template <class T>
 inline void cBuffer<T>::Fill(const T* Data, std::size_t Count)
 {
-	Assert(Data != NULL);
+	Assert(Data != nullptr);
 
 	T* MyData = Lock();
 	std::copy(Data, Data + Count, MyData);
@@ -42,7 +42,9 @@ template <class T>
 inline void cBuffer<T>::Release()
 {
 	if (m_Buffer)
+	{
 		m_Buffer->Release();
+	}
 
 	m_Buffer = NULL;
 }

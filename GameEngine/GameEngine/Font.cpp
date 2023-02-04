@@ -11,7 +11,7 @@ namespace GameEngine
 	 */
 	FontDX::FontDX(void)
 	{
-		m_pFont = NULL;
+		m_pFont = nullptr;
 		m_iSize = 16;
 		m_bBold = false;
 		m_bItalic = false;
@@ -101,7 +101,9 @@ namespace GameEngine
 
 		// Create the font object
 		if (FAILED(D3DXCreateFontIndirect(GameCore::Instance().GetGraphic().GetDeviceCOM(), &DxFontDesc, &m_pFont)))
+		{
 			return false;
+		}
 
 		m_bIsLoaded = true;
 		m_iSize = Size;
@@ -119,9 +121,11 @@ namespace GameEngine
 	void FontDX::Free()
 	{
 		if (m_pFont)
+		{
 			m_pFont->Release();
+		}
 
-		m_pFont = NULL;
+		m_pFont = nullptr;
 	}
 
 	/**
@@ -131,14 +135,20 @@ namespace GameEngine
 	{
 		RECT Rect;
 
-		if (m_pFont == NULL)
+		if (m_pFont == nullptr)
+		{
 			return false;
+		}
 
 		if (!Width)
+		{
 			Width = 65535;
+		}
 
 		if (!Height)
+		{
 			Height = 65536;
+		}
 
 		Rect.left = XPos;
 		Rect.top = YPos;
@@ -146,7 +156,9 @@ namespace GameEngine
 		Rect.bottom = Rect.top + Height;
 
 		if (FAILED(m_pFont->DrawText(pSprite, Text, -1, &Rect, Format, Color)))
+		{
 			return false;
+		}
 
 		return true;
 	}

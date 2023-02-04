@@ -54,7 +54,7 @@ namespace GameEngine
 		extent2 = (box2.GetMax() - box2.GetMin()) * 0.5f;
 
 		//translation, in parent frame
-		D3DXVECTOR3 v = D3DXVECTOR3(box2Mat._41 - box1Mat._41, box2Mat._42 - box1Mat._42, box2Mat._43 - box1Mat._43);
+		auto v = D3DXVECTOR3(box2Mat._41 - box1Mat._41, box2Mat._42 - box1Mat._42, box2Mat._43 - box1Mat._43);
 
 		//Les nouveaux reperes "tournées" pour chaque OBB
 		D3DXVECTOR3 A[3], B[3];
@@ -68,7 +68,7 @@ namespace GameEngine
 		B[2] = D3DXVECTOR3(box2Mat._31, box2Mat._32, box2Mat._33);
 
 		//translation, in A's frame
-		D3DXVECTOR3 trans = D3DXVECTOR3(D3DXVec3Dot(&v, &A[0]),
+		auto trans = D3DXVECTOR3(D3DXVec3Dot(&v, &A[0]),
 			D3DXVec3Dot(&v, &A[1]),
 			D3DXVec3Dot(&v, &A[2]));
 

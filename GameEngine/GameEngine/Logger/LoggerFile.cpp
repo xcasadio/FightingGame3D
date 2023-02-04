@@ -6,7 +6,9 @@ namespace GameEngine
 		m_File(Filename.c_str())
 	{
 		if (!m_File)
+		{
 			throw std::exception("Impossible d'accéder en écriture");
+		}
 
 		m_File << "  ===========================================" << std::endl;
 		m_File << "   GameEngine ::Engine v0.1 - Event log - " << CurrentDate() << std::endl;
@@ -26,7 +28,9 @@ namespace GameEngine
 		//Assert(m_File.is_open());
 
 		if (!m_File.is_open())
+		{
 			return;
+		}
 
 		m_File << Message << std::flush;
 	}

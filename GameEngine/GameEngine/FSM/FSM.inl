@@ -99,7 +99,7 @@ std::set<long> FSM<Tx, Ty>::Process()
 	std::vector< FSM_State<Tx, Ty> > states;
 	std::set<long> statesId; // TODO changer en tableau a element unqiue
 
-	FSM_Transition<Tx, Ty>* pTrans = NULL;
+	FSM_Transition<Tx, Ty>* pTrans = nullptr;
 	std::vector< FSM_Transition<Tx, Ty> >::iterator itTrans;
 
 	if (m_CurrentStateId >= 0)
@@ -140,7 +140,7 @@ FSM_State<Tx, Ty>* FSM<Tx, Ty>::GetStateByID(DWORD id_)
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 /**

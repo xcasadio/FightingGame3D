@@ -24,26 +24,26 @@ namespace GameEngine
 	protected:
 		bool  m_Billboard;
 
-		float m_XPos,      m_YPos,      m_ZPos;
+		float m_XPos, m_YPos, m_ZPos;
 		float m_XRotation, m_YRotation, m_ZRotation;
-		float m_XScale,    m_YScale,    m_ZScale;
+		float m_XScale, m_YScale, m_ZScale;
 
 		D3DXMATRIX m_matWorld;
 		D3DXMATRIX m_matScale;
 		D3DXMATRIX m_matRotation;
 		D3DXMATRIX m_matTranslation;
-		D3DXMATRIX *m_matCombine1;
-		D3DXMATRIX *m_matCombine2;
+		D3DXMATRIX* m_matCombine1;
+		D3DXMATRIX* m_matCombine2;
 
 	public:
 		WorldPosition();
-		void operator = (const WorldPosition &DestPos);
+		void operator = (const WorldPosition& DestPos);
 
-		D3DXMATRIX *GetMatrix();
-		bool SetCombineMatrix1(D3DXMATRIX *Matrix = NULL);
-		bool SetCombineMatrix2(D3DXMATRIX *Matrix = NULL);
+		D3DXMATRIX* GetMatrix();
+		bool SetCombineMatrix1(D3DXMATRIX* Matrix = nullptr);
+		bool SetCombineMatrix2(D3DXMATRIX* Matrix = nullptr);
 
-		bool Copy(const WorldPosition &DestPos);
+		bool Copy(const WorldPosition& DestPos);
 
 		bool Move(float XPos, float YPos, float ZPos);
 		bool MoveRel(float XAdd, float YAdd, float ZAdd);
@@ -66,7 +66,7 @@ namespace GameEngine
 		float GetXScale();
 		float GetYScale();
 		float GetZScale();
-};
+	};
 
 } // namespace GameEngine
 

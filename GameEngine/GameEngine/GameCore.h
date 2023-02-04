@@ -14,9 +14,9 @@
 
 namespace GameEngine
 {
-	#define MAX_PAD 4
+#define MAX_PAD 4
 
-	class GAME_ENGINE_EXPORT GameCore 
+	class GAME_ENGINE_EXPORT GameCore
 		: public ISingleton<GameCore>
 	{
 		MAKE_SINGLETON(GameCore);
@@ -26,65 +26,65 @@ namespace GameEngine
 		typedef struct s_window_param
 		{
 			unsigned int width, height, depth;
-			const char *title;
+			const char* title;
 			bool windowed;
-		} s_window_param;	
+		} s_window_param;
 
 		/**
 		 *
 		 */
 		~GameCore();
 
-		/** 
+		/**
 		 *
 		 */
-		bool Init( int nCmd, LPSTR szCmdLine, Window &win, s_window_param param, HWND parent = NULL, bool bPerspective = true );
-
-		/** 
-		 *
-		 */
-		//bool InitPad(int pad = -1, HWND hWnd = NULL);
-
-		/** 
-		 *
-		 */
-		void Run();
-
-		/** 
-		 *
-		 */
-		bool AddGameState(IGameState *gameState);
-
-		/** 
-		 *
-		 */
-		cGameStateManager *GetGameStateManager();
-
-		/** 
-		 *
-		 */
-		Window &GetWindow();
-
-		/** 
-		 *
-		 */
-		Graphic &GetGraphic();
-
-		/** 
-		 *
-		 */
-		Pad &GetPad( unsigned char index_ );
+		bool Init(int nCmd, LPSTR szCmdLine, Window& win, s_window_param param, HWND parent = nullptr, bool bPerspective = true);
 
 		/**
 		 *
 		 */
-		bool CreateInputDevice( HWND hWnd, HINSTANCE hInst, bool windowed);
+		 //bool InitPad(int pad = -1, HWND hWnd = NULL);
+
+		 /**
+		  *
+		  */
+		void Run();
+
+		/**
+		 *
+		 */
+		bool AddGameState(IGameState* gameState);
+
+		/**
+		 *
+		 */
+		GameStateManager* GetGameStateManager();
+
+		/**
+		 *
+		 */
+		Window& GetWindow();
+
+		/**
+		 *
+		 */
+		Graphic& GetGraphic();
+
+		/**
+		 *
+		 */
+		Pad& GetPad(unsigned char index_);
+
+		/**
+		 *
+		 */
+		bool CreateInputDevice(HWND hWnd, HINSTANCE hInst, bool windowed);
 
 		/**
 		 *
 		 */
 		void ReadAllInputDevice();
-		
+
 		/**
 		 *
 		 */
@@ -107,10 +107,10 @@ namespace GameEngine
 
 	protected:
 		Window m_Window;
-		cGameStateManager m_GameStateManager;
+		GameStateManager m_GameStateManager;
 		Graphic m_Graphic;
 		Pad m_Pad[MAX_PAD];
-		
+
 	private:
 		GameCore();
 

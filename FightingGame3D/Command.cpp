@@ -41,7 +41,7 @@ int Command::Read(std::istream& is_)
 
 	for (size_t i = 0; i < t; i++)
 	{
-		ButtonCombination* pButtonCombination = new ButtonCombination;
+		auto pButtonCombination = new ButtonCombination;
 		pButtonCombination->Read(is_);
 		m_Commands.push_back(*pButtonCombination);
 
@@ -61,9 +61,9 @@ std::ostream& Command::operator >> (std::ostream& os_)
 	size_t t = m_Commands.size();
 	os_.write((char*)&t, sizeof(size_t));
 
-	for (std::vector<ButtonCombination>::iterator it = m_Commands.begin(); it != m_Commands.end(); ++it)
+	for (auto& m_Command : m_Commands)
 	{
-		*it >> os_;
+		m_Command >> os_;
 	}
 
 	return os_;
@@ -82,7 +82,7 @@ void Command::Add(ButtonCombination& combination_)
  */
 bool Command::CommandActivated(std::string& str_)
 {
-	for (std::vector<ButtonCombination>::iterator it = m_Commands.begin(); it != m_Commands.end(); ++it)
+	for (auto it = m_Commands.begin(); it != m_Commands.end(); ++it)
 	{
 		if (str_.compare(it->GetName()) == 0)
 		{
@@ -98,9 +98,9 @@ bool Command::CommandActivated(std::string& str_)
  */
 void Command::InactiveCombination()
 {
-	for (std::vector<ButtonCombination>::iterator it = m_Commands.begin(); it != m_Commands.end(); ++it)
+	for (auto& m_Command : m_Commands)
 	{
-		it->SetActivated(false);
+		m_Command.SetActivated(false);
 	}
 }
 
@@ -623,7 +623,7 @@ void CommandIA::CheckCommand(char posInScreen_, BufferButton& buffer_)
 
 	std::set<long> states = m_FSM.Process();
 
-	if (states.size() > 0)
+	if (!states.empty())
 	{
 		//changement de state
 		/*for ( size_t i = 0; i < states.size(); i++ )
@@ -679,25 +679,25 @@ void CommandIA::InitFSM()
 	IALogicExpressionValue::sIALogicExpressionValue IAVal;
 
 	//le state IMMOBILE
-	FSM_State<IALogicExpressionValue, long>* pState = new FSM_State<IALogicExpressionValue, long>(&m_FSM);
+	auto pState = new FSM_State<IALogicExpressionValue, long>(&m_FSM);
 	long stateObject = STATE_DEF_IDLE;
 	pState->SetStateObject(stateObject);
 	pState->SetId(STATE_DEF_IDLE);
 
 	//la transition
-	FSM_Transition<IALogicExpressionValue, long>* pTransition = new FSM_Transition<
+	auto pTransition = new FSM_Transition<
 		IALogicExpressionValue, long>(&m_FSM, pState);
 	pTransition->SetTargetedStateId(STATE_DEF_WALK_FORWARD);
 
 	//la condition de la transition
-	LogicExpression<IALogicExpressionValue>* pLogicExpr = new LogicExpression<IALogicExpressionValue>;
-	LogicExpressionBrick<IALogicExpressionValue>* pLogicExprBrick = new LogicExpressionBrick<IALogicExpressionValue>;
-	LogicExpressionBrick<IALogicExpressionValue>* pLogicExprBrickLeft = new LogicExpressionBrick<
+	auto pLogicExpr = new LogicExpression<IALogicExpressionValue>;
+	auto pLogicExprBrick = new LogicExpressionBrick<IALogicExpressionValue>;
+	auto pLogicExprBrickLeft = new LogicExpressionBrick<
 		IALogicExpressionValue>;
-	LogicExpressionBrick<IALogicExpressionValue>* pLogicExprBrickRight = new LogicExpressionBrick<
+	auto pLogicExprBrickRight = new LogicExpressionBrick<
 		IALogicExpressionValue>;
-	IALogicExpressionValue* pLogicExprVal = new IALogicExpressionValue;
-	LogicValue<IALogicExpressionValue>* pLogicValue = new LogicValue<IALogicExpressionValue>;
+	auto pLogicExprVal = new IALogicExpressionValue;
+	auto pLogicValue = new LogicValue<IALogicExpressionValue>;
 	IAVal.type = IALogicExpressionValue::IA_LOGIC_EXPRESSION_VALUE_KEYWORD;
 	IAVal.keyWordId = IA_KEY_WORD_DIST_BETWEEN_PLAYER;
 
@@ -890,9 +890,9 @@ std::ostream& ButtonCombination::operator >> (std::ostream& os_)
 
 	os_.write((char*)&t, sizeof(t));
 
-	for (std::vector<sCombination>::iterator it = m_Combinations.begin(); it != m_Combinations.end(); ++it)
+	for (auto& m_Combination : m_Combinations)
 	{
-		os_.write((char*)&(*it), sizeof(sCombination));
+		os_.write((char*)&m_Combination, sizeof(sCombination));
 	}
 
 	return os_;
@@ -1162,7 +1162,7 @@ void BufferButton::Update(Pad* pad_)
 		return;
 	}
 
-	if (m_Buffer.size() > 0)
+	if (!m_Buffer.empty())
 	{
 		if (button.buttonPressed == m_Buffer.front().buttonPressed &&
 			button.buttonHeld == m_Buffer.front().buttonHeld &&
@@ -1193,7 +1193,7 @@ void BufferButton::Clean()
 	int i = 0;
 	DWORD time_ = GetTickCount();
 
-	while (m_Buffer.size())
+	while (!m_Buffer.empty())
 	{
 		if (time_ - m_Buffer.back().time > BUTTON_TIME_MAX_BEFORE_ERASE)
 		{
@@ -1271,32 +1271,33 @@ void BufferButton::CheckCommand(std::vector<ButtonCombination>& commands_)
 	DWORD time = GetTickCount();
 	bool bNextCommand = false;
 
-	for (std::vector<ButtonCombination>::iterator itCommand = commands_.begin(); itCommand != commands_.end(); ++itCommand)
+	for (auto& command : commands_)
 	{
 		//impossible que la commande soit effectuée
-		if (itCommand->GetCombinations().size() > m_Buffer.size())
+		if (command.GetCombinations().size() > m_Buffer.size())
 		{
 			continue;
 		}
 
 		size_t lastButtonChecked = 0;
 
-		for (std::vector<ButtonCombination::sCombination>::const_reverse_iterator itCombi = itCommand->GetCombinations().rbegin(); itCombi < itCommand->GetCombinations().rend(); ++itCombi)
+		for (auto itCombi = command.GetCombinations().rbegin(); itCombi <
+			command.GetCombinations().rend(); ++itCombi)
 		{
 			for (size_t i = lastButtonChecked; i < m_Buffer.size(); i++)
 			{
 				switch (itCombi->type)
 				{
 				case ButtonCombination::BUTTON_PRESSED:
-					button = ReadPressed(i, time, itCommand->GetTimeMax());
+					button = ReadPressed(i, time, command.GetTimeMax());
 					break;
 
 				case ButtonCombination::BUTTON_HELD:
-					button = ReadHeld(i, time, itCommand->GetTimeMax());
+					button = ReadHeld(i, time, command.GetTimeMax());
 					break;
 
 				case ButtonCombination::BUTTON_RELEASED:
-					button = ReadReleased(i, time, itCommand->GetTimeMax());
+					button = ReadReleased(i, time, command.GetTimeMax());
 					break;
 				}//fin switch
 
@@ -1309,11 +1310,11 @@ void BufferButton::CheckCommand(std::vector<ButtonCombination>& commands_)
 						bNextCommand = true;
 						break;
 					}
-					else if (itCombi == itCommand->GetCombinations().rend() - 1)
+					else if (itCombi == command.GetCombinations().rend() - 1)
 					{
-						itCommand->SetActivated(true);
+						command.SetActivated(true);
 
-						if (itCommand->IsSubCombination() == false)
+						if (command.IsSubCombination() == false)
 						{
 							m_Buffer.clear();
 							return;

@@ -12,8 +12,8 @@ namespace GameEngine
 		ZeroMemory(&m_Light, sizeof(D3DLIGHT9));
 		SetType(D3DLIGHT_POINT);
 		Move(0.0f, 0.0f, 0.0f);
-		SetDiffuseColor(255,255,255);
-		SetAmbientColor(255,255,255);
+		SetDiffuseColor(255, 255, 255);
+		SetAmbientColor(255, 255, 255);
 		SetRange(1000.0f);
 		SetAttenuation0(1.0f);
 	}
@@ -40,20 +40,26 @@ namespace GameEngine
 		return TRUE;
 	}
 
-	BOOL Light::GetPos(float *XPos, float *YPos, float *ZPos)
+	BOOL Light::GetPos(float* XPos, float* YPos, float* ZPos)
 	{
-		if(XPos != NULL)
+		if (XPos != nullptr)
+		{
 			*XPos = m_Light.Position.x;
-		if(YPos != NULL)
+		}
+		if (YPos != nullptr)
+		{
 			*YPos = m_Light.Position.y;
-		if(ZPos != NULL)
+		}
+		if (ZPos != nullptr)
+		{
 			*ZPos = m_Light.Position.z;
+		}
 
 		return TRUE;
 	}
 
 	BOOL Light::Point(float XFrom, float YFrom, float ZFrom,
-					   float XAt,   float YAt,   float ZAt)
+		float XAt, float YAt, float ZAt)
 	{
 		D3DXVECTOR3 vecSrc;
 		D3DXVECTOR3 vecDest;
@@ -69,14 +75,20 @@ namespace GameEngine
 		return TRUE;
 	}
 
-	BOOL Light::GetDirection(float *XDir, float *YDir, float *ZDir)
+	BOOL Light::GetDirection(float* XDir, float* YDir, float* ZDir)
 	{
-		if(XDir != NULL)
+		if (XDir != nullptr)
+		{
 			*XDir = m_Light.Direction.x;
-		if(YDir != NULL)
+		}
+		if (YDir != nullptr)
+		{
 			*YDir = m_Light.Direction.y;
-		if(ZDir != NULL)
+		}
+		if (ZDir != nullptr)
+		{
 			*ZDir = m_Light.Direction.z;
+		}
 
 		return TRUE;
 	}
@@ -90,16 +102,22 @@ namespace GameEngine
 		return TRUE;
 	}
 
-	BOOL Light::GetDiffuseColor(unsigned char *Red, unsigned char *Green, unsigned char *Blue)
+	BOOL Light::GetDiffuseColor(unsigned char* Red, unsigned char* Green, unsigned char* Blue)
 	{
-		if(Red != NULL)
+		if (Red != nullptr)
+		{
 			*Red = (unsigned char)(255.0f * m_Light.Diffuse.r);
+		}
 
-		if(Green != NULL)
+		if (Green != nullptr)
+		{
 			*Green = (unsigned char)(255.0f * m_Light.Diffuse.g);
+		}
 
-		if(Blue != NULL)
+		if (Blue != nullptr)
+		{
 			*Blue = (unsigned char)(255.0f * m_Light.Diffuse.b);
+		}
 
 		return TRUE;
 	}
@@ -113,16 +131,22 @@ namespace GameEngine
 		return TRUE;
 	}
 
-	BOOL Light::GetSpecularColor(unsigned char *Red, unsigned char *Green, unsigned char *Blue)
+	BOOL Light::GetSpecularColor(unsigned char* Red, unsigned char* Green, unsigned char* Blue)
 	{
-		if(Red != NULL)
+		if (Red != nullptr)
+		{
 			*Red = (unsigned char)(255.0f * m_Light.Specular.r);
+		}
 
-		if(Green != NULL)
+		if (Green != nullptr)
+		{
 			*Green = (unsigned char)(255.0f * m_Light.Specular.g);
+		}
 
-		if(Blue != NULL)
+		if (Blue != nullptr)
+		{
 			*Blue = (unsigned char)(255.0f * m_Light.Specular.b);
+		}
 
 		return TRUE;
 	}
@@ -136,16 +160,22 @@ namespace GameEngine
 		return TRUE;
 	}
 
-	BOOL Light::GetAmbientColor(unsigned char *Red, unsigned char *Green, unsigned char *Blue)
+	BOOL Light::GetAmbientColor(unsigned char* Red, unsigned char* Green, unsigned char* Blue)
 	{
-		if(Red != NULL)
+		if (Red != nullptr)
+		{
 			*Red = (unsigned char)(255.0f * m_Light.Ambient.r);
+		}
 
-		if(Green != NULL)
+		if (Green != nullptr)
+		{
 			*Green = (unsigned char)(255.0f * m_Light.Ambient.g);
+		}
 
-		if(Blue != NULL)
+		if (Blue != nullptr)
+		{
 			*Blue = (unsigned char)(255.0f * m_Light.Ambient.b);
+		}
 
 		return TRUE;
 	}
@@ -227,7 +257,7 @@ namespace GameEngine
 		return m_Light.Phi;
 	}
 
-	D3DLIGHT9 *Light::GetLight()
+	D3DLIGHT9* Light::GetLight()
 	{
 		return &m_Light;
 	}

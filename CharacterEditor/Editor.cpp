@@ -23,10 +23,10 @@ CameraModelViewer		g_cameraModelViewer;
 Pad						g_Pad;
 DWORD					g_BackgroundColor = 0xffb4b4b4;
 D3DXMATRIX				g_MatWorld;
-CharacterLocal			g_Charac(NULL);
-StateDef* g_pStateDef = NULL;
-StateController* g_pController = NULL;
-Trigger* g_pTrigger = NULL;
+CharacterLocal			g_Charac(nullptr);
+StateDef* g_pStateDef = nullptr;
+StateController* g_pController = nullptr;
+Trigger* g_pTrigger = nullptr;
 long					g_StateDefId = 0;
 bool					g_bTriggerAdded = false;
 bool					g_bStateControllerAdded = false;
@@ -35,14 +35,14 @@ bool					g_bStateControllerEdited = false;
 bool					g_bThreadEnd = false;
 sStateControllerValue	g_value = { STATE_CONTROLLER_VALUE_TYPE_FLOAT, D3DXVECTOR3(0.0f, 0.0f, 0.0f) };
 bool					g_bValueChanged = false;
-ButtonCombination* g_pCombination = NULL;
+ButtonCombination* g_pCombination = nullptr;
 bool					g_bCombinationAdded = false;
 bool					g_bCombinationEdited = false;
 bool					g_bCombinationButtonAdded = false;
 bool					g_bCombinationButtonEdited = false;
 bool					g_bVectorEdited = false;
 std::string				g_szButtonString;
-ButtonCombination::sCombination* g_pCombinationButton = NULL;
+ButtonCombination::sCombination* g_pCombinationButton = nullptr;
 bool					g_bThreadRunning = false;
 bool					g_bShowOBBAttack = true;
 bool					g_bShowOBBDefense = true;
@@ -306,7 +306,7 @@ void CharacterEditor::InitStateControllerDialogGadget(HWND hWnd, StateController
 	ComboBox_AddString(GetDlgItem(hWnd, IDC_COMBO_STATE_CONTROLLER_HIT_HEIGHT), "MIDDLE");
 	ComboBox_AddString(GetDlgItem(hWnd, IDC_COMBO_STATE_CONTROLLER_HIT_HEIGHT), "HIGH");
 
-	if (pStateController_ == NULL)
+	if (pStateController_ == nullptr)
 	{
 		SetWindowText(GetDlgItem(hWnd, IDC_EDIT_STATE_CONTROLLER_NAME), "name");
 
@@ -434,10 +434,9 @@ eStateControllerType CharacterEditor::GetControllerTypeFromCBSelected(int t_)
 //===================================================================================================
 void CharacterEditor::FillGadgetFromCharacterValue()
 {
-	std::map< long, StateDef >::iterator it;
 	char buf[256];
 
-	for (it = g_Charac.GetStateDef().begin(); it != g_Charac.GetStateDef().end(); ++it)
+	for (auto it = g_Charac.GetStateDef().begin(); it != g_Charac.GetStateDef().end(); ++it)
 	{
 		sprintf_s(buf, 256, "%d %s", it->first, it->second.GetDescription());
 
@@ -506,9 +505,9 @@ void CharacterEditor::FillGadgetStateDef()
 	SendMessage(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_COMBO_MOVE_HIT_PERSIST), CB_SETCURSEL, g_pStateDef->GetMoveHitPersist() ? 0 : 1, 0);
 
 	//Si state predefini on desactive certain gadget
-	for (int i = 0; i < sizeof(aStateDefId) / sizeof(int); i++)
+	for (int i : aStateDefId)
 	{
-		if (g_StateDefId == aStateDefId[i])
+		if (g_StateDefId == i)
 		{
 			//communState = true;
 			break;
@@ -568,11 +567,10 @@ void CharacterEditor::FillGadgetStateDef()
 		//on selectionne dans la liste les bones de collision
 		if (g_pStateDef)
 		{
-			int k;
-
-			for (unsigned int i = 0; i < g_pStateDef->GetCollisionAtt().size(); i++)
+			for (auto& i : g_pStateDef->GetCollisionAtt())
 			{
-				k = ListBox_FindString(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_LIST_HIERARCHY), 0, g_pStateDef->GetCollisionAtt().at(i).GetBoneName().c_str());
+				int k = ListBox_FindString(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_LIST_HIERARCHY), 0,
+					i.GetBoneName().c_str());
 				ListBox_SetSel(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_LIST_HIERARCHY), TRUE, k);
 			}
 		}
@@ -589,11 +587,10 @@ void CharacterEditor::FillGadgetStateDef()
 		//on selectionne dans la liste les bones de collision
 		if (g_pStateDef)
 		{
-			int k;
-
-			for (unsigned int i = 0; i < g_pStateDef->GetCollisionDef().size(); i++)
+			for (auto& i : g_pStateDef->GetCollisionDef())
 			{
-				k = ListBox_FindString(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_LIST_HIERARCHY), 0, g_pStateDef->GetCollisionDef().at(i).GetBoneName().c_str());
+				int k = ListBox_FindString(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_LIST_HIERARCHY), 0,
+					i.GetBoneName().c_str());
 				ListBox_SetSel(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_LIST_HIERARCHY), TRUE, k);
 			}
 		}
@@ -609,9 +606,8 @@ void CharacterEditor::FillGadgetStateDef()
 void CharacterEditor::FillListBoxButtonName(HWND hWnd_, std::vector<ButtonCombination::sCombination>& v_)
 {
 	std::string str;
-	std::vector<ButtonCombination::sCombination>::iterator it;
 
-	for (it = v_.begin(); it != v_.end(); ++it)
+	for (auto it = v_.begin(); it != v_.end(); ++it)
 	{
 		int nb = 0;
 
@@ -621,7 +617,7 @@ void CharacterEditor::FillListBoxButtonName(HWND hWnd_, std::vector<ButtonCombin
 
 			if ((it->button & n) == n)
 			{
-				if (str.size() > 0)
+				if (!str.empty())
 				{
 					str.append("+ ");
 				}
@@ -681,9 +677,7 @@ void CharacterEditor::FillListBoxButtonName(HWND hWnd_, std::vector<ButtonCombin
 //===================================================================================================
 void CharacterEditor::FillListBoxCommandName(HWND hWnd_, std::vector<ButtonCombination>& v_)
 {
-	std::vector<ButtonCombination>::iterator itCommand;
-
-	for (itCommand = v_.begin(); itCommand != v_.end(); ++itCommand)
+	for (auto itCommand = v_.begin(); itCommand != v_.end(); ++itCommand)
 	{
 		ListBox_AddString(hWnd_, itCommand->GetName());
 	}
@@ -693,10 +687,9 @@ void CharacterEditor::FillListBoxCommandName(HWND hWnd_, std::vector<ButtonCombi
 //===================================================================================================
 void CharacterEditor::DeleteCommandCombination(int index_)
 {
-	std::vector<ButtonCombination>::iterator it;
 	int i = 0;
 
-	for (it = g_Charac.GetCommand()->GetCommands()->begin(); it != g_Charac.GetCommand()->GetCommands()->end(); ++it)
+	for (auto it = g_Charac.GetCommand()->GetCommands()->begin(); it != g_Charac.GetCommand()->GetCommands()->end(); ++it)
 	{
 		if (i == index_)
 		{
@@ -711,11 +704,9 @@ void CharacterEditor::DeleteCommandCombination(int index_)
 //===================================================================================================
 void CharacterEditor::DeleteCommandButton(int index_, ButtonCombination* pCombi_)
 {
-	std::vector<ButtonCombination::sCombination>::iterator it;
-
 	int i = 0;
 
-	for (it = pCombi_->GetCombination()->begin(); it != pCombi_->GetCombination()->end(); ++it)
+	for (auto it = pCombi_->GetCombination()->begin(); it != pCombi_->GetCombination()->end(); ++it)
 	{
 		if (i == index_)
 		{
@@ -734,9 +725,9 @@ void CharacterEditor::FillListBoxStateControllerName(HWND hWnd_, std::vector<Sta
 
 	if (g_pStateDef)
 	{
-		for (auto it = v_.begin(); it != v_.end(); ++it)
+		for (auto& it : v_)
 		{
-			ListBox_AddString(hWnd_, (*it)->ToString().c_str());
+			ListBox_AddString(hWnd_, it->ToString().c_str());
 		}
 	}
 
@@ -747,9 +738,9 @@ void CharacterEditor::FillListBoxStateControllerName(HWND hWnd_, std::vector<Sta
 //===================================================================================================
 void CharacterEditor::FillListBoxTriggerName(HWND hWnd_, std::vector<Trigger>& v_)
 {
-	for (int i = 0; i < (int)v_.size(); i++)
+	for (auto& i : v_)
 	{
-		ListBox_AddString(hWnd_, v_.at(i).ToString().c_str());
+		ListBox_AddString(hWnd_, i.ToString().c_str());
 	}
 }
 
@@ -757,7 +748,7 @@ void CharacterEditor::FillListBoxTriggerName(HWND hWnd_, std::vector<Trigger>& v
 //===================================================================================================
 void CharacterEditor::DeleteStateDef(long id_)
 {
-	std::map<long, StateDef>::iterator it = g_Charac.GetStateDef().find(id_);
+	auto it = g_Charac.GetStateDef().find(id_);
 
 	if (it == g_Charac.GetStateDef().end())
 	{
@@ -774,7 +765,7 @@ void CharacterEditor::InitCharacterGadget()
 {
 	D3DXMatrixIdentity(&g_MatWorld);
 
-	if (g_Charac.GetCommand() == NULL)
+	if (g_Charac.GetCommand() == nullptr)
 	{
 		//g_Charac.Free();
 		g_Charac.SetCommandType(COMMAND_TYPE_PLAYER);
@@ -838,20 +829,20 @@ void CharacterEditor::InitCharacterGadget()
 //===================================================================================================
 void CharacterEditor::InitHierarchy(LPD3DXFRAME pFrame_)
 {
-	if (strlen(pFrame_->Name) > 0 && pFrame_->pFrameFirstChild != NULL)
+	if (strlen(pFrame_->Name) > 0 && pFrame_->pFrameFirstChild != nullptr)
 	{
-		if (pFrame_->pFrameFirstChild->pMeshContainer != NULL)
+		if (pFrame_->pFrameFirstChild->pMeshContainer != nullptr)
 		{
 			ListBox_AddString(GetDlgItem(g_aChildTab[CHILD_TAB_STATEDEF], IDC_LIST_HIERARCHY), pFrame_->Name);
 		}
 	}
 
-	if (pFrame_->pFrameSibling != NULL)
+	if (pFrame_->pFrameSibling != nullptr)
 	{
 		InitHierarchy(pFrame_->pFrameSibling);
 	}
 
-	if (pFrame_->pFrameFirstChild != NULL)
+	if (pFrame_->pFrameFirstChild != nullptr)
 	{
 		InitHierarchy(pFrame_->pFrameFirstChild);
 	}
@@ -875,7 +866,7 @@ void CharacterEditor::SelectStateDef(int sel_)
 		g_StateDefId = atoi(buf);
 		g_pStateDef = g_Charac.GetStateDef(g_StateDefId);
 
-		if (g_pStateDef != NULL)
+		if (g_pStateDef != nullptr)
 		{
 			FillGadgetStateDef();
 		}
@@ -886,15 +877,13 @@ void CharacterEditor::FillCBTriggerHelper(HWND hWnd_, HWND CBhWnd_)
 {
 	static bool bInit = false;
 
-	std::map< std::string, std::string>::iterator it;
-
 	if (bInit == false)
 	{
 		InitMaptriggerKeyWordHelper(g_MaptriggerKeyWordHelper);
 		bInit = true;
 	}
 
-	for (it = g_MaptriggerKeyWordHelper.begin(); it != g_MaptriggerKeyWordHelper.end(); ++it)
+	for (auto it = g_MaptriggerKeyWordHelper.begin(); it != g_MaptriggerKeyWordHelper.end(); ++it)
 	{
 		ComboBox_AddString(CBhWnd_, it->first.c_str());
 	}
@@ -902,7 +891,6 @@ void CharacterEditor::FillCBTriggerHelper(HWND hWnd_, HWND CBhWnd_)
 
 void CharacterEditor::FillStaticTextTriggerHelper(HWND LabelhWnd_, /*std::string str*/ int sel_)
 {
-	std::map< std::string, std::string>::iterator it;// = g_MaptriggerKeyWordHelper.find( str );
 	/*
 		if ( it != g_MaptriggerKeyWordHelper.end() )
 		{
@@ -913,7 +901,7 @@ void CharacterEditor::FillStaticTextTriggerHelper(HWND LabelhWnd_, /*std::string
 
 		}*/
 
-	for (it = g_MaptriggerKeyWordHelper.begin(); it != g_MaptriggerKeyWordHelper.end(); ++it)
+	for (auto it = g_MaptriggerKeyWordHelper.begin(); it != g_MaptriggerKeyWordHelper.end(); ++it)
 	{
 		if (sel_ == 0)
 		{
@@ -978,10 +966,9 @@ void InitMaptriggerKeyWordHelper(std::map< std::string, std::string>& map_)
 
 void CharacterEditor::FillStateDefListHelper(HWND hWnd_)
 {
-	std::map< long, StateDef >::iterator it;
 	char buf[256];
 
-	for (it = g_Charac.GetStateDef().begin(); it != g_Charac.GetStateDef().end(); ++it)
+	for (auto it = g_Charac.GetStateDef().begin(); it != g_Charac.GetStateDef().end(); ++it)
 	{
 		sprintf_s(buf, 256, "%d %s", it->first, it->second.GetDescription());
 
@@ -1044,17 +1031,17 @@ int CharacterEditor::MsgInitTabControlDialog(HWND hDlg)
 	RECT rcTabCtrl;
 	GetWindowRect(hTabCtrl, &rcTabCtrl);
 	SendMessage(hTabCtrl, TCM_ADJUSTRECT, FALSE, (LPARAM)&rcTabCtrl);
-	MapWindowPoints(NULL, hDlg, (LPPOINT)&rcTabCtrl, 2);
+	MapWindowPoints(nullptr, hDlg, (LPPOINT)&rcTabCtrl, 2);
 
 	// on place les dialogue enfants au centre de ce rectangle
-	for (int i = 0; i < MAX_CHILD_TAB; i++)
+	for (auto& i : g_aChildTab)
 	{
 		// taille du dialogue enfant
 		RECT rcChildTab;
-		GetWindowRect(g_aChildTab[i], &rcChildTab);
+		GetWindowRect(i, &rcChildTab);
 		int x = (rcTabCtrl.left + rcTabCtrl.right) / 2 - (rcChildTab.right - rcChildTab.left) / 2;
 		int y = (rcTabCtrl.top + rcTabCtrl.bottom) / 2 - (rcChildTab.bottom - rcChildTab.top) / 2;
-		SetWindowPos(g_aChildTab[i], NULL, x, y, 0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_NOREDRAW);
+		SetWindowPos(i, nullptr, x, y, 0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_NOREDRAW);
 	}
 
 	// affichage de l'onglet un et mise à jour

@@ -44,15 +44,15 @@ namespace GameEngine
 	void MemoryManager::ReportLeaks()
 	{
 		std::size_t TotalSize = 0;
-		for (TBlockMap::iterator i = m_Blocks.begin(); i != m_Blocks.end(); ++i)
+		for (auto& m_Block : m_Blocks)
 		{
-			TotalSize += i->second.Size;
+			TotalSize += m_Block.second.Size;
 
-			m_File << "-> 0x" << i->first
-				<< " | " << std::setw(7) << std::setfill(' ') << static_cast<int>(i->second.Size) << " octets"
-				<< " | " << /*i->second.File.Filename()*/i->second.File.c_str() << " (" << i->second.Line << ")" << std::endl;
+			m_File << "-> 0x" << m_Block.first
+				<< " | " << std::setw(7) << std::setfill(' ') << static_cast<int>(m_Block.second.Size) << " octets"
+				<< " | " << /*i->second.File.Filename()*/m_Block.second.File.c_str() << " (" << m_Block.second.Line << ")" << std::endl;
 
-			free(i->first);
+			free(m_Block.first);
 		}
 
 		m_File << std::endl << std::endl << "-- "
@@ -85,7 +85,7 @@ namespace GameEngine
 
 	void MemoryManager::Free(void* Ptr, bool Array)
 	{
-		TBlockMap::iterator It = m_Blocks.find(Ptr);
+		auto It = m_Blocks.find(Ptr);
 
 		if (It == m_Blocks.end())
 		{

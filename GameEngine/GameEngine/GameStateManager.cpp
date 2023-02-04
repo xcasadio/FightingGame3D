@@ -42,7 +42,7 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	void IGameState::SetInitialised(bool val_)
+	void IGameState::SetInitialized(bool val_)
 	{
 		m_Initialised = val_;
 	}
@@ -68,8 +68,10 @@ namespace GameEngine
 	 */
 	bool IGameState::AddState(IGameState* pState_)
 	{
-		if (pState_ == NULL)
+		if (pState_ == nullptr)
+		{
 			return false;
+		}
 
 		GameCore::Instance().GetGameStateManager()->Push(pState_);
 		return true;
@@ -81,11 +83,9 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	cGameStateManager::~cGameStateManager()
+	GameStateManager::~GameStateManager()
 	{
-		std::list<IGameState*>::iterator it;
-
-		for (it = m_ListGameState.begin(); it != m_ListGameState.end(); ++it)
+		for (auto it = m_ListGameState.begin(); it != m_ListGameState.end(); ++it)
 		{
 			delete (*it);
 		}
@@ -96,12 +96,12 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	bool cGameStateManager::Run()
+	bool GameStateManager::Run()
 	{
 		Graphic& graphic = GameCore::Instance().GetGraphic();
-		float time = graphic.FrameTime() / 1000.0f;
+		const float time = static_cast<float>(graphic.FrameTime()) / 1000.0f;
 
-		if (m_ListGameState.size() > 0)
+		if (!m_ListGameState.empty())
 		{
 			IGameState* c = m_ListGameState.back();
 
@@ -118,7 +118,7 @@ namespace GameEngine
 						return Pop();
 					}
 
-					c->SetInitialised(true);
+					c->SetInitialized(true);
 				}
 
 				//TODO : refaire
@@ -156,7 +156,9 @@ namespace GameEngine
 			}
 		}
 		else
+		{
 			return false;
+		}
 
 		//return Pop();
 		return true;
@@ -165,15 +167,17 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	bool cGameStateManager::Pop()
+	bool GameStateManager::Pop()
 	{
 		IGameState* c = m_ListGameState.back();
 		delete c;
 
 		m_ListGameState.pop_back();
 
-		if (m_ListGameState.size() == 0)
+		if (m_ListGameState.empty())
+		{
 			return false;
+		}
 
 		return true;
 	}
@@ -181,7 +185,7 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	void cGameStateManager::Push(IGameState* state)
+	void GameStateManager::Push(IGameState* state)
 	{
 		m_ListGameState.push_back(state);
 	}

@@ -37,9 +37,7 @@ namespace GameEngine
 	 */
 	cParticleSystem* cParticleSystemManager::GetParticleSystem(DWORD id_)
 	{
-		std::vector<cParticleSystem*>::iterator it;
-
-		for (it = m_ParticleSystem.begin(); it != m_ParticleSystem.end(); ++it)
+		for (auto it = m_ParticleSystem.begin(); it != m_ParticleSystem.end(); ++it)
 		{
 			if ((*it)->GetId() == id_)
 			{
@@ -47,7 +45,7 @@ namespace GameEngine
 			}
 		}
 
-		return NULL;
+		return nullptr;
 	}
 
 	/**
@@ -55,9 +53,7 @@ namespace GameEngine
 	 */
 	void cParticleSystemManager::Render()
 	{
-		std::vector<cParticleSystem*>::iterator it;
-
-		for (it = m_ParticleSystem.begin(); it != m_ParticleSystem.end(); ++it)
+		for (auto it = m_ParticleSystem.begin(); it != m_ParticleSystem.end(); ++it)
 		{
 			(*it)->Render();
 		}
@@ -68,9 +64,7 @@ namespace GameEngine
 	 */
 	void cParticleSystemManager::Update(float time_)
 	{
-		std::vector<cParticleSystem*>::iterator it;
-
-		for (it = m_ParticleSystem.begin(); it != m_ParticleSystem.end(); ++it)
+		for (auto it = m_ParticleSystem.begin(); it != m_ParticleSystem.end(); ++it)
 		{
 			(*it)->Update(time_);
 		}
@@ -81,9 +75,7 @@ namespace GameEngine
 	 */
 	void cParticleSystemManager::Clear()
 	{
-		std::vector<cParticleSystem*>::iterator it;
-
-		for (it = m_ParticleSystem.begin(); it != m_ParticleSystem.end(); ++it)
+		for (auto it = m_ParticleSystem.begin(); it != m_ParticleSystem.end(); ++it)
 		{
 			delete (*it);
 		}
@@ -99,7 +91,7 @@ namespace GameEngine
 	 */
 	cParticleSystem::cParticleSystem(void)
 	{
-		m_pVisualObject = NULL;
+		m_pVisualObject = nullptr;
 
 		m_ColorStart.a = m_ColorEnd.a = 1.0;
 		m_ColorStart.r = m_ColorEnd.r = 1.0;
@@ -171,8 +163,8 @@ namespace GameEngine
 			delete m_pVisualObject;
 		}
 
-		cParticleBillBoard* billBoard = NULL;
-		MeshX* meshX = NULL;
+		cParticleBillBoard* billBoard = nullptr;
+		MeshX* meshX = nullptr;
 
 		switch (type)
 		{
@@ -211,7 +203,7 @@ namespace GameEngine
 	 */
 	std::ostream& cParticleSystem::operator >> (std::ostream& os_)
 	{
-		if (m_pVisualObject == NULL)
+		if (m_pVisualObject == nullptr)
 		{
 			Window::Error(false, "cParticleSystem::operator << m_pVisualObject == NULL");
 			return os_;
@@ -238,8 +230,8 @@ namespace GameEngine
 
 		//type
 		int type = -1;
-		cParticleBillBoard* billBoard = NULL;
-		MeshX* meshX = NULL;
+		cParticleBillBoard* billBoard = nullptr;
+		MeshX* meshX = nullptr;
 
 		if ((billBoard = dynamic_cast<cParticleBillBoard*> (m_pVisualObject)))
 		{
@@ -338,18 +330,16 @@ namespace GameEngine
 	 */
 	void cParticleSystem::Update(float time_)
 	{
-		std::vector<sParticle>::iterator it;
 		unsigned int pos_ = 0;
 		bool finish = false;
 		DWORD tick = GetTickCount();
-		DWORD nbParticle;
 
 		//TODO : pas sur que la condition soit bien formulé avec le continuous
 		if (m_Particles.size() < m_NbParticleMax && (m_bMaxAttained == false || m_bContinuous))
 		{
 			//TODO : taux d'erreur, recuperer les les nombres apres la virgules et les additionner
 			//sinon la creation ne marche pas pour les petits nombres
-			nbParticle = (DWORD)((float)m_EmissionPerSec * time_ + m_fEmissionPerSecError);
+			DWORD nbParticle = (DWORD)((float)m_EmissionPerSec * time_ + m_fEmissionPerSecError);
 
 			//il pris en compte quand il sup à 1.0
 			//alors on decremente pour juste garder le taux d'erreur restant
@@ -366,7 +356,9 @@ namespace GameEngine
 			}
 		}
 		else
+		{
 			m_bMaxAttained = true;
+		}
 
 		//verif system life si non continous
 		if (m_bContinuous == false && GetTickCount() - m_Timer >= m_ParticleSystemLife)
@@ -385,10 +377,12 @@ namespace GameEngine
 		{
 			finish = true;
 
-			if (m_Particles.size() == 0 || pos_ >= m_Particles.size())
+			if (m_Particles.empty() || pos_ >= m_Particles.size())
+			{
 				break;
+			}
 
-			for (it = m_Particles.begin() + pos_; it != m_Particles.end(); ++it)
+			for (auto it = m_Particles.begin() + pos_; it != m_Particles.end(); ++it)
 			{
 				pos_++;
 
@@ -467,9 +461,13 @@ namespace GameEngine
 		particule.life = GetTickCount();
 
 		if (m_LifeMax - m_LifeMin != 0)
+		{
 			particule.lifeEnd = m_LifeMin + rand() % (int)(m_LifeMax - m_LifeMin);
+		}
 		else
+		{
 			particule.lifeEnd = m_LifeMin;
+		}
 
 		particule.speed = (float)(m_fSpeedMin + (((float)rand() / ((float)RAND_MAX + 1.0)) * m_fSpeedMax));
 

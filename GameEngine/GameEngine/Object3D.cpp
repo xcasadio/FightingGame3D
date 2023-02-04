@@ -19,31 +19,31 @@ namespace GameEngine
 	}
 	*/
 
-	
+
 	Object3D::Object3D(void)
 	{
-		m_pMesh = NULL;
+		m_pMesh = nullptr;
 	}
 
 	Object3D::~Object3D(void)
 	{
 		m_pMesh->Release();
-		m_pMesh = NULL;
+		m_pMesh = nullptr;
 	}
 
-	bool Object3D::Load( const char fileName_ )
+	bool Object3D::Load(const char fileName_)
 	{
 		return false;
 	}
-	
+
 	void Object3D::Render()
 	{
-		
+
 	}
-/*
-	WorldPosition &cObject3D::GetWorldPosition()
-	{
-		return m_PosWorld;
-	}
-*/
+	/*
+		WorldPosition &cObject3D::GetWorldPosition()
+		{
+			return m_PosWorld;
+		}
+	*/
 } // fin namespace GameEngine

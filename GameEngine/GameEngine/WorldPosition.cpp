@@ -11,21 +11,21 @@ namespace GameEngine
 	WorldPosition::WorldPosition()
 	{
 		m_Billboard = false;
-		m_matCombine1 = m_matCombine2 = NULL;
+		m_matCombine1 = m_matCombine2 = nullptr;
 
-		Move(0.0f,0.0f,0.0f);
-		Rotate(0.0f,0.0f,0.0f);
+		Move(0.0f, 0.0f, 0.0f);
+		Rotate(0.0f, 0.0f, 0.0f);
 		Scale(1.0f, 1.0f, 1.0f);
 
 		Update();
 	}
 
-	void WorldPosition::operator = (const WorldPosition &DestPos)
+	void WorldPosition::operator = (const WorldPosition& DestPos)
 	{
 		Copy(DestPos);
 	}
 
-	bool WorldPosition::Copy(const WorldPosition &DestPos)
+	bool WorldPosition::Copy(const WorldPosition& DestPos)
 	{
 		Move(DestPos.m_XPos, DestPos.m_YPos, DestPos.m_ZPos);
 		Rotate(DestPos.m_XRotation, DestPos.m_YRotation, DestPos.m_ZRotation);
@@ -48,7 +48,7 @@ namespace GameEngine
 
 	bool WorldPosition::MoveRel(float XAdd, float YAdd, float ZAdd)
 	{
-	  return Move(m_XPos + XAdd, m_YPos + YAdd, m_ZPos + ZAdd);
+		return Move(m_XPos + XAdd, m_YPos + YAdd, m_ZPos + ZAdd);
 	}
 
 	bool WorldPosition::Rotate(float XRot, float YRot, float ZRot)
@@ -108,16 +108,16 @@ namespace GameEngine
 
 		// Apply billboard matrix
 		if(m_Billboard == true)
-			D3DXMatrixMultiply(&m_matWorld, &m_matWorld, &matTransposed);  
+			D3DXMatrixMultiply(&m_matWorld, &m_matWorld, &matTransposed);
 
 		// Combine with translation matrix
 		D3DXMatrixMultiply(&m_matWorld, &m_matWorld, &m_matTranslation);
 
 		// Combine with combined matrices (if any)
-		if(m_matCombine1 != NULL) 
+		if(m_matCombine1 != NULL)
 			D3DXMatrixMultiply(&m_matWorld, &m_matWorld, m_matCombine1);
 
-		if(m_matCombine2 != NULL) 
+		if(m_matCombine2 != NULL)
 			D3DXMatrixMultiply(&m_matWorld, &m_matWorld, m_matCombine2);
 
 		return true;
@@ -126,15 +126,15 @@ namespace GameEngine
 		D3DXMATRIX matView, matTransposed;
 
 		// Setup billboarding matrix
-		if(m_Billboard == true)
+		if (m_Billboard == true)
 		{
 			D3DXMatrixIdentity(&matView);
 			D3DXMatrixIdentity(&matTransposed);
 
-			if ( FAILED(GameCore::Instance().GetGraphic().GetDeviceCOM()->GetTransform(D3DTS_VIEW, &matView) ) )
+			if (FAILED(GameCore::Instance().GetGraphic().GetDeviceCOM()->GetTransform(D3DTS_VIEW, &matView)))
 			{
 #ifdef _DEBUG
-				Window::Error( false, "Erreur WorldPosition::Update() GetTransform(D3DTS_VIEW, &matView)");
+				Window::Error(false, "Erreur WorldPosition::Update() GetTransform(D3DTS_VIEW, &matView)");
 				exit(-1);
 #endif
 			}
@@ -159,11 +159,15 @@ namespace GameEngine
 			D3DXMatrixMultiply(&m_matWorld, &m_matWorld, &m_matTranslation);
 
 			// TODO : faire pour billboard ???
-			if(m_matCombine1 != NULL) 
+			if (m_matCombine1 != nullptr)
+			{
 				D3DXMatrixMultiply(&m_matWorld, &m_matWorld, m_matCombine1);
+			}
 
-			if(m_matCombine2 != NULL) 
+			if (m_matCombine2 != nullptr)
+			{
 				D3DXMatrixMultiply(&m_matWorld, &m_matWorld, m_matCombine2);
+			}
 		}
 
 		return true;
@@ -175,19 +179,19 @@ namespace GameEngine
 		return true;
 	}
 
-	D3DXMATRIX *WorldPosition::GetMatrix()
+	D3DXMATRIX* WorldPosition::GetMatrix()
 	{
 		Update();
 		return &m_matWorld;
 	}
 
-	bool WorldPosition::SetCombineMatrix1(D3DXMATRIX *Matrix)
+	bool WorldPosition::SetCombineMatrix1(D3DXMATRIX* Matrix)
 	{
 		m_matCombine1 = Matrix;
 		return true;
 	}
 
-	bool WorldPosition::SetCombineMatrix2(D3DXMATRIX *Matrix)
+	bool WorldPosition::SetCombineMatrix2(D3DXMATRIX* Matrix)
 	{
 		m_matCombine2 = Matrix;
 		return true;

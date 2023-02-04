@@ -150,18 +150,18 @@ void AfficheBufferButton(FontDX& font_, BufferButton& button_)
 
 	int x = 0;
 
-	for (std::deque<BufferButton::sBufferButton>::iterator it = button_.GetBuffer().begin(); it != button_.GetBuffer().end(); ++it)
+	for (auto& it : button_.GetBuffer())
 	{
-		sprintf_s(buf, "%d", it->buttonPressed);
+		sprintf_s(buf, "%d", it.buttonPressed);
 		font_.Print(buf, x, 550);
 
-		sprintf_s(buf, "%d", it->buttonHeld);
+		sprintf_s(buf, "%d", it.buttonHeld);
 		font_.Print(buf, x, 560);
 
-		sprintf_s(buf, "%d", it->buttonReleased);
+		sprintf_s(buf, "%d", it.buttonReleased);
 		font_.Print(buf, x, 570);
 
-		sprintf_s(buf, "%d", it->time);
+		sprintf_s(buf, "%d", it.time);
 		font_.Print(buf, x, 580);
 
 		x += 60;

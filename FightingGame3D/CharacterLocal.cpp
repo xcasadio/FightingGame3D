@@ -93,7 +93,9 @@ bool CharacterLocal::LoadSpecial(TiXmlElement* pElementRoot)
 	TiXmlElement* pElement = pElementRoot->FirstChildElement("FileDef");
 
 	if (!pElement)
+	{
 		return false;
+	}
 
 	const char* fileName = pElement->Attribute("fileName");
 
@@ -183,7 +185,7 @@ int CharacterLocal::Read(std::istream& is_)
 	for (size_t i = 0; i < t; i++)
 	{
 		is_.read((char*)&k, sizeof(k));
-		StateDef* pStateDef = new StateDef;
+		auto pStateDef = new StateDef;
 		pStateDef->Read(is_);
 		m_MapStateDef[k] = *pStateDef;
 		delete pStateDef;
@@ -239,10 +241,10 @@ std::ostream& CharacterLocal::operator >> (std::ostream& os_)
 	t = m_MapStateDef.size();
 	os_.write((char*)&t, sizeof(size_t));
 
-	for (std::map<long, StateDef>::iterator it = m_MapStateDef.begin(); it != m_MapStateDef.end(); ++it)
+	for (auto& it : m_MapStateDef)
 	{
-		os_.write((char*)&it->first, sizeof(it->first));
-		it->second >> os_;
+		os_.write((char*)&it.first, sizeof(it.first));
+		it.second >> os_;
 	}
 
 	return os_;
@@ -367,7 +369,7 @@ float CharacterLocal::GetParameterValue(std::string& str_)
 		Window::Error(false, "cCharacterLocal::GetParameterValue() : Le statedef %d n'existe pas", m_CurrentStateDef);
 	}
 
-	if (str_.size() == 0)
+	if (str_.empty())
 	{
 		Window::Error(false, "cCharacterLocal::GetParameterValue() : taille string str == 0");
 		return 0.0f;
@@ -608,10 +610,8 @@ void CharacterLocal::CheckState(StateDef& state_)
 {
 	auto stateController = state_.GetStateController();
 
-	for (auto it = stateController.begin(); it != stateController.end(); ++it)
+	for (auto controller : stateController)
 	{
-		auto* controller = *it;
-
 		if (controller->Check())
 		{
 			switch (controller->GetType())
@@ -737,9 +737,9 @@ void CharacterLocal::Init()
 	m_PrevStateDefId = m_CurrentStateDefId;
 	m_meshX.SetAnimationSet(m_CurrentStateDef.GetAnimId());
 
-	for (std::map<long, StateDef>::iterator it = m_MapStateDef.begin(); it != m_MapStateDef.end(); ++it)
+	for (auto& it : m_MapStateDef)
 	{
-		it->second.SetTriggersCharacterAdr(this);
+		it.second.SetTriggersCharacterAdr(this);
 	}
 
 	//D3DXVec3Cross( &m_vRight, &m_vDir, &m_vUp );
@@ -1019,11 +1019,11 @@ void CharacterLocal::CheckUsualParameters(float time_)
  */
 StateController* CharacterLocal::GetController(eStateControllerType type_)
 {
-	for (auto it = m_CurrentStateDef.GetStateController().begin(); it != m_CurrentStateDef.GetStateController().end(); ++it)
+	for (auto& it : m_CurrentStateDef.GetStateController())
 	{
-		if ((*it)->GetType() == type_ && (*it)->IsActive())
+		if (it->GetType() == type_ && it->IsActive())
 		{
-			return &**it;
+			return &*it;
 		}
 	}
 
@@ -1038,22 +1038,22 @@ void CharacterLocal::InitOBB()
 	std::vector<std::string>::iterator itName;
 	LPD3DXFRAME pFrame = nullptr;
 
-	for (std::map<long, StateDef>::iterator it = m_MapStateDef.begin(); it != m_MapStateDef.end(); ++it)
+	for (auto& it : m_MapStateDef)
 	{
-		for (itName = it->second.GetCollisionAttBonesName().begin(); itName != it->second.GetCollisionAttBonesName().end(); ++itName)
+		for (itName = it.second.GetCollisionAttBonesName().begin(); itName != it.second.GetCollisionAttBonesName().end(); ++itName)
 		{
 			pFrame = D3DXFrameFind(m_meshX.GetFrameRoot(), itName->c_str());
-			it->second.AddCollisionAtt(pFrame);
+			it.second.AddCollisionAtt(pFrame);
 		}
 
-		for (itName = it->second.GetCollisionDefBonesName().begin(); itName != it->second.GetCollisionDefBonesName().end(); ++itName)
+		for (itName = it.second.GetCollisionDefBonesName().begin(); itName != it.second.GetCollisionDefBonesName().end(); ++itName)
 		{
 			pFrame = D3DXFrameFind(m_meshX.GetFrameRoot(), itName->c_str());
-			it->second.AddCollisionDef(pFrame);
+			it.second.AddCollisionDef(pFrame);
 		}
 
-		it->second.GetCollisionAttBonesName().clear();
-		it->second.GetCollisionDefBonesName().clear();
+		it.second.GetCollisionAttBonesName().clear();
+		it.second.GetCollisionDefBonesName().clear();
 	}
 }
 
@@ -1178,7 +1178,7 @@ void CharacterLocal::ApplyStandardDisplacement(eCommandId id_)
  */
 bool CharacterLocal::CheckGetParameterValue(std::string& str_)
 {
-	if (str_.size() == 0)
+	if (str_.empty())
 	{
 		return false;
 	}
@@ -1956,7 +1956,9 @@ void CharacterLocal::AddStateDef(DWORD id_, StateDef& stateDef_)
 	auto it = m_MapStateDef.find(id_);
 
 	if (it != m_MapStateDef.end())
+	{
 		Window::Error(false, "Le stateDef %d deja existant!", id_);
+	}
 #endif
 
 	m_MapStateDef[id_] = stateDef_;

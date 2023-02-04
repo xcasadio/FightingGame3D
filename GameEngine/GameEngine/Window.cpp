@@ -17,8 +17,8 @@ namespace GameEngine
 		m_Width = 800;
 		m_Height = 600;
 		m_Style = WS_OVERLAPPEDWINDOW;
-		m_hWnd = NULL;
-		m_hInst = NULL;
+		m_hWnd = nullptr;
+		m_hInst = nullptr;
 
 		sprintf_s(m_Class, MAX_PATH, "WindowClass%d", nb);
 		nb++;
@@ -31,12 +31,12 @@ namespace GameEngine
 		m_wcex.cbClsExtra = 0L;
 		m_wcex.cbWndExtra = 0L;
 		m_wcex.hInstance = m_hInst;
-		m_wcex.hIcon = NULL;
-		m_wcex.hCursor = NULL;
-		m_wcex.hbrBackground = NULL;
-		m_wcex.lpszMenuName = NULL;
+		m_wcex.hIcon = nullptr;
+		m_wcex.hCursor = nullptr;
+		m_wcex.hbrBackground = nullptr;
+		m_wcex.lpszMenuName = nullptr;
 		m_wcex.lpszClassName = m_Class;
-		m_wcex.hIconSm = NULL;
+		m_wcex.hIconSm = nullptr;
 	}
 
 	Window::~Window()
@@ -46,12 +46,16 @@ namespace GameEngine
 
 	bool Window::Create(unsigned int width_, unsigned int height_, const char* caption, bool windowed, HWND parent)
 	{
-		m_hInst = GetModuleHandle(NULL);
+		m_hInst = GetModuleHandle(nullptr);
 
-		if (caption != NULL)
+		if (caption != nullptr)
+		{
 			strcpy_s(m_Caption, MAX_PATH, caption);
+		}
 		else
+		{
 			strcpy_s(m_Caption, MAX_PATH, "Title");
+		}
 
 		if (!RegisterClassEx(&m_wcex))
 		{
@@ -70,10 +74,10 @@ namespace GameEngine
 			m_Style,
 			m_XPos, m_YPos,
 			m_Width, m_Height,
-			parent, NULL, m_hInst, NULL);
+			parent, nullptr, m_hInst, nullptr);
 
 		// return on error creating the window
-		if (m_hWnd == NULL)
+		if (m_hWnd == nullptr)
 		{
 			Window::Error(true, "m_hWnd == NULL");
 			return false;
@@ -150,9 +154,13 @@ namespace GameEngine
 
 		// Build the message box caption based on fatal flag
 		if (fatal_ == false)
+		{
 			strcpy_s(CaptionText, 16, "Error");
+		}
 		else
+		{
 			strcpy_s(CaptionText, 16, "Fatal Error");
+		}
 
 		// Build variable text buffer
 		va_start(valist, text_);
@@ -160,7 +168,7 @@ namespace GameEngine
 		va_end(valist);
 
 		// Display the message box
-		MessageBox(NULL, ErrorText, CaptionText, MB_OK | MB_ICONEXCLAMATION);
+		MessageBox(nullptr, ErrorText, CaptionText, MB_OK | MB_ICONEXCLAMATION);
 
 		// Post a quit message if error was fatal
 		if (fatal_ == true)

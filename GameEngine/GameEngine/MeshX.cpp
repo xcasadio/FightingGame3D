@@ -19,15 +19,15 @@
 #include "DebugEngine/DebugNew.h"
 
 namespace GameEngine
-{	
+{
 	/**
 	 *
 	 */
 	MeshX::MeshX(void)
 	{
-		m_pMesh          = NULL; // Our mesh object in sysmem
-		m_pMeshMaterials = NULL; // Materials for our mesh
-		m_pMeshTextures  = NULL; // Textures for our mesh
+		m_pMesh = nullptr; // Our mesh object in sysmem
+		m_pMeshMaterials = nullptr; // Materials for our mesh
+		m_pMeshTextures = nullptr; // Textures for our mesh
 		m_dwNumMaterials = 0L;   // Number of mesh materials
 		m_bIsLoaded = false;
 
@@ -50,30 +50,30 @@ namespace GameEngine
 	 * @is flux d'entrée
 	 * @return le nombre d'octet lu
 	 */
-	int MeshX::Read( std::istream &is_ )
+	int MeshX::Read(std::istream& is_)
 	{
 		IParticleVisualObject::Read(is_);
 
 		int octetRead = is_.tellg();
 		SIZE_T n = 0;
 
-		is_.read( (char *) &n, sizeof(n) );
+		is_.read((char*)&n, sizeof(n));
 
-		char *buf = new char[n];
+		auto buf = new char[n];
 
-		is_.read( buf, sizeof(char) * n );
+		is_.read(buf, sizeof(char) * n);
 
-		std::string str = MediaPathManager::Instance().FindMedia( buf );
+		std::string str = MediaPathManager::Instance().FindMedia(buf);
 
-		if ( Load( buf ) == false )
+		if (Load(buf) == false)
 		{
-			Window::Error( false, "MeshX::Read() : Load( buf )" );
+			Window::Error(false, "MeshX::Read() : Load( buf )");
 		}
 
 		delete[] buf;
-		buf = NULL;
+		buf = nullptr;
 
-		octetRead = (int) is_.tellg() - octetRead;
+		octetRead = (int)is_.tellg() - octetRead;
 		return octetRead;
 	}
 
@@ -81,19 +81,19 @@ namespace GameEngine
 	 * @os flux de sortie
 	 * @return le meme flux modifié
 	 */
-	std::ostream &MeshX::operator >> ( std::ostream &os_ )
+	std::ostream& MeshX::operator >> (std::ostream& os_)
 	{
 		IParticleVisualObject::operator >> (os_);
 
 		SIZE_T n = GetName().size() + 1;
-		os_.write( (char *) &n, sizeof(n) );
+		os_.write((char*)&n, sizeof(n));
 
-		std::string str = cStringUtilities::GetFileName( GetName() );
+		std::string str = cStringUtilities::GetFileName(GetName());
 
-		os_.write( (char *) str.c_str(), sizeof(char) * (n - 1) );
+		os_.write((char*)str.c_str(), sizeof(char) * (n - 1));
 
 		char c = '\0';
-		os_.write( (char *) &c, sizeof(char) );
+		os_.write((char*)&c, sizeof(char));
 
 		return os_;
 	}
@@ -101,48 +101,48 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	bool MeshX::Load(const char *fileName)
+	bool MeshX::Load(const char* fileName)
 	{
 		LPD3DXBUFFER pD3DXMtrlBuffer;
-		Graphic *graphic = &GameCore::Instance().GetGraphic();
+		Graphic* graphic = &GameCore::Instance().GetGraphic();
 
 		Free();
 
 		// Load the mesh from the specified file
-		if( FAILED( D3DXLoadMeshFromX( fileName, D3DXMESH_SYSTEMMEM, 
-									   graphic->GetDeviceCOM(), NULL, 
-									   &pD3DXMtrlBuffer, NULL, &m_dwNumMaterials, 
-									   &m_pMesh ) ) )
+		if (FAILED(D3DXLoadMeshFromX(fileName, D3DXMESH_SYSTEMMEM,
+			graphic->GetDeviceCOM(), NULL,
+			&pD3DXMtrlBuffer, NULL, &m_dwNumMaterials,
+			&m_pMesh)))
 		{
 			Free();
-			Window::Error( false, "Could not find file for MeshX %s", fileName);
+			Window::Error(false, "Could not find file for MeshX %s", fileName);
 			return false;
 		}
 
 		// We need to extract the material properties and texture names from the 
 		// pD3DXMtrlBuffer
-		D3DXMATERIAL* d3dxMaterials = (D3DXMATERIAL*)pD3DXMtrlBuffer->GetBufferPointer();
+		auto d3dxMaterials = (D3DXMATERIAL*)pD3DXMtrlBuffer->GetBufferPointer();
 		m_pMeshMaterials = new D3DMATERIAL9[m_dwNumMaterials];
 
-		if( m_pMeshMaterials == NULL )
+		if (m_pMeshMaterials == nullptr)
 		{
 			pD3DXMtrlBuffer->Release();
 			Free();
-			Window::Error( false, "MeshX::Load() : Out of memory, materials");
+			Window::Error(false, "MeshX::Load() : Out of memory, materials");
 			return false/*E_OUTOFMEMORY*/;
 		}
 
-		m_pMeshTextures  = new LPDIRECT3DTEXTURE9[m_dwNumMaterials];
+		m_pMeshTextures = new LPDIRECT3DTEXTURE9[m_dwNumMaterials];
 
-		if( m_pMeshTextures == NULL )
+		if (m_pMeshTextures == nullptr)
 		{
 			pD3DXMtrlBuffer->Release();
 			Free();
-			Window::Error( false, "MeshX::Load() : Out of memory, textures");
+			Window::Error(false, "MeshX::Load() : Out of memory, textures");
 			return false/*E_OUTOFMEMORY*/;
 		}
 
-		for( DWORD i=0; i<m_dwNumMaterials; i++ )
+		for (DWORD i = 0; i < m_dwNumMaterials; i++)
 		{
 			// Copy the material
 			m_pMeshMaterials[i] = d3dxMaterials[i].MatD3D;
@@ -150,23 +150,23 @@ namespace GameEngine
 			// Set the ambient color for the material (D3DX does not do this)
 			m_pMeshMaterials[i].Ambient = m_pMeshMaterials[i].Diffuse;
 
-			m_pMeshTextures[i] = NULL;
+			m_pMeshTextures[i] = nullptr;
 
-			if( d3dxMaterials[i].pTextureFilename != NULL && 
-				lstrlenA( d3dxMaterials[i].pTextureFilename ) > 0 )
+			if (d3dxMaterials[i].pTextureFilename != nullptr &&
+				lstrlenA(d3dxMaterials[i].pTextureFilename) > 0)
 			{
 				// On ajoute le chemin complet au nom des textures
-				std::string str = cStringUtilities::GetFileName( d3dxMaterials[i].pTextureFilename );
-				str = MediaPathManager::Instance().FindMedia( str.c_str() );
+				std::string str = cStringUtilities::GetFileName(d3dxMaterials[i].pTextureFilename);
+				str = MediaPathManager::Instance().FindMedia(str.c_str());
 
 				// Create the texture
-				if( FAILED( D3DXCreateTextureFromFileA( graphic->GetDeviceCOM(), 
-													/*d3dxMaterials[i].pTextureFilename*/str.c_str(), 
-													&m_pMeshTextures[i] ) ) )
+				if (FAILED(D3DXCreateTextureFromFileA(graphic->GetDeviceCOM(),
+					/*d3dxMaterials[i].pTextureFilename*/str.c_str(),
+					&m_pMeshTextures[i])))
 				{
 					pD3DXMtrlBuffer->Release();
 					Free();
-					Window::Error( false, "MeshX::Load() :c ould not find texture map %s", str.c_str());
+					Window::Error(false, "MeshX::Load() :c ould not find texture map %s", str.c_str());
 					return false;
 				}
 			}
@@ -193,37 +193,37 @@ namespace GameEngine
 	 */
 	void MeshX::Render()
 	{
-		Render( NULL, true);
+		Render(nullptr, true);
 	}
 
 	/**
 	 *
 	 */
-	void MeshX::Render( D3DMATERIAL9 *pMat_, bool bDrawTexture_)
+	void MeshX::Render(D3DMATERIAL9* pMat_, bool bDrawTexture_)
 	{
-		Graphic *graphic = &GameCore::Instance().GetGraphic();
+		Graphic* graphic = &GameCore::Instance().GetGraphic();
 
-		if ( pMat_ != NULL )
+		if (pMat_ != nullptr)
 		{
-			graphic->GetDeviceCOM()->SetMaterial( pMat_ );
+			graphic->GetDeviceCOM()->SetMaterial(pMat_);
 		}
 
-		for( DWORD i=0; i<m_dwNumMaterials; i++ )
+		for (DWORD i = 0; i < m_dwNumMaterials; i++)
 		{
-			if ( pMat_ == NULL )
+			if (pMat_ == nullptr)
 			{
-				graphic->GetDeviceCOM()->SetMaterial( &m_pMeshMaterials[i] );
+				graphic->GetDeviceCOM()->SetMaterial(&m_pMeshMaterials[i]);
 			}
-			
-			if ( bDrawTexture_ )
+
+			if (bDrawTexture_)
 			{
-				graphic->GetDeviceCOM()->SetTexture( 0, m_pMeshTextures[i] );
+				graphic->GetDeviceCOM()->SetTexture(0, m_pMeshTextures[i]);
 			}
-	    
-			m_pMesh->DrawSubset( i );
+
+			m_pMesh->DrawSubset(i);
 		}
 
-		graphic->GetDeviceCOM()->SetTexture( 0, NULL );
+		graphic->GetDeviceCOM()->SetTexture(0, nullptr);
 	}
 
 	/**
@@ -237,7 +237,7 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	D3DMATERIAL9 *MeshX::GetMaterials()
+	D3DMATERIAL9* MeshX::GetMaterials()
 	{
 		return m_pMeshMaterials;
 	}
@@ -245,14 +245,14 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	LPDIRECT3DTEXTURE9 *MeshX::GetTextures()
+	LPDIRECT3DTEXTURE9* MeshX::GetTextures()
 	{
 		return m_pMeshTextures;
 	}
 
 	/**
 	 * Definit le mode d'affichage utilisé pour les particules
-	 * exemple : texture, alpha, bend... 
+	 * exemple : texture, alpha, bend...
 	 */
 	void MeshX::SetRenderMode()
 	{
@@ -276,7 +276,7 @@ namespace GameEngine
 		GameCore::Instance().GetGraphic().GetDeviceCOM()->SetRenderState(D3DRS_LIGHTING, true);
 		GameCore::Instance().GetGraphic().GetDeviceCOM()->SetRenderState(D3DRS_ZWRITEENABLE, true);
 
-		GameCore::Instance().GetGraphic().GetDeviceCOM()->SetTexture(0, NULL);
+		GameCore::Instance().GetGraphic().GetDeviceCOM()->SetTexture(0, nullptr);
 	}
 
 	/**
@@ -292,14 +292,16 @@ namespace GameEngine
 	 */
 	void MeshX::Free()
 	{
-		if( m_pMeshMaterials != NULL ) 
-			delete[] m_pMeshMaterials;
-
-		if( m_pMeshTextures )
+		if (m_pMeshMaterials != nullptr)
 		{
-			for( DWORD i = 0; i < m_dwNumMaterials; i++ )
+			delete[] m_pMeshMaterials;
+		}
+
+		if (m_pMeshTextures)
+		{
+			for (DWORD i = 0; i < m_dwNumMaterials; i++)
 			{
-				if( m_pMeshTextures[i] )
+				if (m_pMeshTextures[i])
 				{
 					m_pMeshTextures[i]->Release();
 				}
@@ -307,8 +309,10 @@ namespace GameEngine
 			delete[] m_pMeshTextures;
 		}
 
-		if( m_pMesh != NULL )
+		if (m_pMesh != nullptr)
+		{
 			m_pMesh->Release();
+		}
 
 		m_bIsLoaded = false;
 	}
@@ -316,7 +320,7 @@ namespace GameEngine
 	//////////////////////////////////////////////////////
 	/// cBoundingForm
 	//////////////////////////////////////////////////////
-	
+
 	/**
 	 *
 	 */
@@ -330,15 +334,15 @@ namespace GameEngine
 	 */
 	void BoundingForm::Compute(LPD3DXMESH mesh_)
 	{
-		IDirect3DVertexBuffer9 *pVertex = NULL;
+		IDirect3DVertexBuffer9* pVertex = nullptr;
 		mesh_->GetVertexBuffer(&pVertex);
-		Compute( pVertex, mesh_->GetNumVertices(), D3DXGetFVFVertexSize(mesh_->GetFVF()));
+		Compute(pVertex, mesh_->GetNumVertices(), D3DXGetFVFVertexSize(mesh_->GetFVF()));
 	}
 
 	/**
 	 *
 	 */
-	void BoundingForm::Compute(MeshX &mesh)
+	void BoundingForm::Compute(MeshX& mesh)
 	{
 		Compute(mesh.GetMesh());
 	}
@@ -362,7 +366,7 @@ namespace GameEngine
 	//////////////////////////////////////////////////////
 	/// BoundingBox
 	//////////////////////////////////////////////////////
-	
+
 	/**
 	 *
 	 */
@@ -374,24 +378,24 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	void BoundingBox::Compute(IDirect3DVertexBuffer9 *pVB_, DWORD NumVertices, DWORD FVF )
+	void BoundingBox::Compute(IDirect3DVertexBuffer9* pVB_, DWORD NumVertices, DWORD FVF)
 	{
-		void *pData = NULL;
+		void* pData = nullptr;
 
-		if ( SUCCEEDED( pVB_->Lock(0, 0, &pData, D3DLOCK_READONLY) ) )
+		if (SUCCEEDED(pVB_->Lock(0, 0, &pData, D3DLOCK_READONLY)))
 		{
-			if ( FAILED( D3DXComputeBoundingBox( (D3DXVECTOR3*) pData, NumVertices, FVF, &m_Min, &m_Max ) ) )
+			if (FAILED(D3DXComputeBoundingBox((D3DXVECTOR3*)pData, NumVertices, FVF, &m_Min, &m_Max)))
 			{
-				Window::Error( false, "Erreur D3DXComputeBoundingBox");
+				Window::Error(false, "Erreur D3DXComputeBoundingBox");
 			}
 			pVB_->Unlock();
-		}		
+		}
 	}
 
 	/**
 	 *
 	 */
-	void BoundingBox::SetMin(D3DXVECTOR3 &min_)
+	void BoundingBox::SetMin(D3DXVECTOR3& min_)
 	{
 		m_Min = min_;
 	}
@@ -407,7 +411,7 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	void BoundingBox::SetMax(D3DXVECTOR3 &max_)
+	void BoundingBox::SetMax(D3DXVECTOR3& max_)
 	{
 		m_Max = max_;
 	}
@@ -423,7 +427,7 @@ namespace GameEngine
 	//////////////////////////////////////////////////////
 	/// BoundingSphere
 	//////////////////////////////////////////////////////
-	
+
 	/**
 	 *
 	 */
@@ -436,24 +440,24 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	void BoundingSphere::Compute(IDirect3DVertexBuffer9 *pVB_, DWORD NumVertices, DWORD FVF )
+	void BoundingSphere::Compute(IDirect3DVertexBuffer9* pVB_, DWORD NumVertices, DWORD FVF)
 	{
-		void *pData = NULL;
+		void* pData = nullptr;
 
-		if ( SUCCEEDED( pVB_->Lock(0, 0, &pData, D3DLOCK_READONLY) ) )
+		if (SUCCEEDED(pVB_->Lock(0, 0, &pData, D3DLOCK_READONLY)))
 		{
-			if ( FAILED( D3DXComputeBoundingSphere( (D3DXVECTOR3*) pData, NumVertices, FVF, &m_Center, &m_Radius ) ) )
+			if (FAILED(D3DXComputeBoundingSphere((D3DXVECTOR3*)pData, NumVertices, FVF, &m_Center, &m_Radius)))
 			{
-				Window::Error( false, "Erreur D3DXComputeBoundingSphere");
+				Window::Error(false, "Erreur D3DXComputeBoundingSphere");
 			}
 			pVB_->Unlock();
-		}		
+		}
 	}
 
 	/**
 	 *
 	 */
-	void BoundingSphere::SetCenter(D3DXVECTOR3 &center_)
+	void BoundingSphere::SetCenter(D3DXVECTOR3& center_)
 	{
 		m_Center = center_;
 	}
@@ -465,7 +469,7 @@ namespace GameEngine
 	{
 		return m_Center;
 	}
-	
+
 	/**
 	 *
 	 */

@@ -16,11 +16,11 @@ namespace GameEngine
 	//long GameCore::m_ClearColor(0);
 
 	SINGLETON_IMPL(GameCore)
-	
-	/**
-	 *
-	 */
-	GameCore::GameCore()
+
+		/**
+		 *
+		 */
+		GameCore::GameCore()
 	{
 		//m_GameStateManager.SetGameCore(this);
 		m_bWindowClosing = false;
@@ -44,31 +44,35 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	cGameStateManager *GameCore::GetGameStateManager()
-	{ 
+	GameStateManager* GameCore::GetGameStateManager()
+	{
 		return &m_GameStateManager;
 	}
 
 	/**
 	 *
 	 */
-	bool GameCore::Init(int nCmd, LPSTR szCmdLine, Window &win, s_window_param param, HWND parent, bool bPerspective )
+	bool GameCore::Init(int nCmd, LPSTR szCmdLine, Window& win, s_window_param param, HWND parent, bool bPerspective)
 	{
 		//TODO : interprété la ligne de commande
 
 		//if ( !m_Window.Create(param.caption, parent) )
 			//return false;
 		m_Window = win;
-			
-		if ( !m_Graphic.Init() )
-			return false;
 
-		if ( !m_Graphic.SetMode(m_Window.GethWnd(), param.windowed, true, param.width, param.height, param.depth, bPerspective) )
+		if (!m_Graphic.Init())
+		{
 			return false;
+		}
+
+		if (!m_Graphic.SetMode(m_Window.GethWnd(), param.windowed, true, param.width, param.height, param.depth, bPerspective))
+		{
+			return false;
+		}
 
 		//if ( !m_Pad.Init(m_Window.GethWnd(), m_Window.GethInst(), param.windowed) )
 			//return false;
-		
+
 		return true;
 	}
 
@@ -84,7 +88,7 @@ namespace GameEngine
 							m_Graphic.GetWindowed()) )
 				return false;
 		}
-		
+
 		return true;
 	}*/
 
@@ -93,14 +97,14 @@ namespace GameEngine
 	 */
 	void GameCore::Run()
 	{
-		ShowWindow( m_Window.GethWnd(), SW_SHOWDEFAULT );
-		UpdateWindow( m_Window.GethWnd() );
+		ShowWindow(m_Window.GethWnd(), SW_SHOWDEFAULT);
+		UpdateWindow(m_Window.GethWnd());
 
 		m_Graphic.StartTime();
 
-		while( m_Graphic.BeginFrame() && m_bWindowClosing == false )
+		while (m_Graphic.BeginFrame() && m_bWindowClosing == false)
 		{
-			if ( m_GameStateManager.Run() == false )
+			if (m_GameStateManager.Run() == false)
 			{
 				break;
 			}
@@ -114,10 +118,12 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	bool GameCore::AddGameState(IGameState *gameState)
+	bool GameCore::AddGameState(IGameState* gameState)
 	{
-		if ( gameState == NULL)
+		if (gameState == nullptr)
+		{
 			return false;
+		}
 
 		m_GameStateManager.Push(gameState);
 		return true;
@@ -126,7 +132,7 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	Window &GameCore::GetWindow()
+	Window& GameCore::GetWindow()
 	{
 		return m_Window;
 	}
@@ -134,15 +140,15 @@ namespace GameEngine
 	/**
 	 *
 	 */
-	Graphic &GameCore::GetGraphic()
+	Graphic& GameCore::GetGraphic()
 	{
 		return m_Graphic;
 	}
-	
+
 	/**
 	 *
 	 */
-	Pad &GameCore::GetPad( unsigned char index_ )
+	Pad& GameCore::GetPad(unsigned char index_)
 	{
 		return m_Pad[index_];
 	}
@@ -152,13 +158,13 @@ namespace GameEngine
 	 */
 	void GameCore::ReadAllInputDevice()
 	{
-		for ( int i = 0; i < MAX_INPUT_DEVICE; i++ )
+		for (auto& i : Input::g_pInputDevice)
 		{
-			if ( Input::g_pInputDevice[i] != NULL )
+			if (i != nullptr)
 			{
-				if ( Input::g_pInputDevice[i]->Acquire() )
+				if (i->Acquire())
 				{
-					if ( Input::g_pInputDevice[i]->Read() ==false )
+					if (i->Read() == false)
 					{
 						//Maybe another app acquire the input
 					}
@@ -171,55 +177,55 @@ namespace GameEngine
 			}
 		}
 
-		for ( int i = 0; i < MAX_PAD; i++ )
+		for (auto& i : m_Pad)
 		{
-			m_Pad[i].Read();
+			i.Read();
 		}
 	}
 
 	/**
 	 *
 	 */
-	bool GameCore::CreateInputDevice( HWND hWnd, HINSTANCE hInst, bool windowed)
+	bool GameCore::CreateInputDevice(HWND hWnd, HINSTANCE hInst, bool windowed)
 	{
-		if ( !Input::Instance().Init(hWnd, hInst) )
+		if (!Input::Instance().Init(hWnd, hInst))
 		{
-			Window::Error( false, "Echec de la création de l'input");
+			Window::Error(false, "Echec de la création de l'input");
 			return false;
 		}
 
 		Input::g_pInputDevice[INPUT_DEVICE_MOUSE] = new InputDevice;
 
-		if ( !Input::g_pInputDevice[INPUT_DEVICE_MOUSE]->Create(InputDevice::INPUT_DEVICE_TYPE_MOUSE, windowed) )
+		if (!Input::g_pInputDevice[INPUT_DEVICE_MOUSE]->Create(InputDevice::INPUT_DEVICE_TYPE_MOUSE, windowed))
 		{
-			Window::Error( false, "Echec de la création de la souris");
+			Window::Error(false, "Echec de la création de la souris");
 			return false;
 		}
 
 		Input::g_pInputDevice[INPUT_DEVICE_KEYBOARD] = new InputDevice;
 
-		if ( !Input::g_pInputDevice[INPUT_DEVICE_KEYBOARD]->Create(InputDevice::INPUT_DEVICE_TYPE_KEYBOARD, windowed) )
-		{ 
-			Window::Error( false, "Echec de la création du clavier");
+		if (!Input::g_pInputDevice[INPUT_DEVICE_KEYBOARD]->Create(InputDevice::INPUT_DEVICE_TYPE_KEYBOARD, windowed))
+		{
+			Window::Error(false, "Echec de la création du clavier");
 			return false;
 		}
 
-		for ( int i = INPUT_DEVICE_JOYSTICK1; i <= INPUT_DEVICE_JOYSTICK4; i++ )
+		for (int i = INPUT_DEVICE_JOYSTICK1; i <= INPUT_DEVICE_JOYSTICK4; i++)
 		{
-			Input::g_pInputDevice[i] = NULL;
+			Input::g_pInputDevice[i] = nullptr;
 			Input::g_pInputDevice[i] = new InputDevice();
 
-			if ( !Input::g_pInputDevice[i]->Create( InputDevice::INPUT_DEVICE_TYPE_JOYSTICK, windowed) )
+			if (!Input::g_pInputDevice[i]->Create(InputDevice::INPUT_DEVICE_TYPE_JOYSTICK, windowed))
 			{
 				delete Input::g_pInputDevice[i];
-				Input::g_pInputDevice[i] = NULL;
+				Input::g_pInputDevice[i] = nullptr;
 
 #ifdef _DEBUG
 				ILogger::Log() << "joystick absent :" << i << "\n";
 #endif
 			}
 		}
-		
+
 		return true;
 	}
 

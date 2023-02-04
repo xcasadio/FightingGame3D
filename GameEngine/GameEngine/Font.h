@@ -74,7 +74,7 @@ namespace GameEngine
 		 * @param LPD3DXSPRITE spécifie le sprite sur lequel le texte est ecrit, si NULL le texte est ecrit sur l'ecran
 		 * @return true si reussi
 		 */
-		bool Print(const char* pText, long XPos, long YPos, long Width = 0, long Height = 0, D3DCOLOR Color = 0xffffffff, DWORD Format = 0, LPD3DXSPRITE pSprite = NULL);
+		bool Print(const char* pText, long XPos, long YPos, long Width = 0, long Height = 0, D3DCOLOR Color = 0xffffffff, DWORD Format = 0, LPD3DXSPRITE pSprite = nullptr);
 
 	private:
 		ID3DXFont* m_pFont;

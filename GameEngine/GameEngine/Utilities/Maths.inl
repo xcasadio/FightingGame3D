@@ -52,7 +52,7 @@ const T* LogicValue<T>::GetValue() const
 		return m_Value.pValue;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 /**

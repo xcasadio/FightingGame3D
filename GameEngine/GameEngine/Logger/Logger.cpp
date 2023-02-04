@@ -5,7 +5,7 @@
 
 namespace GameEngine
 {
-	ILogger* ILogger::s_Instance = NULL;
+	ILogger* ILogger::s_Instance = nullptr;
 
 	ILogger::~ILogger()
 	{
@@ -21,7 +21,7 @@ namespace GameEngine
 	void ILogger::Destroy()
 	{
 		delete s_Instance;
-		s_Instance = NULL;
+		s_Instance = nullptr;
 	}
 
 	void ILogger::Log(const char* Format, ...)
@@ -45,7 +45,7 @@ namespace GameEngine
 	std::string ILogger::CurrentDate() const
 	{
 		char sTime[24];
-		time_t CurrentTime = time(NULL);
+		time_t CurrentTime = time(nullptr);
 		tm m;
 		localtime_s(&m, &CurrentTime);
 		strftime(sTime, sizeof(sTime), "%d/%m/%Y", &m);
@@ -57,7 +57,7 @@ namespace GameEngine
 	std::string ILogger::CurrentTime() const
 	{
 		char sTime[24];
-		time_t CurrentTime = time(NULL);
+		time_t CurrentTime = time(nullptr);
 		tm m;
 		localtime_s(&m, &CurrentTime);
 		strftime(sTime, sizeof(sTime), "%H:%M:%S", &m);

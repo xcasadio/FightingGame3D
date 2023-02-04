@@ -6,7 +6,7 @@ template <class T, template <class> class Ownership>
 
 template <class T, template <class> class Ownership>
 inline cSmartPtr<T, Ownership>::cSmartPtr() :
-	m_Data(NULL)
+	m_Data(nullptr)
 {
 
 }
@@ -45,7 +45,9 @@ inline T& cSmartPtr<T, Ownership>::operator *() const
 	//Assert(m_Data != NULL);
 
 	if (m_Data)
+	{
 		return *m_Data;
+	}
 
 	return NULL;
 }

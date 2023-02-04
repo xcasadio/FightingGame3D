@@ -11,7 +11,7 @@ namespace GameEngine
 	 */
 	cSkyBox::cSkyBox(void) : SKYBOX_FVF(D3DFVF_XYZ | D3DFVF_TEX1)
 	{
-		m_pVB = NULL;
+		m_pVB = nullptr;
 	}
 
 	/**
@@ -85,15 +85,17 @@ namespace GameEngine
 	 */
 	bool cSkyBox::Free()
 	{
-		int i;
-
-		for (i = 0; i < 6; i++)
+		for (int i = 0; i < 6; i++)
+		{
 			m_Textures[i].Free();
+		}
 
 		if (m_pVB)
+		{
 			m_pVB->Release();
+		}
 
-		m_pVB = NULL;
+		m_pVB = nullptr;
 
 		return true;
 	}
@@ -113,8 +115,6 @@ namespace GameEngine
 	 */
 	bool cSkyBox::Render(ICamera& camera, bool alpha)
 	{
-		short i;
-
 		D3DMATERIAL9 mat;
 		ZeroMemory(&mat, sizeof(D3DMATERIAL9));
 
@@ -140,11 +140,13 @@ namespace GameEngine
 
 		GameCore::Instance().GetGraphic().EnableAlphaTesting();
 		if (alpha)
+		{
 			GameCore::Instance().GetGraphic().EnableAlphaBlending(true, D3DBLEND_SRCCOLOR, D3DBLEND_DESTCOLOR);
+		}
 
 		GameCore::Instance().GetGraphic().GetDeviceCOM()->SetMaterial(&mat);
 
-		for (i = 0; i < 6; i++)
+		for (short i = 0; i < 6; i++)
 		{
 			if (m_Textures[i].IsLoaded())
 			{
@@ -158,7 +160,9 @@ namespace GameEngine
 
 		GameCore::Instance().GetGraphic().EnableAlphaTesting(false);
 		if (alpha)
+		{
 			GameCore::Instance().GetGraphic().EnableAlphaBlending(false);
+		}
 
 		return true;
 	}
@@ -179,7 +183,7 @@ namespace GameEngine
 	 */
 	cSkyDome::cSkyDome(void) : SKYDOME_FVF(D3DFVF_XYZ | D3DFVF_TEX1)
 	{
-		m_pVB = NULL;
+		m_pVB = nullptr;
 	}
 
 	/**
@@ -231,9 +235,11 @@ namespace GameEngine
 		m_Texture.Free();
 
 		if (m_pVB)
+		{
 			m_pVB->Release();
+		}
 
-		m_pVB = NULL;
+		m_pVB = nullptr;
 
 		return true;
 	}
@@ -277,7 +283,9 @@ namespace GameEngine
 
 		GameCore::Instance().GetGraphic().EnableAlphaTesting();
 		if (alpha)
+		{
 			GameCore::Instance().GetGraphic().EnableAlphaBlending(true, D3DBLEND_SRCCOLOR, D3DBLEND_DESTCOLOR);
+		}
 
 		GameCore::Instance().GetGraphic().GetDeviceCOM()->SetMaterial(&mat);
 
@@ -293,7 +301,9 @@ namespace GameEngine
 
 		GameCore::Instance().GetGraphic().EnableAlphaTesting(false);
 		if (alpha)
+		{
 			GameCore::Instance().GetGraphic().EnableAlphaBlending(false);
+		}
 
 		return true;
 	}

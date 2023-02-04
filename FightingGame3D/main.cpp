@@ -36,13 +36,19 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int nCmdSh
 
 	Window win;
 	if (!win.Create(param.width, param.height, "Fighting Game", param.windowed))
+	{
 		return -1;
+	}
 
 	if (GameCore::Instance().Init(nCmdShow, szCmdLine, win, param) == false)
+	{
 		return -1;
+	}
 
 	if (!GameCore::Instance().CreateInputDevice(win.GethWnd(), win.GethInst(), param.windowed))
+	{
 		return -1;
+	}
 
 	if (!GameCore::Instance().GetPad(0).Load("pad.xml"))
 	{

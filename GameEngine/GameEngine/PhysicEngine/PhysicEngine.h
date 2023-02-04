@@ -21,13 +21,13 @@ namespace GameEngine
 	/**
 	 * Les variables necessaires pour les calculs de la physique.
 	 */
-	class GAME_ENGINE_EXPORT cPhysicParameters
+	class GAME_ENGINE_EXPORT PhysicParameters
 		: public CoordinateSpace
 	{
 	public:
-		cPhysicParameters();
-		~cPhysicParameters();
-		
+		PhysicParameters();
+		~PhysicParameters();
+
 	protected:
 		D3DXVECTOR3 m_vDir, m_vAcc;
 		D3DXVECTOR3 m_vPrevDir, m_vPrevAcc;
@@ -41,43 +41,43 @@ namespace GameEngine
 	/**
 	 * Le moteur de la physique en singleton
 	 */
-	class GAME_ENGINE_EXPORT cPhysicEngine :
-		public ISingleton<cPhysicEngine>
+	class GAME_ENGINE_EXPORT PhysicEngine :
+		public ISingleton<PhysicEngine>
 	{
-		MAKE_SINGLETON(cPhysicEngine)
+		MAKE_SINGLETON(PhysicEngine)
 
-		friend class cPhysicParameters;
+			friend class PhysicParameters;
 
 	public:
 		/**
 		 *
 		 */
-		~cPhysicEngine(void);
+		~PhysicEngine();
 
 		/**
 		 *
 		 */
-		cPhysicSpaceWarp *AddSpaceWarp( eSpaceWarpType type_ );
+		PhysicSpaceWarp* AddSpaceWarp(eSpaceWarpType type_);
 
 	protected:
-		std::deque<cPhysicSpaceWarp> m_SpaceWarp;
-		std::set<cPhysicParameters *> m_ParametersObjects;
-		
+		std::deque<PhysicSpaceWarp> m_SpaceWarp;
+		std::set<PhysicParameters*> m_ParametersObjects;
+
 	private:
 		/**
 		 *
 		 */
-		cPhysicEngine(void);
+		PhysicEngine(void);
 
 		/**
 		 *
 		 */
-		void AddObject( cPhysicParameters *param_ );
+		void AddObject(PhysicParameters* param_);
 
 		/**
 		 *
 		 */
-		void DeleteObject( cPhysicParameters *param_ );
+		void DeleteObject(PhysicParameters* param_);
 	};
 
 } // namespace GameEngine

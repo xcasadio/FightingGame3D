@@ -28,30 +28,30 @@ namespace GameEngine
 		typedef struct s_game_param
 		{
 			bool fpsLock, frameskip;
-			
+
 		} s_game_param;
 
 		Graphic();
 		~Graphic();
 
-		IDirect3D9       *GetDirect3DCOM();
-		IDirect3DDevice9 *GetDeviceCOM();
-		ID3DXSprite      *GetSpriteCOM();
+		IDirect3D9* GetDirect3DCOM();
+		IDirect3DDevice9* GetDeviceCOM();
+		ID3DXSprite* GetSpriteCOM();
 
 		bool Init();
 		bool Shutdown();
 
 		bool SetMode(HWND hWnd, bool Windowed = TRUE, bool UseZBuffer = FALSE, long Width = 0, long Height = 0, char BPP = 0, bool bPerspective = true);
 
-		long GetNumDisplayModes(D3DFORMAT Format) ;
-		bool GetDisplayModeInfo(long Num, D3DDISPLAYMODE *Mode, D3DFORMAT Format);
+		long GetNumDisplayModes(D3DFORMAT Format);
+		bool GetDisplayModeInfo(long Num, D3DDISPLAYMODE* Mode, D3DFORMAT Format);
 
 		char GetFormatBPP(D3DFORMAT Format) const;
 		bool CheckFormat(D3DFORMAT Format, bool Windowed, bool HAL);
 
 		bool AntiAliasingCapability(D3DMULTISAMPLE_TYPE type_)  const;
 
-		bool Display(const RECT *pSourceRect = NULL, const RECT *pDestRect = NULL, HWND hDestWindowOverride = NULL, const RGNDATA* pDirtyRegion = NULL);
+		bool Display(const RECT* pSourceRect = nullptr, const RECT* pDestRect = nullptr, HWND hDestWindowOverride = nullptr, const RGNDATA* pDirtyRegion = nullptr);
 
 		bool BeginFrame();
 		void EndFrame();
@@ -81,17 +81,17 @@ namespace GameEngine
 		float GetViewNear();
 		float GetViewFar();
 
-		bool SetPerspective(float FOV = D3DX_PI / 4.0f, float Aspect=1.3333f, float Near=1.0f, float Far=10000.0f);
-		bool SetOrtho(float width, float height, float Near=1.0f, float Far=10000.0f);
-	    
-		bool SetWorldPosition(WorldPosition *WorldPos);
-		bool SetCamera(ICamera *Camera);
-		bool SetLight(long Num, Light *Light);
-		bool SetMaterial(Material *Material);
-		bool SetTexture(short Num, Texture *Texture);
-	    
+		bool SetPerspective(float FOV = D3DX_PI / 4.0f, float Aspect = 1.3333f, float Near = 1.0f, float Far = 10000.0f);
+		bool SetOrtho(float width, float height, float Near = 1.0f, float Far = 10000.0f);
+
+		bool SetWorldPosition(WorldPosition* WorldPos);
+		bool SetCamera(ICamera* Camera);
+		bool SetLight(long Num, Light* Light);
+		bool SetMaterial(Material* Material);
+		bool SetTexture(short Num, Texture* Texture);
+
 		bool SetAmbientLight(unsigned char Red, unsigned char Green, unsigned char Blue);
-		bool GetAmbientLight(unsigned char *Red, unsigned char *Green, unsigned char *Blue);
+		bool GetAmbientLight(unsigned char* Red, unsigned char* Green, unsigned char* Blue);
 
 		bool EnableLight(long Num, bool Enable = true);
 		bool EnableLighting(bool Enable = true);
@@ -100,9 +100,9 @@ namespace GameEngine
 		bool EnableAlphaTesting(bool Enable = true);
 
 	protected:
-		IDirect3D9       *m_pD3D;
-		IDirect3DDevice9 *m_pD3DDevice;
-		ID3DXSprite      *m_pSprite;
+		IDirect3D9* m_pD3D;
+		IDirect3DDevice9* m_pD3DDevice;
+		ID3DXSprite* m_pSprite;
 
 		D3DDISPLAYMODE    m_d3ddm;
 

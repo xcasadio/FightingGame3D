@@ -33,7 +33,7 @@ class FIGHTING_GAME_EXPORT GameRunStage :
 {
 public:
 	GameRunStage();
-	//GameRunTest(cGameStateManager *gameStateManager);
+	//GameRunTest(GameStateManager *gameStateManager);
 	~GameRunStage() override;
 
 	bool Init() override;

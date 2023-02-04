@@ -33,9 +33,8 @@ namespace GameEngine
 	{
 		std::string str;
 		std::fstream file;
-		std::set<std::string>::iterator it;
 
-		for (it = m_Paths.begin(); it != m_Paths.end(); ++it)
+		for (auto it = m_Paths.begin(); it != m_Paths.end(); ++it)
 		{
 			str.append(*it);
 			str.append(fileName_);

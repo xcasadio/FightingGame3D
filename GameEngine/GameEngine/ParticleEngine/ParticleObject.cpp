@@ -139,8 +139,8 @@ namespace GameEngine
 	 */
 	cParticleBillBoard::cParticleBillBoard(void) : PARTICLE_FVF(D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1)
 	{
-		m_pParticleVB = NULL;
-		m_pParticleTexture = NULL;
+		m_pParticleVB = nullptr;
+		m_pParticleTexture = nullptr;
 
 		ZeroMemory(&m_Mat, sizeof(m_Mat));
 
@@ -160,16 +160,16 @@ namespace GameEngine
 	 */
 	void cParticleBillBoard::Free()
 	{
-		if (m_pParticleTexture != NULL)
+		if (m_pParticleTexture != nullptr)
 		{
 			m_pParticleTexture->Release();
-			m_pParticleTexture = NULL;
+			m_pParticleTexture = nullptr;
 		}
 
-		if (m_pParticleVB != NULL)
+		if (m_pParticleVB != nullptr)
 		{
 			m_pParticleVB->Release();
-			m_pParticleVB = NULL;
+			m_pParticleVB = nullptr;
 		}
 	}
 
@@ -247,7 +247,7 @@ namespace GameEngine
 
 		is_.read((char*)&n, sizeof(SIZE_T));
 
-		char* buf = new char[n];
+		auto buf = new char[n];
 
 		is_.read(buf, sizeof(char) * n);
 
@@ -259,7 +259,7 @@ namespace GameEngine
 		}
 
 		delete[] buf;
-		buf = NULL;
+		buf = nullptr;
 
 		octetRead = (int)is_.tellg() - octetRead;
 
@@ -275,7 +275,7 @@ namespace GameEngine
 		IParticleVisualObject::operator >> (os_);
 
 		SIZE_T n = m_FileName.size() + 1;
-		char* pBuf = new char[n + 1];
+		auto pBuf = new char[n + 1];
 
 		os_.write((char*)&n, sizeof(n));
 
@@ -287,7 +287,7 @@ namespace GameEngine
 		os_.write(pBuf, sizeof(char) * n);
 
 		delete pBuf;
-		pBuf = NULL;
+		pBuf = nullptr;
 
 		return os_;
 	}
@@ -326,7 +326,7 @@ namespace GameEngine
 		GameCore::Instance().GetGraphic().GetDeviceCOM()->SetRenderState(D3DRS_LIGHTING, true);
 		GameCore::Instance().GetGraphic().GetDeviceCOM()->SetRenderState(D3DRS_ZWRITEENABLE, true);
 
-		GameCore::Instance().GetGraphic().GetDeviceCOM()->SetTexture(0, NULL);
+		GameCore::Instance().GetGraphic().GetDeviceCOM()->SetTexture(0, nullptr);
 	}
 
 	/**
@@ -371,7 +371,7 @@ namespace GameEngine
 		// Create vertex buffers and set data
 		GameCore::Instance().GetGraphic().GetDeviceCOM()->CreateVertexBuffer(sizeof(sParticleVertex) * 4, 0, \
 			PARTICLE_FVF, D3DPOOL_MANAGED, \
-			& m_pParticleVB, NULL);
+			& m_pParticleVB, nullptr);
 
 		m_pParticleVB->Lock(0, 0, (void**)&Ptr, 0);
 		memcpy(Ptr, verts, sizeof(verts));

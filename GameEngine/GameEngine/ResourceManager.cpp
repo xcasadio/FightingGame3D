@@ -37,90 +37,94 @@
 namespace GameEngine
 {
 
-////////////////////////////////////////////////////////////
-// Implémentation des méthodes du singleton
-////////////////////////////////////////////////////////////
-SINGLETON_IMPL(ResourceManager)
+	////////////////////////////////////////////////////////////
+	// Implémentation des méthodes du singleton
+	////////////////////////////////////////////////////////////
+	SINGLETON_IMPL(ResourceManager)
 
 
-/////////////////////////////////////////////////////////////
-/// Constructeur par défaut
-///
-////////////////////////////////////////////////////////////
-ResourceManager::ResourceManager()
-{
-
-}
-
-
-/////////////////////////////////////////////////////////////
-/// Destructeur
-///
-////////////////////////////////////////////////////////////
-ResourceManager::~ResourceManager()
-{
-#ifdef _DEBUG
-    // S'il reste des ressources dans la liste, on le signale
-    if (!m_Resources.empty())
-    {
-        ILogger::Log() << "** warning ** Des ressources non pas été libérées :\n";
-
-        for (TResourcesMap::const_iterator i = m_Resources.begin(); i != m_Resources.end(); ++i)
-        {
-            ILogger::Log() << " - " << i->second->GetName() << "\n";
-        }
-    }
-#endif // _DEBUG
-}
-
-
-/////////////////////////////////////////////////////////////
-/// Ajoute une ressource
-///
-/// \param Name :     Nom associé à la ressource
-/// \param Resource : Pointeur sur la ressource à ajouter
-///
-////////////////////////////////////////////////////////////
-void ResourceManager::Add(const std::string& Name, IResource* Resource)
-{
-    //Assert(Resource != NULL);
-	if ( Resource == NULL )
-		throw std::exception("ResourceManager::Add() : ressource null");
-
-#ifdef _DEBUG
-    // Si la ressource avait déjà été chargée, on le signale
-    if (m_Resources.find(Name) != m_Resources.end())
-		ILogger::Log() << "Ressource déjà chargée : " << Name << "\n";
-#endif // _DEBUG
-
-    // Ajout de la ressource à la liste
-    m_Resources[Name] = Resource;
-    Resource->m_Name = Name;
-}
-
-
-/////////////////////////////////////////////////////////////
-/// Retire une ressource
-///
-/// \param Name : Nom de la ressource à retirer
-///
-////////////////////////////////////////////////////////////
-void ResourceManager::Remove(const std::string& Name)
-{
-    // Recherche de la ressource dans la table
-    TResourcesMap::iterator It = m_Resources.find(Name);
-
-    // Si la ressource n'avait pas été chargée, on le signale
-    if (It == m_Resources.end())
+		/////////////////////////////////////////////////////////////
+		/// Constructeur par défaut
+		///
+		////////////////////////////////////////////////////////////
+		ResourceManager::ResourceManager()
 	{
-#ifdef _DEBUG
-		ILogger::Log() << "Ressource inexistante : " << Name << " : impossible a supprimer !\n";
-#endif
-		return;
+
 	}
 
-    // Retrait de la ressource de la liste
-    m_Resources.erase(It);
-}
+
+	/////////////////////////////////////////////////////////////
+	/// Destructeur
+	///
+	////////////////////////////////////////////////////////////
+	ResourceManager::~ResourceManager()
+	{
+#ifdef _DEBUG
+		// S'il reste des ressources dans la liste, on le signale
+		if (!m_Resources.empty())
+		{
+			ILogger::Log() << "** warning ** Des ressources non pas été libérées :\n";
+
+			for (TResourcesMap::const_iterator i = m_Resources.begin(); i != m_Resources.end(); ++i)
+			{
+				ILogger::Log() << " - " << i->second->GetName() << "\n";
+			}
+		}
+#endif // _DEBUG
+	}
+
+
+	/////////////////////////////////////////////////////////////
+	/// Ajoute une ressource
+	///
+	/// \param Name :     Nom associé à la ressource
+	/// \param Resource : Pointeur sur la ressource à ajouter
+	///
+	////////////////////////////////////////////////////////////
+	void ResourceManager::Add(const std::string& Name, IResource* Resource)
+	{
+		//Assert(Resource != NULL);
+		if (Resource == nullptr)
+		{
+			throw std::exception("ResourceManager::Add() : ressource null");
+		}
+
+#ifdef _DEBUG
+		// Si la ressource avait déjà été chargée, on le signale
+		if (m_Resources.find(Name) != m_Resources.end())
+		{
+			ILogger::Log() << "Ressource déjà chargée : " << Name << "\n";
+		}
+#endif // _DEBUG
+
+		// Ajout de la ressource à la liste
+		m_Resources[Name] = Resource;
+		Resource->m_Name = Name;
+	}
+
+
+	/////////////////////////////////////////////////////////////
+	/// Retire une ressource
+	///
+	/// \param Name : Nom de la ressource à retirer
+	///
+	////////////////////////////////////////////////////////////
+	void ResourceManager::Remove(const std::string& Name)
+	{
+		// Recherche de la ressource dans la table
+		auto It = m_Resources.find(Name);
+
+		// Si la ressource n'avait pas été chargée, on le signale
+		if (It == m_Resources.end())
+		{
+#ifdef _DEBUG
+			ILogger::Log() << "Ressource inexistante : " << Name << " : impossible a supprimer !\n";
+#endif
+			return;
+		}
+
+		// Retrait de la ressource de la liste
+		m_Resources.erase(It);
+	}
 
 } // namespace GameEngine

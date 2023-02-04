@@ -8,18 +8,18 @@
 
 namespace GameEngine
 {
-	InputDevice *Input::g_pInputDevice[ MAX_INPUT_DEVICE ];
+	InputDevice* Input::g_pInputDevice[MAX_INPUT_DEVICE];
 
 	///////////////////////////////////////////////////////////////////////
 	SINGLETON_IMPL(Input)
 
-	Input::Input()
+		Input::Input()
 	{
-		m_pDI = NULL;
+		m_pDI = nullptr;
 
-		for ( int i = 0; i < MAX_INPUT_DEVICE; i++ )
+		for (int i = 0; i < MAX_INPUT_DEVICE; i++)
 		{
-			g_pInputDevice[ MAX_INPUT_DEVICE ] = NULL;
+			g_pInputDevice[MAX_INPUT_DEVICE] = nullptr;
 		}
 	}
 
@@ -33,7 +33,7 @@ namespace GameEngine
 		return m_hWnd;
 	}
 
-	IDirectInput8 *Input::GetDirectInputCOM()
+	IDirectInput8* Input::GetDirectInputCOM()
 	{
 		return m_pDI;
 	}
@@ -44,9 +44,9 @@ namespace GameEngine
 
 		m_hWnd = hWnd;
 
-		if( FAILED(DirectInput8Create(hInst, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**) &m_pDI, NULL)) )
+		if (FAILED(DirectInput8Create(hInst, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&m_pDI, NULL)))
 		{
-			Window::Error( true, "FAILED(DirectInput8Create(hInst, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**) &m_pDI, NULL))" );
+			Window::Error(true, "FAILED(DirectInput8Create(hInst, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**) &m_pDI, NULL))");
 			return false;
 		}
 
@@ -55,21 +55,23 @@ namespace GameEngine
 
 	bool Input::Shutdown()
 	{
-		for ( int i = 0; i < MAX_INPUT_DEVICE; i++ )
+		for (auto& i : g_pInputDevice)
 		{
-			if ( g_pInputDevice[i] )
+			if (i)
 			{
-				delete g_pInputDevice[i];
-				g_pInputDevice[i] = NULL;
+				delete i;
+				i = nullptr;
 			}
 		}
 
-		if ( m_pDI )
+		if (m_pDI)
+		{
 			m_pDI->Release();
+		}
 
-		m_pDI = NULL;
+		m_pDI = nullptr;
 
-		m_hWnd = NULL;
+		m_hWnd = nullptr;
 
 		return true;
 	}
@@ -80,10 +82,10 @@ namespace GameEngine
 	{
 		m_Type = INPUT_DEVICE_TYPE_NONE;
 		m_Windowed = true;
-		m_pDIDevice = NULL;
+		m_pDIDevice = nullptr;
 
-		m_MouseState    = (DIMOUSESTATE*) &m_State;
-		m_JoystickState = (DIJOYSTATE*) &m_State;
+		m_MouseState = (DIMOUSESTATE*)&m_State;
+		m_JoystickState = (DIJOYSTATE*)&m_State;
 
 		Clear();
 	}
@@ -93,43 +95,43 @@ namespace GameEngine
 		Free();
 	}
 
-	bool InputDevice::Create( short Type, bool Windowed)
+	bool InputDevice::Create(short Type, bool Windowed)
 	{
-		DIDATAFORMAT *DataFormat;
+		DIDATAFORMAT* DataFormat;
 		DIPROPRANGE   DIprg;
 		DIPROPDWORD   DIpdw;
 
 
 		Free();
 
-		switch(Type)
+		switch (Type)
 		{
 		case INPUT_DEVICE_TYPE_KEYBOARD:
-			if( FAILED( Input::Instance().GetDirectInputCOM()->CreateDevice(GUID_SysKeyboard, /*&m_pDIDevice*/ &m_pDIDevice, NULL)) ) 
+			if (FAILED(Input::Instance().GetDirectInputCOM()->CreateDevice(GUID_SysKeyboard, /*&m_pDIDevice*/ &m_pDIDevice, NULL)))
 			{
-				Window::Error( true, "FAILED( cInput::Instance().GetDirectInputCOM()->CreateDevice(GUID_SysKeyboard, /*&m_pDIDevice*/ &m_pDIDevice, NULL))" );
+				Window::Error(true, "FAILED( cInput::Instance().GetDirectInputCOM()->CreateDevice(GUID_SysKeyboard, /*&m_pDIDevice*/ &m_pDIDevice, NULL))");
 				return false;
 			}
 			DataFormat = (DIDATAFORMAT*)&c_dfDIKeyboard;
 			break;
 
 		case INPUT_DEVICE_TYPE_MOUSE:
-			if( FAILED( Input::Instance().GetDirectInputCOM()->CreateDevice(GUID_SysMouse, /*&m_pDIDevice*/ &m_pDIDevice, NULL)) ) 
+			if (FAILED(Input::Instance().GetDirectInputCOM()->CreateDevice(GUID_SysMouse, /*&m_pDIDevice*/ &m_pDIDevice, NULL)))
 			{
-				Window::Error( true, "FAILED( cInput::Instance().GetDirectInputCOM()->CreateDevice(GUID_SysMouse, /*&m_pDIDevice*/ &m_pDIDevice, NULL))" );
+				Window::Error(true, "FAILED( cInput::Instance().GetDirectInputCOM()->CreateDevice(GUID_SysMouse, /*&m_pDIDevice*/ &m_pDIDevice, NULL))");
 				return false;
 			}
 			DataFormat = (DIDATAFORMAT*)&c_dfDIMouse;
 			break;
 
 		case INPUT_DEVICE_TYPE_JOYSTICK:
-			if( FAILED( Input::Instance().GetDirectInputCOM()->EnumDevices(DI8DEVCLASS_GAMECTRL, EnumJoysticks, this, DIEDFL_ATTACHEDONLY)) )
+			if (FAILED(Input::Instance().GetDirectInputCOM()->EnumDevices(DI8DEVCLASS_GAMECTRL, EnumJoysticks, this, DIEDFL_ATTACHEDONLY)))
 			{
-				Window::Error( true, "FAILED( cInput::Instance().GetDirectInputCOM()->EnumDevices(DI8DEVCLASS_GAMECTRL, EnumJoysticks, this, DIEDFL_ATTACHEDONLY))" );
+				Window::Error(true, "FAILED( cInput::Instance().GetDirectInputCOM()->EnumDevices(DI8DEVCLASS_GAMECTRL, EnumJoysticks, this, DIEDFL_ATTACHEDONLY))");
 				return false;
 			}
 
-			if(m_pDIDevice == NULL)
+			if (m_pDIDevice == nullptr)
 			{
 				//Window::Error( true, "m_pDIDevice == NULL" );
 				return false;
@@ -143,69 +145,69 @@ namespace GameEngine
 
 		m_Windowed = Windowed;
 
-		if( FAILED( m_pDIDevice->SetDataFormat(DataFormat)) )
+		if (FAILED(m_pDIDevice->SetDataFormat(DataFormat)))
 		{
-			Window::Error( true, "FAILED( m_pDIDevice->SetDataFormat(DataFormat))" );
+			Window::Error(true, "FAILED( m_pDIDevice->SetDataFormat(DataFormat))");
 			return false;
 		}
 
 		// Set the cooperative level - Foreground & Nonexclusive
-		if( FAILED( m_pDIDevice->SetCooperativeLevel(Input::Instance().GethWnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE)) )
+		if (FAILED(m_pDIDevice->SetCooperativeLevel(Input::Instance().GethWnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE)))
 		{
-			Window::Error( true, "FAILED( m_pDIDevice->SetCooperativeLevel(cInput::Instance().GethWnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE))" );
+			Window::Error(true, "FAILED( m_pDIDevice->SetCooperativeLevel(cInput::Instance().GethWnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE))");
 			return false;
 		}
 
-		if(Type == INPUT_DEVICE_TYPE_JOYSTICK)
+		if (Type == INPUT_DEVICE_TYPE_JOYSTICK)
 		{
-			DIprg.diph.dwSize       = sizeof(DIPROPRANGE);
+			DIprg.diph.dwSize = sizeof(DIPROPRANGE);
 			DIprg.diph.dwHeaderSize = sizeof(DIPROPHEADER);
-			DIprg.diph.dwHow        = DIPH_BYOFFSET;
-			DIprg.lMin              = -1024;
-			DIprg.lMax              = +1024;
+			DIprg.diph.dwHow = DIPH_BYOFFSET;
+			DIprg.lMin = -1024;
+			DIprg.lMax = +1024;
 
 			DIprg.diph.dwObj = DIJOFS_X;
-			if( FAILED( m_pDIDevice->SetProperty(DIPROP_RANGE, &DIprg.diph)) )
+			if (FAILED(m_pDIDevice->SetProperty(DIPROP_RANGE, &DIprg.diph)))
 			{
-				Window::Error( true, "FAILED( m_pDIDevice->SetProperty(DIPROP_RANGE, &DIprg.diph))" );
+				Window::Error(true, "FAILED( m_pDIDevice->SetProperty(DIPROP_RANGE, &DIprg.diph))");
 				return false;
 			}
 
 			DIprg.diph.dwObj = DIJOFS_Y;
-			if( FAILED( m_pDIDevice->SetProperty(DIPROP_RANGE, &DIprg.diph)) )
+			if (FAILED(m_pDIDevice->SetProperty(DIPROP_RANGE, &DIprg.diph)))
 			{
-				Window::Error( true, "FAILED( m_pDIDevice->SetProperty(DIPROP_RANGE, &DIprg.diph))" );
+				Window::Error(true, "FAILED( m_pDIDevice->SetProperty(DIPROP_RANGE, &DIprg.diph))");
 				return false;
 			}
 
 			// Set the special properties of the joystick - deadzone 12%
-			DIpdw.diph.dwSize       = sizeof(DIPROPDWORD);
+			DIpdw.diph.dwSize = sizeof(DIPROPDWORD);
 			DIpdw.diph.dwHeaderSize = sizeof(DIPROPHEADER);
-			DIpdw.diph.dwHow        = DIPH_BYOFFSET;
-			DIpdw.dwData            = 128;
+			DIpdw.diph.dwHow = DIPH_BYOFFSET;
+			DIpdw.dwData = 128;
 
 			// Set X deadzone
 			DIpdw.diph.dwObj = DIJOFS_X;
-			if( FAILED( m_pDIDevice->SetProperty(DIPROP_DEADZONE, &DIpdw.diph)) )
+			if (FAILED(m_pDIDevice->SetProperty(DIPROP_DEADZONE, &DIpdw.diph)))
 			{
-				Window::Error( true, "FAILED( m_pDIDevice->SetProperty(DIPROP_DEADZONE, &DIpdw.diph))" );
+				Window::Error(true, "FAILED( m_pDIDevice->SetProperty(DIPROP_DEADZONE, &DIpdw.diph))");
 				return false;
 			}
 
 			// Set Y deadzone
 			DIpdw.diph.dwObj = DIJOFS_Y;
-			if( FAILED( m_pDIDevice->SetProperty(DIPROP_DEADZONE, &DIpdw.diph)) )
+			if (FAILED(m_pDIDevice->SetProperty(DIPROP_DEADZONE, &DIpdw.diph)))
 			{
-				Window::Error( true, "FAILED( m_pDIDevice->SetProperty(DIPROP_DEADZONE, &DIpdw.diph))" );
+				Window::Error(true, "FAILED( m_pDIDevice->SetProperty(DIPROP_DEADZONE, &DIpdw.diph))");
 				return false;
 			}
 		}
 
 		HRESULT hr = m_pDIDevice->Acquire();
 
-		if ( hr != S_OK && hr != DIERR_OTHERAPPHASPRIO )
+		if (hr != S_OK && hr != DIERR_OTHERAPPHASPRIO)
 		{
-			Window::Error( true, "hr != S_OK && hr != DIERR_OTHERAPPHASPRIO" );
+			Window::Error(true, "hr != S_OK && hr != DIERR_OTHERAPPHASPRIO");
 			return false;
 		}
 
@@ -218,15 +220,15 @@ namespace GameEngine
 
 	bool InputDevice::Free()
 	{
-		if( m_pDIDevice != NULL)
+		if (m_pDIDevice != nullptr)
 		{
 			m_pDIDevice->Unacquire();
 			m_pDIDevice->Release();
-			m_pDIDevice = NULL;
+			m_pDIDevice = nullptr;
 		}
 
 		m_Type = INPUT_DEVICE_TYPE_NONE;
-	 
+
 		Clear();
 
 		return true;
@@ -234,12 +236,12 @@ namespace GameEngine
 
 	bool InputDevice::Clear()
 	{
-		short i;
-
 		ZeroMemory(&m_State, 256);
 
-		for(i=0;i<256;i++)
-		m_Locks[i]  = false;
+		for (short i = 0; i < 256; i++)
+		{
+			m_Locks[i] = false;
+		}
 
 		m_XPos = 0;
 		m_YPos = 0;
@@ -254,44 +256,56 @@ namespace GameEngine
 		long BufferSizes[3] = { 256, sizeof(DIMOUSESTATE), sizeof(DIJOYSTATE) };
 		short i;
 
-		if(m_pDIDevice == NULL)
+		if (m_pDIDevice == nullptr)
+		{
 			return false;
+		}
 
-		if(m_Type < 1 || m_Type > 3)
+		if (m_Type < 1 || m_Type > 3)
+		{
 			return false;
+		}
 
 		// Loop polling and reading until succeeded or unknown error
 		// Also take care of lost-focus problems
-		while(1)
+		while (1)
 		{
 			m_pDIDevice->Poll();
 
-			if(SUCCEEDED(hr = m_pDIDevice->GetDeviceState(BufferSizes[m_Type-1], (LPVOID)&m_State)))
+			if (SUCCEEDED(hr = m_pDIDevice->GetDeviceState(BufferSizes[m_Type - 1], (LPVOID)&m_State)))
+			{
 				break;
+			}
 
-			if(hr != DIERR_INPUTLOST && hr != DIERR_NOTACQUIRED)
+			if (hr != DIERR_INPUTLOST && hr != DIERR_NOTACQUIRED)
+			{
 				return false;
+			}
 
-			if(FAILED(m_pDIDevice->Acquire()))
+			if (FAILED(m_pDIDevice->Acquire()))
 			{
 				hr = m_pDIDevice->Acquire();
-				while( hr == DIERR_INPUTLOST ) 
+				while (hr == DIERR_INPUTLOST)
+				{
 					hr = m_pDIDevice->Acquire();
+				}
 
-				if( hr == DIERR_OTHERAPPHASPRIO || 
-					hr == DIERR_NOTACQUIRED ) 
+				if (hr == DIERR_OTHERAPPHASPRIO ||
+					hr == DIERR_NOTACQUIRED)
+				{
 					return false;
+				}
 
 				return true;
 			}
-			
+
 		}
 
 		// Since only the mouse coordinates are relative, you'll
 		// have to deal with them now
-		if(m_Type == INPUT_DEVICE_TYPE_MOUSE)
+		if (m_Type == INPUT_DEVICE_TYPE_MOUSE)
 		{
-			if(m_Windowed == true)
+			if (m_Windowed == true)
 			{
 				POINT pt;
 				GetCursorPos(&pt);
@@ -308,31 +322,37 @@ namespace GameEngine
 			m_Wheel = m_MouseState->lZ;
 		}
 
-		switch(m_Type) 
+		switch (m_Type)
 		{
 		case INPUT_DEVICE_TYPE_KEYBOARD:
-			for(i=0;i<256;i++) 
+			for (i = 0; i < 256; i++)
 			{
-				if(!(m_State[i] & 0x80))
-				m_Locks[i] = false;
+				if (!(m_State[i] & 0x80))
+				{
+					m_Locks[i] = false;
+				}
 			}
 			break;
 
 		case INPUT_DEVICE_TYPE_MOUSE:
-			for(i=0;i<4;i++)
+			for (i = 0; i < 4; i++)
 			{
-				if(!(m_MouseState->rgbButtons[i]))
-				m_Locks[i] = false;
+				if (!(m_MouseState->rgbButtons[i]))
+				{
+					m_Locks[i] = false;
+				}
 			}
-		break;
+			break;
 
 		case INPUT_DEVICE_TYPE_JOYSTICK:
-			for(i=0;i<32;i++) 
+			for (i = 0; i < 32; i++)
 			{
-				if(!(m_JoystickState->rgbButtons[i]))
-				m_Locks[i] = false;
+				if (!(m_JoystickState->rgbButtons[i]))
+				{
+					m_Locks[i] = false;
+				}
 			}
-		break;
+			break;
 		}
 
 		return true;
@@ -340,13 +360,19 @@ namespace GameEngine
 
 	bool InputDevice::Acquire(bool Active)
 	{
-		if(m_pDIDevice == NULL)
+		if (m_pDIDevice == nullptr)
+		{
 			return false;
+		}
 
-		if(Active == true)
+		if (Active == true)
+		{
 			m_pDIDevice->Acquire();
+		}
 		else
+		{
 			m_pDIDevice->Unacquire();
+		}
 
 		return true;
 	}
@@ -364,8 +390,10 @@ namespace GameEngine
 
 	long InputDevice::GetXPos()
 	{
-		if(m_Type == INPUT_DEVICE_TYPE_JOYSTICK)
+		if (m_Type == INPUT_DEVICE_TYPE_JOYSTICK)
+		{
 			m_XPos = m_JoystickState->lX;
+		}
 
 		return m_XPos;
 	}
@@ -378,8 +406,10 @@ namespace GameEngine
 
 	long InputDevice::GetYPos()
 	{
-		if(m_Type == INPUT_DEVICE_TYPE_JOYSTICK)
+		if (m_Type == INPUT_DEVICE_TYPE_JOYSTICK)
+		{
 			m_YPos = m_JoystickState->lY;
+		}
 
 		return m_YPos;
 	}
@@ -392,7 +422,7 @@ namespace GameEngine
 
 	long InputDevice::GetXDelta()
 	{
-		switch(m_Type)
+		switch (m_Type)
 		{
 		case INPUT_DEVICE_TYPE_MOUSE:
 			return m_MouseState->lX;
@@ -406,7 +436,7 @@ namespace GameEngine
 
 	long InputDevice::GetYDelta()
 	{
-		switch(m_Type)
+		switch (m_Type)
 		{
 		case INPUT_DEVICE_TYPE_MOUSE:
 			return m_MouseState->lY;
@@ -420,16 +450,20 @@ namespace GameEngine
 
 	long InputDevice::GetWheel()
 	{
-		if (m_Type == INPUT_DEVICE_TYPE_MOUSE )
+		if (m_Type == INPUT_DEVICE_TYPE_MOUSE)
+		{
 			return m_Wheel;
+		}
 
 		return 0;
 	}
 
 	bool InputDevice::GetKeyState(char Num)
 	{
-		if(m_State[Num] & 0x80 && m_Locks[Num] == false)
+		if (m_State[Num] & 0x80 && m_Locks[Num] == false)
+		{
 			return true;
+		}
 		return false;
 	}
 
@@ -448,39 +482,44 @@ namespace GameEngine
 	{
 		static HKL KeyboardLayout = GetKeyboardLayout(0);
 		unsigned char WinKeyStates[256], DIKeyStates[256];
-		unsigned short i, ScanCode, VirtualKey, Keys, Num;
-		unsigned long EndTime;
+		unsigned short ScanCode, VirtualKey, Keys;
 
-		if((m_Type != INPUT_DEVICE_TYPE_KEYBOARD) || (m_pDIDevice == NULL))
+		if ((m_Type != INPUT_DEVICE_TYPE_KEYBOARD) || (m_pDIDevice == nullptr))
+		{
 			return 0;
+		}
 
-		EndTime = GetTickCount() + TimeOut;
+		unsigned long EndTime = GetTickCount() + TimeOut;
 
 		// Loop until timeout or key pressed
-		while(1)
+		while (1)
 		{
 			GetKeyboardState(WinKeyStates);
 
 			m_pDIDevice->GetDeviceState(256, DIKeyStates);
 
 			// Scan through looking for key presses
-			for(i=0;i<256;i++)
+			for (unsigned short i = 0; i < 256; i++)
 			{
-				if(DIKeyStates[i] & 0x80)
+				if (DIKeyStates[i] & 0x80)
 				{
-					if((VirtualKey = MapVirtualKeyEx((ScanCode = i), 1, KeyboardLayout)))
+					if ((VirtualKey = MapVirtualKeyEx((ScanCode = i), 1, KeyboardLayout)))
 					{
-						Num = ToAsciiEx(VirtualKey, ScanCode, WinKeyStates, &Keys, 0, KeyboardLayout);
-						if(Num)
+						unsigned short Num = ToAsciiEx(VirtualKey, ScanCode, WinKeyStates, &Keys, 0, KeyboardLayout);
+						if (Num)
+						{
 							return Keys;
+						}
 					}
 				}
 			}
 
-			if(TimeOut)
+			if (TimeOut)
 			{
-				if(GetTickCount() > EndTime)
+				if (GetTickCount() > EndTime)
+				{
 					return 0;
+				}
 			}
 		}
 
@@ -489,12 +528,14 @@ namespace GameEngine
 
 	long InputDevice::GetNumKeyPresses()
 	{
-		long i, Num = 0;
+		long Num = 0;
 
-		for(i=0;i<256;i++)
+		for (long i = 0; i < 256; i++)
 		{
-			if(m_State[i] & 0x80 && m_Locks[i] == false)
+			if (m_State[i] & 0x80 && m_Locks[i] == false)
+			{
 				Num++;
+			}
 		}
 
 		return Num;
@@ -502,12 +543,14 @@ namespace GameEngine
 
 	long InputDevice::GetNumPureKeyPresses()
 	{
-		long i, Num = 0;
+		long Num = 0;
 
-		for(i=0;i<256;i++)
+		for (long i = 0; i < 256; i++)
 		{
-			if(m_State[i] & 0x80)
+			if (m_State[i] & 0x80)
+			{
 				Num++;
+			}
 		}
 
 		return Num;
@@ -517,27 +560,33 @@ namespace GameEngine
 	{
 		char State = 0;
 
-		if(m_Type == INPUT_DEVICE_TYPE_MOUSE)
+		if (m_Type == INPUT_DEVICE_TYPE_MOUSE)
+		{
 			State = m_MouseState->rgbButtons[Num];
+		}
 
-		if(m_Type == INPUT_DEVICE_TYPE_JOYSTICK)
+		if (m_Type == INPUT_DEVICE_TYPE_JOYSTICK)
+		{
 			State = m_JoystickState->rgbButtons[Num];
+		}
 
-		if(State & 0x80 && m_Locks[Num] == false)
+		if (State & 0x80 && m_Locks[Num] == false)
+		{
 			return true;
+		}
 
 		return false;
 	}
 
 	bool InputDevice::SetButtonState(char Num, BYTE State)
 	{
-		if(m_Type == INPUT_DEVICE_TYPE_MOUSE)
+		if (m_Type == INPUT_DEVICE_TYPE_MOUSE)
 		{
 			m_MouseState->rgbButtons[Num] = State;
 			return true;
 		}
 
-		if(m_Type == INPUT_DEVICE_TYPE_JOYSTICK)
+		if (m_Type == INPUT_DEVICE_TYPE_JOYSTICK)
 		{
 			m_JoystickState->rgbButtons[Num] = State;
 			return true;
@@ -548,11 +597,15 @@ namespace GameEngine
 
 	BYTE InputDevice::GetPureButtonState(char Num)
 	{
-		if(m_Type == INPUT_DEVICE_TYPE_MOUSE)
+		if (m_Type == INPUT_DEVICE_TYPE_MOUSE)
+		{
 			return m_MouseState->rgbButtons[Num];
+		}
 
-		if(m_Type == INPUT_DEVICE_TYPE_JOYSTICK)
+		if (m_Type == INPUT_DEVICE_TYPE_JOYSTICK)
+		{
 			return m_JoystickState->rgbButtons[Num];
+		}
 
 		return false;
 	}
@@ -561,49 +614,57 @@ namespace GameEngine
 	{
 		long i, Num = 0;
 
-		if(m_Type == INPUT_DEVICE_TYPE_MOUSE)
+		if (m_Type == INPUT_DEVICE_TYPE_MOUSE)
 		{
-			for(i=0;i<4;i++)
+			for (i = 0; i < 4; i++)
 			{
-				if(m_MouseState->rgbButtons[i] & 0x80 && m_Locks[i] == false)
+				if (m_MouseState->rgbButtons[i] & 0x80 && m_Locks[i] == false)
+				{
 					Num++;
+				}
 			}
 		}
 		else
 		{
-			if(m_Type == INPUT_DEVICE_TYPE_JOYSTICK)
+			if (m_Type == INPUT_DEVICE_TYPE_JOYSTICK)
 			{
-				for(i=0;i<32;i++)
+				for (i = 0; i < 32; i++)
 				{
-					if(m_JoystickState->rgbButtons[i] & 0x80 && m_Locks[i] == false)
+					if (m_JoystickState->rgbButtons[i] & 0x80 && m_Locks[i] == false)
+					{
 						Num++;
+					}
 				}
 			}
 		}
 
-	  return Num;
+		return Num;
 	}
 
 	long InputDevice::GetNumPureButtonPresses()
 	{
 		long i, Num = 0;
 
-		if(m_Type == INPUT_DEVICE_TYPE_MOUSE)
+		if (m_Type == INPUT_DEVICE_TYPE_MOUSE)
 		{
-			for(i=0;i<4;i++)
+			for (i = 0; i < 4; i++)
 			{
-			  if(m_MouseState->rgbButtons[i] & 0x80)
-				Num++;
+				if (m_MouseState->rgbButtons[i] & 0x80)
+				{
+					Num++;
+				}
 			}
 		}
 		else
 		{
-			if(m_Type == INPUT_DEVICE_TYPE_JOYSTICK)
+			if (m_Type == INPUT_DEVICE_TYPE_JOYSTICK)
 			{
-				for(i=0;i<32;i++)
+				for (i = 0; i < 32; i++)
 				{
-				  if(m_JoystickState->rgbButtons[i] & 0x80)
-					Num++;
+					if (m_JoystickState->rgbButtons[i] & 0x80)
+					{
+						Num++;
+					}
 				}
 			}
 		}
@@ -613,25 +674,29 @@ namespace GameEngine
 
 	BOOL FAR PASCAL InputDevice::EnumJoysticks(LPCDIDEVICEINSTANCE pdInst, LPVOID pvRef)
 	{
-		InputDevice *Input;
+		InputDevice* Input;
 
-		if((Input = (InputDevice*) pvRef) == NULL)
+		if ((Input = (InputDevice*)pvRef) == nullptr)
+		{
 			return DIENUM_STOP;
+		}
 
-		if(FAILED( Input::Instance().GetDirectInputCOM()->CreateDevice(pdInst->guidInstance, Input->GetLPDirectInputDevice(), NULL)))
+		if (FAILED(Input::Instance().GetDirectInputCOM()->CreateDevice(pdInst->guidInstance, Input->GetLPDirectInputDevice(), NULL)))
+		{
 			return DIENUM_CONTINUE;
+		}
 
 		return DIENUM_STOP;
 	}
 
-	IDirectInputDevice8 **InputDevice::GetLPDirectInputDevice(void)
-	{ 
-		return &m_pDIDevice; 
+	IDirectInputDevice8** InputDevice::GetLPDirectInputDevice(void)
+	{
+		return &m_pDIDevice;
 	}
 
-	IDirectInputDevice8 *InputDevice::GetDirectInputDevice(void)
-	{ 
-		return m_pDIDevice; 
+	IDirectInputDevice8* InputDevice::GetDirectInputDevice(void)
+	{
+		return m_pDIDevice;
 	}
 
 } // namespace GameEgine

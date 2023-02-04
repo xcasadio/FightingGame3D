@@ -14,7 +14,9 @@ namespace GameEngine
 		static T& Instance()
 		{
 			if (!Inst)
+			{
 				Inst = new T;
+			}
 
 			return *Inst;
 		}

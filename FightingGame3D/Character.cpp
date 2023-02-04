@@ -59,20 +59,26 @@ bool Character::LoadCommun(const char* fileName)
 	TiXmlElement* pElementRoot = xmlDoc.FirstChildElement("Character");
 
 	if (!pElementRoot)
+	{
 		return false;
+	}
 
 	//On charge les caracteristiques du perso ------------------------------
 	TiXmlElement* pElement = pElementRoot->FirstChildElement("Status");
 
 	if (!pElement)
+	{
 		return false;
+	}
 
 	//TODO - status
 
 	pElement = pElementRoot->FirstChildElement("PositionDef");
 
 	if (!pElement)
+	{
 		return false;
+	}
 
 	//TODO - PositionDef
 
@@ -80,10 +86,14 @@ bool Character::LoadCommun(const char* fileName)
 	pElement = pElementRoot->FirstChildElement("MeshDef");
 
 	if (!pElement)
+	{
 		return false;
+	}
 
 	if (LoadMesh(pElement) == false)
+	{
 		return false;
+	}
 
 	//On charge les sons ---------------------------------------------------
 
