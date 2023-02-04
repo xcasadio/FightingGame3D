@@ -50,14 +50,14 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int nCmdSh
 		return -1;
 	}
 
-	if (!GameCore::Instance().GetPad(0).Load("pad.xml"))
+	if (!GameCore::Instance().GetPad(0).Load("Data\\pad.xml"))
 	{
-		Window::Error(true, "Erreur pad Load(pad.xml)");
+		Window::Error(true, "Erreur pad Load(Data\\pad.xml)");
 	}
 
-	if (!GameCore::Instance().GetPad(1).Load("pad2.xml"))
+	if (!GameCore::Instance().GetPad(1).Load("Data\\pad2.xml"))
 	{
-		Window::Error(true, "Erreur pad Load(pad2.xml)");
+		Window::Error(true, "Erreur pad Load(Data\\pad2.xml)");
 	}
 
 	MediaPathManager::Instance().AddPath("Data\\character\\");
